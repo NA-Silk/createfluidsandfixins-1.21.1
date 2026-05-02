@@ -1,5 +1,5 @@
 
-Installation information
+Installation information for Create: Fluid and Fixins
 =======
 
 This template repository can be directly cloned to get you started with a new
