@@ -1,0 +1,13 @@
+{
+  "itemGroup.createfluidsandfixins": "Example Mod Tab",
+  "block.createfluidsandfixins.example_block": "Example Block",
+  "item.createfluidsandfixins.example_item": "Example Item",
+
+  "createfluidsandfixins.configuration.title": "Create: Fluids and Fixins Configs",
+  "createfluidsandfixins.configuration.section.createfluidsandfixins.common.toml": "Create: Fluids and Fixins Configs",
+  "createfluidsandfixins.configuration.section.createfluidsandfixins.common.toml.title": "Create: Fluids and Fixins Configs",
+  "createfluidsandfixins.configuration.items": "Item List",
+  "createfluidsandfixins.configuration.logDirtBlock": "Log Dirt Block",
+  "createfluidsandfixins.configuration.magicNumberIntroduction": "Magic Number Text",
+  "createfluidsandfixins.configuration.magicNumber": "Magic Number"
+}
