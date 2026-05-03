@@ -23,3 +23,15 @@ Additional Resources:
 ==========
 Community Documentation: https://docs.neoforged.net/  
 NeoForged Discord: https://discord.neoforged.net/
+
+Requirements:
+==========
+1. Install [IntelliJ IDEA](https://www.jetbrains.com/idea/download/?section=windows)
+    - Update PATH variable (restart needed) := CHECK Add "bin" folder to the PATH
+2. Install [Temurin jdk-21.0.11+10](https://adoptium.net/temurin/releases/?version=21&os=windows&arch=any&mode=filter)
+    - Set or override JAVA_HOME variable := Will be installed on local hard drive
+3. Clone repository
+4. Set "Project Structure... > Project Settings > Project > Language Level" := 21
+5. Set "Project Structure... > Project Settings > Project > SDK" := temurin-21
+6. Set "Settings... > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM" := Project SDK
+7. Press "Build"
