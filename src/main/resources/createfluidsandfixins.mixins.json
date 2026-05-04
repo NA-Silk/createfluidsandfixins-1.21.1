@@ -1,12 +1,11 @@
 {
   "required": true,
-  "package": "com.nasilk.createfluidsandfixins.mixin",
+  "package": "com.nasilk.createfluidsandfixins.mixins",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "PipeExtractionMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "overwrites": {
-    "requireAnnotations": true
   }
 }
