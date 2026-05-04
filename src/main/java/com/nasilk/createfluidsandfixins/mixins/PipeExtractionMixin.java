@@ -28,7 +28,7 @@ public class PipeExtractionMixin {
             return;
 
         // Check if in END and y <= 5
-        if (world.dimension() == Level.END && outputPos.getY() <= 5) {
+        if (world.dimension() == Level.END && outputPos.getY() < 5) {
 
             // Debug message
             System.out.println("Custom End fluid extraction triggered at " + outputPos);
