@@ -1,5 +1,6 @@
 package com.nasilk.createfluidsandfixins;
 
+import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.item.Moditems;
 import net.minecraft.world.item.CreativeModeTabs;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class CreateFluidsAndFixins {
 
 
         Moditems.register(modEventBus);
+        ModBlocks.register(modEventBus);
 
 
         // Register the item to a creative tab
@@ -53,9 +55,15 @@ public class CreateFluidsAndFixins {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-       if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+       if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
            event.accept(Moditems.DENSITEBUCKET);
        }
+
+        if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+           event.accept(ModBlocks.DENSITEBLOCK);
+        }
+
+
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

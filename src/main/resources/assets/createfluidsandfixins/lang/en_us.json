@@ -11,5 +11,6 @@
   "createfluidsandfixins.configuration.magicNumberIntroduction": "Magic Number Text",
   "createfluidsandfixins.configuration.magicNumber": "Magic Number",
 
-  "item.createfluidsandfixins.densitebucket": "Densite Emulsion"
+  "item.createfluidsandfixins.densitebucket": "Densite Emulsion",
+  "block.createfluidsandfixins.densiteblock": "Densite"
 }
