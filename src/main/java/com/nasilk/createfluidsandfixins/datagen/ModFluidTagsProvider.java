@@ -1,9 +1,5 @@
 package com.nasilk.createfluidsandfixins.datagen;
 
-/* MCCourse imports
- * import net.kaupenjoe.mccourse.MCCourseMod;
- * import net.kaupenjoe.mccourse.fluid.ModFluids;
- */
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 
@@ -25,7 +21,7 @@ public class ModFluidTagsProvider extends FluidTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
         tag(FluidTags.WATER)
-                .add(ModFluids.SOURCE_DENSITE_SOLUTION_WATER.get())
-                .add(ModFluids.FLOWING_DENSITE_SOLUTION_WATER.get());
+                .add(ModFluids.SOURCE_DENSITE_EMULSION.get())
+                .add(ModFluids.FLOWING_DENSITE_EMULSION.get());
     }
 }

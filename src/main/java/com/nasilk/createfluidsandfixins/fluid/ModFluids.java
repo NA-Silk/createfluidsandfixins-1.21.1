@@ -1,10 +1,5 @@
 package com.nasilk.createfluidsandfixins.fluid;
 
-/* MCCourse imports
- * import net.kaupenjoe.mccourse.MCCourseMod;
- * import net.kaupenjoe.mccourse.block.ModBlocks;
- * import net.kaupenjoe.mccourse.item.ModItems;
- */
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.item.ModItems;
@@ -30,21 +25,22 @@ public class ModFluids {
     public static final DeferredRegister<Fluid> FLUIDS =
             DeferredRegister.create(BuiltInRegistries.FLUID, CreateFluidsAndFixins.MOD_ID);
 
-    public static final Supplier<FlowingFluid> SOURCE_DENSITE_SOLUTION_WATER = FLUIDS.register("source_densite_solution_water",
-            () -> new BaseFlowingFluid.Source(ModFluids.DENSITE_SOLUTION_WATER_PROPERTIES));
-    public static final Supplier<FlowingFluid> FLOWING_DENSITE_SOLUTION_WATER = FLUIDS.register("flowing_densite_solution_water",
-            () -> new BaseFlowingFluid.Flowing(ModFluids.DENSITE_SOLUTION_WATER_PROPERTIES));
+    public static final Supplier<FlowingFluid> SOURCE_DENSITE_EMULSION = FLUIDS.register("source_densite_emulsion",
+            () -> new BaseFlowingFluid.Source(ModFluids.DENSITE_EMULSION_PROPERTIES));
 
-    public static final DeferredBlock<LiquidBlock> DENSITE_SOLUTION_WATER_BLOCK = ModBlocks.BLOCKS.register("densite_solution_water_block",
-            () -> new LiquidBlock(ModFluids.SOURCE_DENSITE_SOLUTION_WATER.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).noLootTable()));
+    public static final Supplier<FlowingFluid> FLOWING_DENSITE_EMULSION = FLUIDS.register("flowing_densite_emulsion",
+            () -> new BaseFlowingFluid.Flowing(ModFluids.DENSITE_EMULSION_PROPERTIES));
 
-    public static final DeferredItem<Item> DENSITE_SOLUTION_WATER_BUCKET = ModItems.ITEMS.registerItem("densitebucket",
-            properties -> new BucketItem(ModFluids.SOURCE_DENSITE_SOLUTION_WATER.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final DeferredBlock<LiquidBlock> DENSITE_EMULSION_BLOCK = ModBlocks.BLOCKS.register("densite_emulsion_block",
+            () -> new LiquidBlock(ModFluids.SOURCE_DENSITE_EMULSION.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).noLootTable()));
 
-    public static final BaseFlowingFluid.Properties DENSITE_SOLUTION_WATER_PROPERTIES = new BaseFlowingFluid.Properties(
-            ModFluidTypes.DENSITE_SOLUTION_WATER_FLUID_TYPE, SOURCE_DENSITE_SOLUTION_WATER, FLOWING_DENSITE_SOLUTION_WATER)
+    public static final DeferredItem<Item> DENSITE_EMULSION_BUCKET = ModItems.ITEMS.registerItem("densite_emulsion_bucket",
+            properties -> new BucketItem(ModFluids.SOURCE_DENSITE_EMULSION.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1)));
+
+    public static final BaseFlowingFluid.Properties DENSITE_EMULSION_PROPERTIES = new BaseFlowingFluid.Properties(
+            ModFluidTypes.DENSITE_EMULSION_FLUID_TYPE, SOURCE_DENSITE_EMULSION, FLOWING_DENSITE_EMULSION)
             .slopeFindDistance(2).levelDecreasePerBlock(1)
-            .block(ModFluids.DENSITE_SOLUTION_WATER_BLOCK).bucket(ModFluids.DENSITE_SOLUTION_WATER_BUCKET);
+            .block(ModFluids.DENSITE_EMULSION_BLOCK).bucket(ModFluids.DENSITE_EMULSION_BUCKET);
 
 
     public static void register(IEventBus eventBus) {

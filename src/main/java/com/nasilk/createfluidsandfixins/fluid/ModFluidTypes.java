@@ -1,8 +1,5 @@
 package com.nasilk.createfluidsandfixins.fluid;
 
-/* MCCourse imports
- * import net.kaupenjoe.mccourse.MCCourseMod;
- */
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 
 import net.minecraft.resources.ResourceLocation;
@@ -22,12 +19,10 @@ public class ModFluidTypes {
     public static final DeferredRegister<FluidType> FLUID_TYPES =
             DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, CreateFluidsAndFixins.MOD_ID);
 
-    public static final Supplier<FluidType> DENSITE_SOLUTION_WATER_FLUID_TYPE = registerFluidType("densite_solution_water_fluid",
+    public static final Supplier<FluidType> DENSITE_EMULSION_FLUID_TYPE = registerFluidType("densite_emulsion_fluid_type",
             new BaseFluidType(WATER_STILL_RL, WATER_FLOWING_RL, WATER_OVERLAY_RL, 0xA1343E69,
                     new Vector3f(108f / 255f, 168f / 255f, 212f / 255f),
                     FluidType.Properties.create()));
-
-
 
     private static Supplier<FluidType> registerFluidType(String name, FluidType fluidType) {
         return FLUID_TYPES.register(name, () -> fluidType);

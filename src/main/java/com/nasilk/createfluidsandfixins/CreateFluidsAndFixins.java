@@ -66,15 +66,13 @@ public class CreateFluidsAndFixins {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-       if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-           event.accept(ModFluids.DENSITE_SOLUTION_WATER_BUCKET);
-       }
-
-        if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-           event.accept(ModBlocks.DENSITEBLOCK);
+        if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+           event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
         }
 
-
+        if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+           event.accept(ModBlocks.DENSITE_BLOCK);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -90,15 +88,15 @@ public class CreateFluidsAndFixins {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
-                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_DENSITE_SOLUTION_WATER.get(), RenderType.translucent());
-                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DENSITE_SOLUTION_WATER.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_DENSITE_EMULSION.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DENSITE_EMULSION.get(), RenderType.translucent());
             });
         }
 
         @SubscribeEvent
         public static void onClientExtensions(RegisterClientExtensionsEvent event) {
-            event.registerFluidType(((BaseFluidType) ModFluidTypes.DENSITE_SOLUTION_WATER_FLUID_TYPE.get()).getClientFluidTypeExtensions(),
-                    ModFluidTypes.DENSITE_SOLUTION_WATER_FLUID_TYPE.get());
+            event.registerFluidType(((BaseFluidType) ModFluidTypes.DENSITE_EMULSION_FLUID_TYPE.get()).getClientFluidTypeExtensions(),
+                    ModFluidTypes.DENSITE_EMULSION_FLUID_TYPE.get());
         }
     }
 }
