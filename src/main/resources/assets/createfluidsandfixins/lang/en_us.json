@@ -9,5 +9,7 @@
   "createfluidsandfixins.configuration.items": "Item List",
   "createfluidsandfixins.configuration.logDirtBlock": "Log Dirt Block",
   "createfluidsandfixins.configuration.magicNumberIntroduction": "Magic Number Text",
-  "createfluidsandfixins.configuration.magicNumber": "Magic Number"
+  "createfluidsandfixins.configuration.magicNumber": "Magic Number",
+
+  "item.createfluidsandfixins.densitebucket": "Densite Emulsion"
 }
