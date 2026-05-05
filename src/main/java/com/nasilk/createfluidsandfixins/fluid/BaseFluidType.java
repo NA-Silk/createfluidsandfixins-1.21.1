@@ -12,32 +12,33 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-/**
- * Basic implementation of {@link FluidType} that supports specifying still and flowing textures in the constructor.
- *
- * @author Choonster (<a href="https://github.com/Choonster-Minecraft-Mods/TestMod3/blob/1.19.x/LICENSE.txt">MIT License</a>)
- * Change by: Kaupenjoe
- * Added overlayTexture and tintColor as well. Also converts tint color into fog color
- */
+import java.util.function.Consumer;
+
 public class BaseFluidType extends FluidType {
     private final ResourceLocation stillTexture;
     private final ResourceLocation flowingTexture;
     private final ResourceLocation overlayTexture;
-    private final int tintColor;
     private final Vector3f fogColor;
 
-    public BaseFluidType(final ResourceLocation stillTexture, final ResourceLocation flowingTexture, final ResourceLocation overlayTexture,
-                         final int tintColor, final Vector3f fogColor, final Properties properties) {
+    public BaseFluidType(
+        ResourceLocation stillTexture,
+        ResourceLocation flowingTexture,
+        @Nullable ResourceLocation overlayTexture,
+        Vector3f fogColor,
+        Properties properties
+    ) {
         super(properties);
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
         this.overlayTexture = overlayTexture;
-        this.tintColor = tintColor;
         this.fogColor = fogColor;
     }
 
-    public IClientFluidTypeExtensions getClientFluidTypeExtensions() {
-        return new IClientFluidTypeExtensions() {
+    @SuppressWarnings("removal")
+    @Override
+    public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+        consumer.accept(new IClientFluidTypeExtensions() {
+
             @Override
             public ResourceLocation getStillTexture() {
                 return stillTexture;
@@ -53,23 +54,44 @@ public class BaseFluidType extends FluidType {
                 return overlayTexture;
             }
 
+            // No tint (use texture colors)
             @Override
             public int getTintColor() {
-                return tintColor;
+                return 0xFFFFFFFF;
             }
 
+            // Fog glow effect
             @Override
-            public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level,
-                                                    int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
+            public @NotNull Vector3f modifyFogColor(
+                Camera camera,
+                float partialTick,
+                ClientLevel level,
+                int renderDistance,
+                float darkenWorldAmount,
+                Vector3f fluidFogColor
+            ) {
                 return fogColor;
             }
 
             @Override
-            public void modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick,
-                                        float nearDistance, float farDistance, FogShape shape) {
-                RenderSystem.setShaderFogStart(1f);
-                RenderSystem.setShaderFogEnd(6f); // distance when the fog starts
+            public void modifyFogRender(
+                Camera camera,
+                FogRenderer.FogMode mode,
+                float renderDistance,
+                float partialTick,
+                float nearDistance,
+                float farDistance,
+                FogShape shape
+            ) {
+                RenderSystem.setShaderFogStart(0.0f);
+                RenderSystem.setShaderFogEnd(8.0f);
             }
-        };
+        });
+    }
+
+    // Glow effect
+    @Override
+    public int getLightLevel() {
+        return 15;
     }
 }

@@ -1,9 +1,10 @@
 package com.nasilk.createfluidsandfixins.mixins;
 
+import com.nasilk.createfluidsandfixins.fluid.ModFluids;
+
 import com.simibubi.create.content.fluids.OpenEndedPipe;
 
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.core.BlockPos;
 
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -34,7 +35,7 @@ public class PipeExtractionMixin {
             System.out.println("Custom End fluid extraction triggered at " + outputPos);
 
             // Return lava as if it was extracted
-            cir.setReturnValue(new FluidStack(Fluids.LAVA, 1000));
+            cir.setReturnValue(new FluidStack(ModFluids.SOURCE_DENSITE_EMULSION.get(), 500));
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.nasilk.createfluidsandfixins;
 
 import com.nasilk.createfluidsandfixins.block.ModBlocks;
-import com.nasilk.createfluidsandfixins.fluid.BaseFluidType;
 import com.nasilk.createfluidsandfixins.fluid.ModFluidTypes;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 import com.nasilk.createfluidsandfixins.item.ModItems;
@@ -12,7 +11,6 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
@@ -91,12 +89,6 @@ public class CreateFluidsAndFixins {
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_DENSITE_EMULSION.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DENSITE_EMULSION.get(), RenderType.translucent());
             });
-        }
-
-        @SubscribeEvent
-        public static void onClientExtensions(RegisterClientExtensionsEvent event) {
-            event.registerFluidType(((BaseFluidType) ModFluidTypes.DENSITE_EMULSION_FLUID_TYPE.get()).getClientFluidTypeExtensions(),
-                    ModFluidTypes.DENSITE_EMULSION_FLUID_TYPE.get());
         }
     }
 }

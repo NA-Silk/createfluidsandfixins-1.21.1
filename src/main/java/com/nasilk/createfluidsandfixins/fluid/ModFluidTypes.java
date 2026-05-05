@@ -19,26 +19,31 @@ public class ModFluidTypes {
      */
 
     public static final DeferredRegister<FluidType> FLUID_TYPES =
-            DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, CreateFluidsAndFixins.MOD_ID);
+        DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, CreateFluidsAndFixins.MOD_ID);
 
     // DENSITE EMULSION
     public static final ResourceLocation DENSITE_STILL_RL =
-            ResourceLocation.fromNamespaceAndPath(CreateFluidsAndFixins.MOD_ID,
-                    "fluid/source_densite_emulsion");
+        ResourceLocation.fromNamespaceAndPath(
+            CreateFluidsAndFixins.MOD_ID,
+            "block/source_densite_emulsion");
     public static final ResourceLocation DENSITE_FLOWING_RL =
-            ResourceLocation.fromNamespaceAndPath(CreateFluidsAndFixins.MOD_ID,
-                    "fluid/flowing_densite_emulsion");
+        ResourceLocation.fromNamespaceAndPath(
+            CreateFluidsAndFixins.MOD_ID,
+            "block/flowing_densite_emulsion");
     public static final Supplier<FluidType> DENSITE_EMULSION_FLUID_TYPE =
-            registerFluidType("densite_emulsion_fluid_type",
-                    new BaseFluidType(
-                            DENSITE_STILL_RL,
-                            DENSITE_FLOWING_RL,
-                            null,
-                            0xA1343E69,
-                            new Vector3f(108f / 255f, 168f / 255f, 212f / 255f),
-                            FluidType.Properties.create()
-                    )
-            );
+        registerFluidType(
+            "densite_emulsion_fluid_type",
+            new BaseFluidType(
+                DENSITE_STILL_RL,
+                DENSITE_FLOWING_RL,
+                null,
+                new Vector3f(0.6f, 0.8f, 1.0f), // glow color
+                FluidType.Properties.create()
+                .lightLevel(15) // glow
+                .viscosity(1500) // thicker than water
+                .density(1500)
+            )
+        );
 
     // NEXT FLUID ...
 
