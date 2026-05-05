@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "createfluidsandfixins:fluid/flowing_densite_emulsion"
+  }
+}

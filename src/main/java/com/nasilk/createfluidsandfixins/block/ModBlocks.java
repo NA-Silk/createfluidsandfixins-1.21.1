@@ -33,13 +33,13 @@ public class ModBlocks {
                     .strength(2.0f, 9.0f)
                     .jumpFactor(0.5f)
                     .friction(0.9f)
-                    .lightLevel(state -> 2) //add separate glow layer texture later _e
+                    .lightLevel(state -> 2) // Add separate glow layer texture later _e
                     .hasPostProcess((state, pos, level) -> true)
                     .emissiveRendering((state, pos, level) -> true)
                     .sound(new SoundType(1.0f, 0.1f,
                             SoundEvents.ENDER_EYE_DEATH,
                             SoundEvents.NETHERITE_BLOCK_STEP,
-                            SoundEvents.ENDER_EYE_DEATH, //might need another sound or pitch override
+                            SoundEvents.ENDER_EYE_DEATH, // Might need another sound or pitch override
                             SoundEvents.NETHERITE_BLOCK_HIT,
                             SoundEvents.NETHERITE_BLOCK_FALL
                     ))

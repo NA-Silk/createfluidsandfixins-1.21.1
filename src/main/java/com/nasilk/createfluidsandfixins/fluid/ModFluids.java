@@ -22,9 +22,11 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public class ModFluids {
+    // DEFAULT
     public static final DeferredRegister<Fluid> FLUIDS =
             DeferredRegister.create(BuiltInRegistries.FLUID, CreateFluidsAndFixins.MOD_ID);
 
+    // DENSITE EMULSION
     public static final Supplier<FlowingFluid> SOURCE_DENSITE_EMULSION = FLUIDS.register("source_densite_emulsion",
             () -> new BaseFlowingFluid.Source(ModFluids.DENSITE_EMULSION_PROPERTIES));
 
@@ -42,6 +44,7 @@ public class ModFluids {
             .slopeFindDistance(2).levelDecreasePerBlock(1)
             .block(ModFluids.DENSITE_EMULSION_BLOCK).bucket(ModFluids.DENSITE_EMULSION_BUCKET);
 
+    // NEXT FLUID ...
 
     public static void register(IEventBus eventBus) {
         FLUIDS.register(eventBus);
