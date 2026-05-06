@@ -55,12 +55,12 @@ public class ModFluidTypes {
     public static final ResourceLocation VOID_SEA_SLURRY_STILL_RL =
         ResourceLocation.fromNamespaceAndPath(
             CreateFluidsAndFixins.MOD_ID,
-            "block/source_densite_emulsion" // CHANGE THIS
+            "block/source_void_sea_slurry" // OKAY FINE
         );
     public static final ResourceLocation VOID_SEA_SLURRY_FLOWING_RL =
         ResourceLocation.fromNamespaceAndPath(
             CreateFluidsAndFixins.MOD_ID,
-            "block/flowing_densite_emulsion" // CHANGE THIS
+            "block/flowing_void_sea_slurry" // DONT YELL AT ME
         );
     public static final Supplier<FluidType> VOID_SEA_SLURRY_FLUID_TYPE =
         registerFluidType(
