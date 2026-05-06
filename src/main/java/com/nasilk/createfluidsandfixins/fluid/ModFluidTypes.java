@@ -43,8 +43,9 @@ public class ModFluidTypes {
                 0xFFFFFFFF,
                 FluidType.Properties.create()
                     .lightLevel(15) // Glow
-                    .viscosity(1500) // Thicker than water
-                    .density(1500)
+                    .viscosity(5000) // Slow flow
+                    .density(5000) // Physics related
+                    .canSwim(false)
             )
         );
 
@@ -70,8 +71,9 @@ public class ModFluidTypes {
                 0xFFFFFFFF,
                 FluidType.Properties.create()
                     .lightLevel(15) // Glow
-                    .viscosity(1500) // Thicker than water
-                    .density(1500)
+                    .viscosity(1500) // Slow flow
+                    .density(1500) // Physics related
+                    .canSwim(false)
             )
         );
 

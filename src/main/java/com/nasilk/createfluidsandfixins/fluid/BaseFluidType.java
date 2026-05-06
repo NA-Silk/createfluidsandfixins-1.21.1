@@ -7,6 +7,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,12 +44,12 @@ public class BaseFluidType extends FluidType {
         consumer.accept(new IClientFluidTypeExtensions() {
 
             @Override
-            public ResourceLocation getStillTexture() {
+            public @NotNull ResourceLocation getStillTexture() {
                 return stillTexture;
             }
 
             @Override
-            public ResourceLocation getFlowingTexture() {
+            public @NotNull ResourceLocation getFlowingTexture() {
                 return flowingTexture;
             }
 
@@ -57,7 +58,7 @@ public class BaseFluidType extends FluidType {
                 return overlayTexture;
             }
 
-            // No tint (use texture colors)
+            // Overlay tint [no tint: 0xFFFFFFFF]
             @Override
             public int getTintColor() {
                 return tintColor;
@@ -66,35 +67,29 @@ public class BaseFluidType extends FluidType {
             // Fog glow effect
             @Override
             public @NotNull Vector3f modifyFogColor(
-                Camera camera,
+                @NotNull Camera camera,
                 float partialTick,
-                ClientLevel level,
+                @NotNull ClientLevel level,
                 int renderDistance,
                 float darkenWorldAmount,
-                Vector3f fluidFogColor
+                @NotNull Vector3f fluidFogColor
             ) {
                 return fogColor;
             }
 
             @Override
             public void modifyFogRender(
-                Camera camera,
-                FogRenderer.FogMode mode,
+                @NotNull Camera camera,
+                FogRenderer.@NotNull FogMode mode,
                 float renderDistance,
                 float partialTick,
                 float nearDistance,
                 float farDistance,
-                FogShape shape
+                @NotNull FogShape shape
             ) {
                 RenderSystem.setShaderFogStart(0.0f);
                 RenderSystem.setShaderFogEnd(8.0f);
             }
         });
-    }
-
-    // Glow effect
-    @Override
-    public int getLightLevel() {
-        return 15;
     }
 }
