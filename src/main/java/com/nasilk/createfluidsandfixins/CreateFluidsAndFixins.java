@@ -65,11 +65,12 @@ public class CreateFluidsAndFixins {
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-           event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
+            event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
+            event.accept(ModFluids.VOID_SEA_SLURRY_BUCKET);
         }
 
         if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-           event.accept(ModBlocks.DENSITE_BLOCK);
+            event.accept(ModBlocks.DENSITE_BLOCK);
         }
     }
 
@@ -88,6 +89,8 @@ public class CreateFluidsAndFixins {
             event.enqueueWork(() -> {
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_DENSITE_EMULSION.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DENSITE_EMULSION.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_VOID_SEA_SLURRY.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_VOID_SEA_SLURRY.get(), RenderType.translucent());
             });
         }
     }

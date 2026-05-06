@@ -42,7 +42,7 @@ displayName="${mod_name}" #mandatory
 #credits="" #optional
 
 # The authors of the mod, displayed in the mod UI (optional)
-authors="NA-Silk"
+authors="NA-Silk, Pebbbles"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
@@ -98,5 +98,19 @@ config="${mod_id}.mixins.json"
     modId="create"
     type="required"
     versionRange="[6.0.10,6.1.0)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="sable"
+    type="required"
+    versionRange="[1.2.2,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="create-aeronautics"
+    type="optional"
+    versionRange="[1.2.1,)"
     ordering="NONE"
     side="BOTH"

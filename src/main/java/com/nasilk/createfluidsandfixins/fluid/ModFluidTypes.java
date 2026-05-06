@@ -37,19 +37,45 @@ public class ModFluidTypes {
                 DENSITE_STILL_RL,
                 DENSITE_FLOWING_RL,
                 null,
-                new Vector3f(0.6f, 0.8f, 1.0f), // glow color
+                new Vector3f(0.141f, 0.0f, 0.259f), // Fog color
+                0xFFFFFFFF,
                 FluidType.Properties.create()
-                .lightLevel(15) // glow
-                .viscosity(1500) // thicker than water
+                .lightLevel(15) // Glow
+                .viscosity(1500) // Thicker than water
                 .density(1500)
             )
         );
 
-    // NEXT FLUID ...
+    // VOID SEA SLURRY
+    public static final ResourceLocation VOID_SEA_SLURRY_STILL_RL =
+            ResourceLocation.fromNamespaceAndPath(
+                    CreateFluidsAndFixins.MOD_ID,
+                    "block/source_densite_emulsion"); // CHANGE THIS
+    public static final ResourceLocation VOID_SEA_SLURRY_FLOWING_RL =
+            ResourceLocation.fromNamespaceAndPath(
+                    CreateFluidsAndFixins.MOD_ID,
+                    "block/flowing_densite_emulsion"); // CHANGE THIS
+    public static final Supplier<FluidType> VOID_SEA_SLURRY_FLUID_TYPE =
+            registerFluidType(
+                    "void_sea_slurry_fluid_type",
+                    new BaseFluidType(
+                            VOID_SEA_SLURRY_STILL_RL,
+                            VOID_SEA_SLURRY_FLOWING_RL,
+                            null,
+                            new Vector3f(0.141f, 0.0f, 0.259f), // Fog color
+                            0xFFFFFFFF,
+                            FluidType.Properties.create()
+                                    .lightLevel(15) // Glow
+                                    .viscosity(1500) // Thicker than water
+                                    .density(1500)
+                    )
+            );
 
     private static Supplier<FluidType> registerFluidType(String name, FluidType fluidType) {
         return FLUID_TYPES.register(name, () -> fluidType);
     }
+
+    // NEXT FLUID ...
 
     public static void register(IEventBus eventBus) {
         FLUID_TYPES.register(eventBus);

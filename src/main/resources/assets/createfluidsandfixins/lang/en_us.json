@@ -12,5 +12,6 @@
   "createfluidsandfixins.configuration.magicNumber": "Magic Number",
 
   "item.createfluidsandfixins.densite_emulsion_bucket": "Densite Emulsion Bucket",
-  "block.createfluidsandfixins.densite_block": "Densite Block"
+  "block.createfluidsandfixins.densite_block": "Densite Block",
+  "item.createfluidsandfixins.void_sea_slurry_bucket": "Void Sea Slurry Bucket"
 }

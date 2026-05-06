@@ -19,12 +19,14 @@ public class BaseFluidType extends FluidType {
     private final ResourceLocation flowingTexture;
     private final ResourceLocation overlayTexture;
     private final Vector3f fogColor;
+    private final int tintColor;
 
     public BaseFluidType(
         ResourceLocation stillTexture,
         ResourceLocation flowingTexture,
         @Nullable ResourceLocation overlayTexture,
         Vector3f fogColor,
+        int tintColor,
         Properties properties
     ) {
         super(properties);
@@ -32,6 +34,7 @@ public class BaseFluidType extends FluidType {
         this.flowingTexture = flowingTexture;
         this.overlayTexture = overlayTexture;
         this.fogColor = fogColor;
+        this.tintColor = tintColor;
     }
 
     @SuppressWarnings("removal")
@@ -57,7 +60,7 @@ public class BaseFluidType extends FluidType {
             // No tint (use texture colors)
             @Override
             public int getTintColor() {
-                return 0xFFFFFFFF;
+                return tintColor;
             }
 
             // Fog glow effect
