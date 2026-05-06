@@ -23,19 +23,15 @@ public class PipeExtractionMixin {
 
     @Inject(method = "removeFluidFromSpace", at = @At("HEAD"), cancellable = true)
     private void removeFluidFromSpaceMixin(boolean simulate, CallbackInfoReturnable<FluidStack> cir) {
-
         // Error check
-        if (world == null)
-            return;
+        if (world == null) return;
 
         // Check if in END and y <= 5
         if (world.dimension() == Level.END && outputPos.getY() < 5) {
-
-            // Debug message
             System.out.println("Custom End fluid extraction triggered at " + outputPos);
 
-            // Return lava as if it was extracted
-            cir.setReturnValue(new FluidStack(ModFluids.SOURCE_DENSITE_EMULSION.get(), 500));
+            // Return void sea slurry as if it was extracted
+            cir.setReturnValue(new FluidStack(ModFluids.SOURCE_VOID_SEA_SLURRY.get(), 500));
         }
     }
 }
