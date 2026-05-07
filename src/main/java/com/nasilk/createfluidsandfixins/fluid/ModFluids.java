@@ -48,7 +48,7 @@ public class ModFluids {
     )
         .slopeFindDistance(1) // Horizontal searching rate
         .levelDecreasePerBlock(1) // Spread distance
-        .tickRate(20) // Spread rate (water ~5, inverted scale)
+        .tickRate(25) // Spread rate (water ~5, inverted scale)
         .block(ModFluids.DENSITE_EMULSION_BLOCK)
         .bucket(ModFluids.DENSITE_EMULSION_BUCKET);
 
@@ -72,11 +72,37 @@ public class ModFluids {
         SOURCE_VOID_SEA_SLURRY,
         FLOWING_VOID_SEA_SLURRY
     )
-        .slopeFindDistance(2) // Horizontal searching rate (flow speed)
+        .slopeFindDistance(1) // Horizontal searching rate (flow speed)
         .levelDecreasePerBlock(1) // Spread distance
-        .tickRate(10) // Spread rate (water ~5, inverted scale)
+        .tickRate(15) // Spread rate (water ~5, inverted scale)
         .block(ModFluids.VOID_SEA_SLURRY_BLOCK)
         .bucket(ModFluids.VOID_SEA_SLURRY_BUCKET);
+
+
+    // DRIFT CONDENSATE
+    public static final Supplier<FlowingFluid> SOURCE_DRIFT_CONDENSATE = FLUIDS.register(
+        "source_drift_condensate",
+        () -> new BaseFlowingFluid.Source(ModFluids.DRIFT_CONDENSATE_PROPERTIES));
+    public static final Supplier<FlowingFluid> FLOWING_DRIFT_CONDENSATE = FLUIDS.register(
+        "flowing_drift_condensate",
+        () -> new BaseFlowingFluid.Flowing(ModFluids.DRIFT_CONDENSATE_PROPERTIES));
+    public static final DeferredBlock<LiquidBlock> DRIFT_CONDENSATE_BLOCK = ModBlocks.BLOCKS.register(
+        "drift_condensate_block",
+        () -> new LiquidBlock(ModFluids.SOURCE_DRIFT_CONDENSATE.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).noLootTable()));
+    public static final DeferredItem<Item> DRIFT_CONDENSATE_BUCKET = ModItems.ITEMS.registerItem(
+        "drift_condensate_bucket",
+        properties -> new BucketItem(ModFluids.SOURCE_DRIFT_CONDENSATE.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1)));
+
+    public static final BaseFlowingFluid.Properties DRIFT_CONDENSATE_PROPERTIES = new BaseFlowingFluid.Properties(
+        ModFluidTypes.DRIFT_CONDENSATE_FLUID_TYPE,
+        SOURCE_DRIFT_CONDENSATE,
+        FLOWING_DRIFT_CONDENSATE
+    )
+        .slopeFindDistance(3) // Horizontal searching rate (flow speed)
+        .levelDecreasePerBlock(2) // Spread distance
+        .tickRate(10) // Spread rate (water ~5, inverted scale)
+        .block(ModFluids.DRIFT_CONDENSATE_BLOCK)
+        .bucket(ModFluids.DRIFT_CONDENSATE_BUCKET);
 
 
     // NEXT FLUID ...

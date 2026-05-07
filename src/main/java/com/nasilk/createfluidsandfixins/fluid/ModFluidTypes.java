@@ -84,6 +84,37 @@ public class ModFluidTypes {
     }
 
 
+    // DRIFT CONDENSATE
+    public static final ResourceLocation DRIFT_STILL_RL =
+            ResourceLocation.fromNamespaceAndPath(
+                    CreateFluidsAndFixins.MOD_ID,
+                    "block/source_drift_condensate"
+            );
+    public static final ResourceLocation DRIFT_FLOWING_RL =
+            ResourceLocation.fromNamespaceAndPath(
+                    CreateFluidsAndFixins.MOD_ID,
+                    "block/flowing_drift_condensate"
+            );
+    public static final Supplier<FluidType> DRIFT_CONDENSATE_FLUID_TYPE =
+        registerFluidType(
+            "drift_condensate_fluid_type",
+            new BaseFluidType(
+                DRIFT_STILL_RL,
+                DRIFT_FLOWING_RL,
+                null,
+                null,
+                new Vector3f(0.95f, 0.78f, 0.68f),  // Fog color
+                FluidType.Properties.create()
+                    .lightLevel(6) // Glow?
+                    .viscosity(400) // Physics related (higher = heavier)
+                    .density(-500) // Physics related (higher = heavier)
+                    .motionScale(0.002)
+                    .temperature(250)
+                    .canSwim(false)
+            )
+        );
+
+
     // NEXT FLUID ...
 
     public static void register(IEventBus eventBus) {
