@@ -48,6 +48,7 @@ public class ModFluids {
     )
         .slopeFindDistance(2)
         .levelDecreasePerBlock(1)
+            .tickRate(25)    // fuck you i couldnt get it to go back in line with the others
         .block(ModFluids.DENSITE_EMULSION_BLOCK)
         .bucket(ModFluids.DENSITE_EMULSION_BUCKET);
 
@@ -73,11 +74,36 @@ public class ModFluids {
     )
         .slopeFindDistance(2)
         .levelDecreasePerBlock(1)
+            .tickRate(35) // fuck you i couldnt get it to go back in line with the others
         .block(ModFluids.VOID_SEA_SLURRY_BLOCK)
         .bucket(ModFluids.VOID_SEA_SLURRY_BUCKET);
 
 
     // NEXT FLUID ...
+
+    public static final Supplier<FlowingFluid> SOURCE_DRIFT_CONDENSATE = FLUIDS.register(
+            "source_drift_condensate",
+            () -> new BaseFlowingFluid.Source(ModFluids.DRIFT_CONDENSATE_PROPERTIES));
+    public static final Supplier<FlowingFluid> FLOWING_DRIFT_CONDENSATE = FLUIDS.register(
+            "flowing_drift_condensate",
+            () -> new BaseFlowingFluid.Flowing(ModFluids.DRIFT_CONDENSATE_PROPERTIES));
+    public static final DeferredBlock<LiquidBlock> DRIFT_CONDENSATE_BLOCK = ModBlocks.BLOCKS.register(
+            "drift_condensate_block",
+            () -> new LiquidBlock(ModFluids.SOURCE_DRIFT_CONDENSATE.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).noLootTable()));
+    public static final DeferredItem<Item> DRIFT_CONDENSATE_BUCKET = ModItems.ITEMS.registerItem(
+            "drift_condensate_bucket",
+            properties -> new BucketItem(ModFluids.SOURCE_DRIFT_CONDENSATE.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1)));
+
+    public static final BaseFlowingFluid.Properties DRIFT_CONDENSATE_PROPERTIES = new BaseFlowingFluid.Properties(
+            ModFluidTypes.DRIFT_CONDENSATE_FLUID_TYPE,
+            SOURCE_DRIFT_CONDENSATE,
+            FLOWING_DRIFT_CONDENSATE
+    )
+            .slopeFindDistance(3)
+            .levelDecreasePerBlock(2)
+            .tickRate(10)
+            .block(ModFluids.DRIFT_CONDENSATE_BLOCK)
+            .bucket(ModFluids.DRIFT_CONDENSATE_BUCKET);
 
     public static void register(IEventBus eventBus) {
         FLUIDS.register(eventBus);
