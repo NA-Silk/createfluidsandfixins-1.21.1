@@ -3,7 +3,9 @@
   "package": "com.nasilk.createfluidsandfixins.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "PipeExtractionMixin"
+    "FluidDrainingBehaviourMixin",
+    "HosePulleyMixin",
+    "OpenEndedPipeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

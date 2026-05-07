@@ -43,7 +43,7 @@ public class ModFluidTypes {
                 null,
                 new Vector3f(0.141f, 0.0f, 0.259f), // Fog color
                 FluidType.Properties.create()
-                    .lightLevel(15) // Glow?
+                    //.lightLevel(15) // Glow?
                     .viscosity(5000) // Physics related (higher = heavier)
                     .density(5000) // Physics related (higher = heavier)
                     .canSwim(false)
