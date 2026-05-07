@@ -40,12 +40,12 @@ public class ModFluidTypes {
                 DENSITE_STILL_RL,
                 DENSITE_FLOWING_RL,
                 null,
+                null,
                 new Vector3f(0.141f, 0.0f, 0.259f), // Fog color
-                0xFFFFFFFF,
                 FluidType.Properties.create()
-                    .lightLevel(15) // Glow
-                    .viscosity(5000) // Slow flow
-                    .density(5000) // Physics related
+                    .lightLevel(15) // Glow?
+                    .viscosity(5000) // Physics related (higher = heavier)
+                    .density(5000) // Physics related (higher = heavier)
                     .canSwim(false)
             )
         );
@@ -60,7 +60,7 @@ public class ModFluidTypes {
     public static final ResourceLocation VOID_SEA_SLURRY_FLOWING_RL =
         ResourceLocation.fromNamespaceAndPath(
             CreateFluidsAndFixins.MOD_ID,
-            "block/flowing_void_sea_slurry" // DONT YELL AT ME
+            "block/flowing_void_sea_slurry" // DON'T YELL AT ME
         );
     public static final Supplier<FluidType> VOID_SEA_SLURRY_FLUID_TYPE =
         registerFluidType(
@@ -69,12 +69,12 @@ public class ModFluidTypes {
                 VOID_SEA_SLURRY_STILL_RL,
                 VOID_SEA_SLURRY_FLOWING_RL,
                 null,
+                null,
                 new Vector3f(0.141f, 0.0f, 0.259f), // Fog color
-                0xFFFFFFFF,
                 FluidType.Properties.create()
-                    .lightLevel(15) // Glow
-                    .viscosity(1500) // Slow flow
-                    .density(1500) // Physics related
+                    .lightLevel(15) // Glow?
+                    .viscosity(1500) // Physics related (higher = heavier)
+                    .density(1500) // Physics related (higher = heavier)
                     .canSwim(false)
             )
         );

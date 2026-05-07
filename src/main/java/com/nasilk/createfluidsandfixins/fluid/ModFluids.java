@@ -46,8 +46,9 @@ public class ModFluids {
         SOURCE_DENSITE_EMULSION,
         FLOWING_DENSITE_EMULSION
     )
-        .slopeFindDistance(2)
-        .levelDecreasePerBlock(1)
+        .slopeFindDistance(1) // Horizontal searching rate
+        .levelDecreasePerBlock(1) // Spread distance
+        .tickRate(20) // Spread rate (water ~5, inverted scale)
         .block(ModFluids.DENSITE_EMULSION_BLOCK)
         .bucket(ModFluids.DENSITE_EMULSION_BUCKET);
 
@@ -71,8 +72,9 @@ public class ModFluids {
         SOURCE_VOID_SEA_SLURRY,
         FLOWING_VOID_SEA_SLURRY
     )
-        .slopeFindDistance(2)
-        .levelDecreasePerBlock(1)
+        .slopeFindDistance(2) // Horizontal searching rate (flow speed)
+        .levelDecreasePerBlock(1) // Spread distance
+        .tickRate(10) // Spread rate (water ~5, inverted scale)
         .block(ModFluids.VOID_SEA_SLURRY_BLOCK)
         .bucket(ModFluids.VOID_SEA_SLURRY_BUCKET);
 

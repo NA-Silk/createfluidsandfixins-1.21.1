@@ -7,7 +7,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,16 +25,17 @@ public class BaseFluidType extends FluidType {
         ResourceLocation stillTexture,
         ResourceLocation flowingTexture,
         @Nullable ResourceLocation overlayTexture,
+        @Nullable Integer tintColor,
         Vector3f fogColor,
-        int tintColor,
         Properties properties
     ) {
         super(properties);
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
         this.overlayTexture = overlayTexture;
-        this.fogColor = fogColor;
+        if (tintColor == null) { tintColor = 0xFFFFFFFF; }
         this.tintColor = tintColor;
+        this.fogColor = fogColor;
     }
 
     @SuppressWarnings("removal")
