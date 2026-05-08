@@ -15,6 +15,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import java.util.function.Supplier;
 
+// TODO: Add hasAdjacentSelf
 public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
     private final Supplier<Block> transformBlock;
     private final FluidTransformationSettings settings;

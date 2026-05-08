@@ -46,7 +46,7 @@ public class ModFluids {
         true, // Require adjacent ice
         false, // Transform flowing fluids
         false, // Vaporize in ultrawarm dimensions
-        Set.of(Level.OVERWORLD), // Allowed dimensions
+        Set.of(Level.OVERWORLD, Level.NETHER, Level.END), // Allowed dimensions
         Optional.of(() -> SoundEvents.ENDER_EYE_DEATH) // Sound effect
     );
     public static final Supplier<FlowingFluid> SOURCE_DENSITE_EMULSION = FLUIDS.register(

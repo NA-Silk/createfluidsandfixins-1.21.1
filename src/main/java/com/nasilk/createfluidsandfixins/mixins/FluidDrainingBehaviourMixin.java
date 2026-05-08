@@ -29,7 +29,7 @@ public class FluidDrainingBehaviourMixin {
 
         // DRIFT CONDENSATE: check if in OVERWORLD and y > yDriftCondensate
         if (world.dimension() == Level.OVERWORLD && root.getY() > settings.yDriftCondensate) {
-            System.out.println("Void Sea Slurry extraction permitted at " + root.getY());
+            System.out.println("Drift Condensate extraction permitted at " + root.getY());
             // Pretend there is something to pull so HosePulleyFluidHandler proceeds
             cir.setReturnValue(true);
         }

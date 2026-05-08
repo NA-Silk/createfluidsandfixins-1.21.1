@@ -33,7 +33,7 @@ public class OpenEndedPipeMixin {
 
         // DRIFT CONDENSATE: check if in OVERWORLD and y > yDriftCondensate
         if (world.dimension() == Level.OVERWORLD && outputPos.getY() > settings.yDriftCondensate) {
-            System.out.println("Void Sea Slurry extraction permitted at " + outputPos);
+            System.out.println("Drift Condensate extraction permitted at " + outputPos);
             // Pretend there is something to pull so HosePulleyFluidHandler proceeds
             cir.setReturnValue(new FluidStack(ModFluids.SOURCE_DRIFT_CONDENSATE.get(), 500));
         }
