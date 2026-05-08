@@ -11,7 +11,6 @@ import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
-
 import java.util.function.Consumer;
 
 public class BaseFluidType extends FluidType {

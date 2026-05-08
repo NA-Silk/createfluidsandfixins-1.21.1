@@ -1,4 +1,4 @@
-package com.nasilk.createfluidsandfixins.fluid;
+package com.nasilk.createfluidsandfixins.fluid.flowingfluid;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -72,18 +72,10 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
         return super.getSource(false);
     }
 
-    public static class Flowing extends UpwardBaseFlowingFluid {
 
+    public static class Flowing extends UpwardBaseFlowingFluid {
         public Flowing(Properties properties) {
             super(properties);
-        }
-
-        @Override
-        protected void createFluidStateDefinition(
-                StateDefinition.Builder<Fluid, FluidState> builder
-        ) {
-            super.createFluidStateDefinition(builder);
-            builder.add(LEVEL);
         }
 
         @Override
@@ -95,10 +87,18 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
         public int getAmount(FluidState state) {
             return state.getValue(LEVEL);
         }
+
+        @Override
+        protected void createFluidStateDefinition(
+                StateDefinition.Builder<Fluid, FluidState> builder
+        ) {
+            super.createFluidStateDefinition(builder);
+            builder.add(LEVEL);
+        }
     }
 
-    public static class Source extends UpwardBaseFlowingFluid {
 
+    public static class Source extends UpwardBaseFlowingFluid {
         public Source(Properties properties) {
             super(properties);
         }

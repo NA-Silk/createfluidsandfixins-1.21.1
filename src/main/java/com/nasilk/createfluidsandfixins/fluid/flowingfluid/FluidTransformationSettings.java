@@ -1,9 +1,8 @@
-package com.nasilk.createfluidsandfixins.fluid;
+package com.nasilk.createfluidsandfixins.fluid.flowingfluid;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.Level;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;

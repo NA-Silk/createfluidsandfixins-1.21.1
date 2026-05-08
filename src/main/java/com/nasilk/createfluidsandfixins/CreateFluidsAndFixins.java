@@ -4,7 +4,6 @@ import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.fluid.ModFluidTypes;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 import com.nasilk.createfluidsandfixins.item.ModItems;
-
 import com.nasilk.createfluidsandfixins.util.ModDispenserBehaviors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -12,10 +11,8 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
-
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -37,9 +34,6 @@ public class CreateFluidsAndFixins {
 
     // The constructor for the mod class is the first code that is run when the mod is loaded
     public CreateFluidsAndFixins(IEventBus modEventBus, ModContainer modContainer) {
-        // Register the commonSetup method for mod loading
-        modEventBus.addListener(this::commonSetup);
-
         // Custom registrations
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
@@ -48,6 +42,9 @@ public class CreateFluidsAndFixins {
 
         // Register ourselves for server and other game events
         NeoForge.EVENT_BUS.register(this);
+
+        // Register the commonSetup method for mod loading
+        modEventBus.addListener(this::commonSetup);
 
         // Register the items to a creative tab
         modEventBus.addListener(this::addCreative);

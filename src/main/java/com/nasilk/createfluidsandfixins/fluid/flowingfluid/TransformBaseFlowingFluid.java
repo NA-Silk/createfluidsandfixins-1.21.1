@@ -1,4 +1,4 @@
-package com.nasilk.createfluidsandfixins.fluid;
+package com.nasilk.createfluidsandfixins.fluid.flowingfluid;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,16 +12,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
-
 import java.util.function.Supplier;
 
-public abstract class ModBaseFlowingFluid extends BaseFlowingFluid {
+public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
     private final Supplier<Block> transformBlock;
     private final FluidTransformationSettings settings;
 
-    protected ModBaseFlowingFluid(
+    protected TransformBaseFlowingFluid(
             Properties properties,
             Supplier<Block> transformBlock,
             FluidTransformationSettings settings
@@ -140,7 +138,8 @@ public abstract class ModBaseFlowingFluid extends BaseFlowingFluid {
         return false;
     }
 
-    public static class Flowing extends ModBaseFlowingFluid {
+
+    public static class Flowing extends TransformBaseFlowingFluid {
         public Flowing(
                 Properties properties,
                 Supplier<Block> transformBlock,
@@ -168,7 +167,8 @@ public abstract class ModBaseFlowingFluid extends BaseFlowingFluid {
         }
     }
 
-    public static class Source extends ModBaseFlowingFluid {
+
+    public static class Source extends TransformBaseFlowingFluid {
         public Source(
                 Properties properties,
                 Supplier<Block> transformBlock,

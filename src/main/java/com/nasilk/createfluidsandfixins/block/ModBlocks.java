@@ -1,15 +1,7 @@
 package com.nasilk.createfluidsandfixins.block;
 
-/* MCCourse imports
- * import net.kaupenjoe.mccourse.sound.ModSounds;
-
- * import net.minecraft.util.valueproviders.UniformInt;
- * import net.minecraft.world.level.block.state.properties.BlockSetType;
- * import net.minecraft.world.level.block.state.properties.WoodType;
- */
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.item.ModItems;
-
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -20,7 +12,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
 import java.util.function.Supplier;
 
 public class ModBlocks {

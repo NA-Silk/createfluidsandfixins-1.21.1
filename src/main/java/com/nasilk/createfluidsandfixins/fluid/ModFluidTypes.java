@@ -1,14 +1,12 @@
 package com.nasilk.createfluidsandfixins.fluid;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
-
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.joml.Vector3f;
-
 import java.util.function.Supplier;
 
 public class ModFluidTypes {
@@ -40,7 +38,7 @@ public class ModFluidTypes {
                 DENSITE_STILL_RL,
                 DENSITE_FLOWING_RL,
                 null,
-                null,
+                null, // 0xAARRGGBB (ARGB format)
                 new Vector3f(0.141f, 0.0f, 0.259f), // Fog color
                 FluidType.Properties.create()
                     .lightLevel(1) // Glow?
@@ -70,7 +68,7 @@ public class ModFluidTypes {
                 VOID_SEA_SLURRY_FLOWING_RL,
                 null,
                 null,
-                new Vector3f(0.141f, 0.0f, 0.259f), // Fog color
+                new Vector3f(0.20f, 0.086f, 0.322f), // Fog color
                 FluidType.Properties.create()
                     .lightLevel(2) // Glow?
                     .viscosity(1500) // Physics related (higher = heavier)
@@ -102,8 +100,8 @@ public class ModFluidTypes {
                 DRIFT_STILL_RL,
                 DRIFT_FLOWING_RL,
                 null,
-                null,
-                new Vector3f(0.95f, 0.78f, 0.68f),  // Fog color
+                0xAAFFFFFF,
+                new Vector3f(0.337f, 0.714f, 0.80f),  // Fog color
                 FluidType.Properties.create()
                     .lightLevel(6) // Glow?
                     .viscosity(200) // Physics related (higher = heavier)

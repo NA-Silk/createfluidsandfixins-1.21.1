@@ -1,7 +1,6 @@
 package com.nasilk.createfluidsandfixins.util;
 
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.BlockSource;

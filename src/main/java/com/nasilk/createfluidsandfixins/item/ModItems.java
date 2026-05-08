@@ -1,10 +1,5 @@
 package com.nasilk.createfluidsandfixins.item;
 
-/*
- * import net.minecraft.world.item.Item;
- * import net.neoforged.neoforge.registries.DeferredItem;
- */
-
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;

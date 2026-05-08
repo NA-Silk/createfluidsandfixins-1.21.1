@@ -2,8 +2,10 @@ package com.nasilk.createfluidsandfixins.fluid;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.block.ModBlocks;
+import com.nasilk.createfluidsandfixins.fluid.flowingfluid.FluidTransformationSettings;
+import com.nasilk.createfluidsandfixins.fluid.flowingfluid.TransformBaseFlowingFluid;
+import com.nasilk.createfluidsandfixins.fluid.flowingfluid.UpwardBaseFlowingFluid;
 import com.nasilk.createfluidsandfixins.item.ModItems;
-
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BucketItem;
@@ -20,12 +22,11 @@ import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
-// NOTE: FluidTransformationSettings only required if using ModBaseFlowingFluid
+// NOTE: FluidTransformationSettings only required if using TransformBaseFlowingFluid or UpwardTransformBaseFlowingFluid
 public class ModFluids {
     // DEFAULT
     public static final DeferredRegister<Fluid> FLUIDS =
@@ -50,7 +51,7 @@ public class ModFluids {
     );
     public static final Supplier<FlowingFluid> SOURCE_DENSITE_EMULSION = FLUIDS.register(
         "source_densite_emulsion",
-        () -> new ModBaseFlowingFluid.Source(
+        () -> new TransformBaseFlowingFluid.Source(
             ModFluids.DENSITE_EMULSION_PROPERTIES,
             ModBlocks.DENSITE_BLOCK,
             DENSITE_EMULSION_SETTINGS
@@ -58,7 +59,7 @@ public class ModFluids {
     );
     public static final Supplier<FlowingFluid> FLOWING_DENSITE_EMULSION = FLUIDS.register(
         "flowing_densite_emulsion",
-        () -> new ModBaseFlowingFluid.Flowing(
+        () -> new TransformBaseFlowingFluid.Flowing(
             ModFluids.DENSITE_EMULSION_PROPERTIES,
             ModBlocks.DENSITE_BLOCK,
             DENSITE_EMULSION_SETTINGS
@@ -74,7 +75,7 @@ public class ModFluids {
         properties -> new BucketItem(ModFluids.SOURCE_DENSITE_EMULSION.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
     );
 
-    public static final ModBaseFlowingFluid.Properties DENSITE_EMULSION_PROPERTIES = new ModBaseFlowingFluid.Properties(
+    public static final TransformBaseFlowingFluid.Properties DENSITE_EMULSION_PROPERTIES = new TransformBaseFlowingFluid.Properties(
         ModFluidTypes.DENSITE_EMULSION_FLUID_TYPE,
         SOURCE_DENSITE_EMULSION,
         FLOWING_DENSITE_EMULSION
