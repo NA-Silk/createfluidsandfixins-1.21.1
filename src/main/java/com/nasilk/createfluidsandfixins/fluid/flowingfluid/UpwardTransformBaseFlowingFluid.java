@@ -40,9 +40,9 @@ public abstract class UpwardTransformBaseFlowingFluid extends TransformBaseFlowi
             int newAmount = amount - 2;
             if (newAmount > 0) {
                 level.setBlock(
-                        abovePos,
-                        this.getFlowing(newAmount, false).createLegacyBlock(),
-                        3
+                    abovePos,
+                    this.getFlowing(newAmount, false).createLegacyBlock(),
+                    3
                 );
             }
 
@@ -91,7 +91,7 @@ public abstract class UpwardTransformBaseFlowingFluid extends TransformBaseFlowi
 
         @Override
         protected void createFluidStateDefinition(
-                StateDefinition.Builder<Fluid, FluidState> builder
+            StateDefinition.Builder<Fluid, FluidState> builder
         ) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);

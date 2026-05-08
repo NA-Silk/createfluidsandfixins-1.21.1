@@ -90,7 +90,7 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
 
         @Override
         protected void createFluidStateDefinition(
-                StateDefinition.Builder<Fluid, FluidState> builder
+            StateDefinition.Builder<Fluid, FluidState> builder
         ) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);

@@ -18,13 +18,14 @@ public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
         DeferredRegister.createBlocks(CreateFluidsAndFixins.MOD_ID);
 
-    public static final DeferredBlock<Block> DENSITE_BLOCK = registerBlock("densite_block",
+    public static final DeferredBlock<Block> DENSITE_BLOCK = registerBlock(
+        "densite_block",
         () -> new Block(BlockBehaviour.Properties.of()
             .mapColor(MapColor.COLOR_PURPLE)
             .strength(2.0f, 9.0f)
             .jumpFactor(0.5f)
             .friction(0.9f)
-            .lightLevel(state -> 2) // Add separate glow layer texture later _e
+            .lightLevel(state -> 2) // Add separate glow layer texture later
             .hasPostProcess((state, pos, level) -> true)
             .emissiveRendering((state, pos, level) -> true)
             .sound(

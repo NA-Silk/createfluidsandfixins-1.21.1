@@ -35,8 +35,8 @@ public class ModFluids {
 
     // DENSITE EMULSION
     public static final FluidTransformationSettings DENSITE_EMULSION_SETTINGS = new FluidTransformationSettings(
-        0.02f, // Transform chance
-        2, // Max skylight
+        1.0f, // Transform chance
+        15, // Max skylight
         -64, // min Y
         319, // max Y
         false, // Require cold biome

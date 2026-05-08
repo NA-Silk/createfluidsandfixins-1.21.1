@@ -37,8 +37,8 @@ public class CreateFluidsAndFixins {
         // Custom registrations
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
-        ModFluidTypes.register(modEventBus);
-        ModFluids.register(modEventBus);
+        ModFluidTypes.register(modEventBus); // Fluid textures
+        ModFluids.register(modEventBus); // Fluid behaviors
 
         // Register ourselves for server and other game events
         NeoForge.EVENT_BUS.register(this);

@@ -67,7 +67,7 @@ public class ModFluidTypes {
                 VOID_SEA_SLURRY_STILL_RL,
                 VOID_SEA_SLURRY_FLOWING_RL,
                 null,
-                null,
+                null, // 0xAARRGGBB (ARGB format)
                 new Vector3f(0.20f, 0.086f, 0.322f), // Fog color
                 FluidType.Properties.create()
                     .lightLevel(2) // Glow?
@@ -100,7 +100,7 @@ public class ModFluidTypes {
                 DRIFT_STILL_RL,
                 DRIFT_FLOWING_RL,
                 null,
-                0xAAFFFFFF,
+                0xAAFFFFFF, // 0xAARRGGBB (ARGB format)
                 new Vector3f(0.337f, 0.714f, 0.80f),  // Fog color
                 FluidType.Properties.create()
                     .lightLevel(6) // Glow?

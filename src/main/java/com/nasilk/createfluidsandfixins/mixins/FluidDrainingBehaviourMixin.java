@@ -14,16 +14,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class FluidDrainingBehaviourMixin {
     @Inject(method = "pullNext", at = @At("HEAD"), cancellable = true)
     private void pullNextMixin(BlockPos root, boolean simulate, CallbackInfoReturnable<Boolean> cir) {
-        int yVoidSeaSlurry = new MixinSettings().yVoidSeaSlurry;
+        MixinSettings settings = new MixinSettings();
         Level world = ((BlockEntityBehaviour)(Object)this).getWorld();
 
         // Error check
         if (world == null) return;
 
-        // Check if in END and y <= yVoidSeaSlurry
-        if (world.dimension() == Level.END && root.getY() < yVoidSeaSlurry) {
+        // VOID SEA SLURRY: check if in END and y < yVoidSeaSlurry
+        if (world.dimension() == Level.END && root.getY() < settings.yVoidSeaSlurry) {
             System.out.println("Void Sea Slurry extraction permitted at " + root.getY());
+            // Pretend there is something to pull so HosePulleyFluidHandler proceeds
+            cir.setReturnValue(true);
+        }
 
+        // DRIFT CONDENSATE: check if in OVERWORLD and y > yDriftCondensate
+        if (world.dimension() == Level.OVERWORLD && root.getY() > settings.yDriftCondensate) {
+            System.out.println("Void Sea Slurry extraction permitted at " + root.getY());
             // Pretend there is something to pull so HosePulleyFluidHandler proceeds
             cir.setReturnValue(true);
         }

@@ -20,9 +20,9 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
     private final FluidTransformationSettings settings;
 
     protected TransformBaseFlowingFluid(
-            Properties properties,
-            Supplier<Block> transformBlock,
-            FluidTransformationSettings settings
+        Properties properties,
+        Supplier<Block> transformBlock,
+        FluidTransformationSettings settings
     ) {
         super(properties);
         this.transformBlock = transformBlock;
@@ -36,10 +36,10 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
 
     @Override
     public void randomTick(
-            Level level,
-            BlockPos pos,
-            FluidState state,
-            RandomSource random
+        Level level,
+        BlockPos pos,
+        FluidState state,
+        RandomSource random
     ) {
         super.randomTick(level, pos, state, random);
 
@@ -141,9 +141,9 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
 
     public static class Flowing extends TransformBaseFlowingFluid {
         public Flowing(
-                Properties properties,
-                Supplier<Block> transformBlock,
-                FluidTransformationSettings settings
+            Properties properties,
+            Supplier<Block> transformBlock,
+            FluidTransformationSettings settings
         ) {
             super(properties, transformBlock, settings);
         }
@@ -160,7 +160,7 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
 
         @Override
         protected void createFluidStateDefinition(
-                StateDefinition.Builder<Fluid, FluidState> builder
+            StateDefinition.Builder<Fluid, FluidState> builder
         ) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
@@ -170,9 +170,9 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
 
     public static class Source extends TransformBaseFlowingFluid {
         public Source(
-                Properties properties,
-                Supplier<Block> transformBlock,
-                FluidTransformationSettings settings
+            Properties properties,
+            Supplier<Block> transformBlock,
+            FluidTransformationSettings settings
         ) {
             super(properties, transformBlock, settings);
         }
