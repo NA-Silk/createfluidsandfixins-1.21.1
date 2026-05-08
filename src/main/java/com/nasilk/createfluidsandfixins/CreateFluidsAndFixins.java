@@ -35,8 +35,7 @@ public class CreateFluidsAndFixins {
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    // The constructor for the mod class is the first code that is run when your mod is loaded.
-    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
+    // The constructor for the mod class is the first code that is run when the mod is loaded
     public CreateFluidsAndFixins(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for mod loading
         modEventBus.addListener(this::commonSetup);
@@ -47,15 +46,13 @@ public class CreateFluidsAndFixins {
         ModFluidTypes.register(modEventBus);
         ModFluids.register(modEventBus);
 
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (CreateFluidsAndFixins) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
+        // Register ourselves for server and other game events
         NeoForge.EVENT_BUS.register(this);
 
-        // Register the item to a creative tab
+        // Register the items to a creative tab
         modEventBus.addListener(this::addCreative);
 
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
+        // Register ModConfigSpec so that FML can create and load the config file
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
@@ -64,10 +61,10 @@ public class CreateFluidsAndFixins {
             ModDispenserBehaviors.register();
         });
 
-        LOGGER.info("Create Fluids & Fixins loaded");
+        LOGGER.info("Create: Fluids and Fixins loaded");
     }
 
-    // Add the example block item to the building blocks tab
+    // Add block items to creative tabs
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
@@ -80,14 +77,14 @@ public class CreateFluidsAndFixins {
         }
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
+    // @SubscribeEvent lets the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
+    // @EventBusSubscriber automatically registers all static methods in the class annotated with @SubscribeEvent
     @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent

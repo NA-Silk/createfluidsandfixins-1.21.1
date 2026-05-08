@@ -18,6 +18,7 @@ public class ModDispenserBehaviors {
     public static void register() {
         registerFluidBucket((BucketItem) ModFluids.DENSITE_EMULSION_BUCKET.get());
         registerFluidBucket((BucketItem) ModFluids.VOID_SEA_SLURRY_BUCKET.get());
+        registerFluidBucket((BucketItem) ModFluids.DRIFT_CONDENSATE_BUCKET.get());
     }
 
     private static void registerFluidBucket(BucketItem bucketItem) {
