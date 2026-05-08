@@ -17,14 +17,13 @@ public class HosePulleyMixin {
     @Inject(method = "getDrainableFluid", at = @At("HEAD"), cancellable = true)
     private void getDrainableFluidMixin(BlockPos rootPos, CallbackInfoReturnable<FluidStack> cir) {
         MixinSettings settings = new MixinSettings();
-        int yVoidSeaSlurry = settings.yVoidSeaSlurry;
         Level world = ((BlockEntityBehaviour)(Object)this).getWorld();
 
         // Error check
         if (world == null) return;
 
         // VOID SEA SLURRY: check if in END and y < yVoidSeaSlurry
-        if (world.dimension() == Level.END && rootPos.getY() < yVoidSeaSlurry) {
+        if (world.dimension() == Level.END && rootPos.getY() < settings.yVoidSeaSlurry) {
             System.out.println("Void Sea Slurry extraction triggered at " + rootPos);
             // Return Void Sea Slurry as if it was extracted
             cir.setReturnValue(new FluidStack(ModFluids.SOURCE_VOID_SEA_SLURRY.get(), 500));
@@ -32,7 +31,7 @@ public class HosePulleyMixin {
 
         // DRIFT CONDENSATE: check if in OVERWORLD and y > yDriftCondensate
         if (world.dimension() == Level.OVERWORLD && rootPos.getY() > settings.yDriftCondensate) {
-            System.out.println("Void Sea Slurry extraction permitted at " + rootPos.getY());
+            System.out.println("Void Sea Slurry extraction permitted at " + rootPos);
             // Pretend there is something to pull so HosePulleyFluidHandler proceeds
             cir.setReturnValue(new FluidStack(ModFluids.SOURCE_DRIFT_CONDENSATE.get(), 500));
         }
