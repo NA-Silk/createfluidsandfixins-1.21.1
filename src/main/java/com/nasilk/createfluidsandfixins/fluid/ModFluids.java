@@ -148,9 +148,9 @@ public class ModFluids {
         SOURCE_DRIFT_CONDENSATE,
         FLOWING_DRIFT_CONDENSATE
     )
-        .slopeFindDistance(1) // Horizontal searching rate (flow speed)
+        .slopeFindDistance(0) // Horizontal searching rate (flow speed)
         .levelDecreasePerBlock(1) // Spread distance
-        .tickRate(15) // Spread rate (water ~5, inverted scale)
+        .tickRate(8) // Spread rate (water ~5, inverted scale)
         .block(ModFluids.DRIFT_CONDENSATE_BLOCK)
         .bucket(ModFluids.DRIFT_CONDENSATE_BUCKET);
 
