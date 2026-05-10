@@ -2,7 +2,6 @@ package com.nasilk.createfluidsandfixins.fluid;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.block.ModBlocks;
-import com.nasilk.createfluidsandfixins.fluid.flowingfluid.UpwardTransformBaseFlowingFluid;
 import com.nasilk.createfluidsandfixins.util.FluidTransformationSettings;
 import com.nasilk.createfluidsandfixins.fluid.flowingfluid.TransformBaseFlowingFluid;
 import com.nasilk.createfluidsandfixins.fluid.flowingfluid.UpwardBaseFlowingFluid;
@@ -175,7 +174,7 @@ public class ModFluids {
     );
     public static final Supplier<FlowingFluid> SOURCE_PROPULSITE_FLURRY = FLUIDS.register(
         "source_propulsite_flurry",
-        () -> new UpwardTransformBaseFlowingFluid.Source(
+        () -> new TransformBaseFlowingFluid.Source(
             ModFluids.PROPULSITE_FLURRY_PROPERTIES,
             ModBlocks.PROPULSITE_BLOCK,
             PROPULSITE_FLURRY_SETTINGS
@@ -183,7 +182,7 @@ public class ModFluids {
     );
     public static final Supplier<FlowingFluid> FLOWING_PROPULSITE_FLURRY = FLUIDS.register(
         "flowing_propulsite_flurry",
-        () -> new UpwardTransformBaseFlowingFluid.Flowing(
+        () -> new TransformBaseFlowingFluid.Flowing(
             ModFluids.PROPULSITE_FLURRY_PROPERTIES,
             ModBlocks.PROPULSITE_BLOCK,
             PROPULSITE_FLURRY_SETTINGS
@@ -199,14 +198,14 @@ public class ModFluids {
         properties -> new BucketItem(ModFluids.SOURCE_PROPULSITE_FLURRY.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
     );
 
-    public static final UpwardTransformBaseFlowingFluid.Properties PROPULSITE_FLURRY_PROPERTIES = new UpwardTransformBaseFlowingFluid.Properties(
+    public static final TransformBaseFlowingFluid.Properties PROPULSITE_FLURRY_PROPERTIES = new TransformBaseFlowingFluid.Properties(
         ModFluidTypes.PROPULSITE_FLURRY_FLUID_TYPE,
         SOURCE_PROPULSITE_FLURRY,
         FLOWING_PROPULSITE_FLURRY
     )
-        .slopeFindDistance(1) // Horizontal searching rate
+        .slopeFindDistance(8) // Horizontal searching rate
         .levelDecreasePerBlock(1) // Spread distance
-        .tickRate(5) // Spread rate (water ~5, inverted scale)
+        .tickRate(2) // Spread rate (water ~5, inverted scale)
         .block(ModFluids.PROPULSITE_FLURRY_BLOCK)
         .bucket(ModFluids.PROPULSITE_FLURRY_BUCKET);
 

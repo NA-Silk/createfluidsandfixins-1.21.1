@@ -1,4 +1,4 @@
-package com.nasilk.createfluidsandfixins.util;
+package com.nasilk.createfluidsandfixins.behavior;
 
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 import net.minecraft.core.BlockPos;

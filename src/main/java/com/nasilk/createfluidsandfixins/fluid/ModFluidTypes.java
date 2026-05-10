@@ -42,8 +42,8 @@ public class ModFluidTypes {
                 new Vector3f(0.20f, 0.086f, 0.322f), // Fog color
                 FluidType.Properties.create()
                     .lightLevel(2) // Glow?
-                    .viscosity(1500) // Physics related (higher = heavier)
-                    .density(1500) // Physics related (higher = heavier), upside down pipe flow
+                    .viscosity(2500) // Physics related (higher = heavier)
+                    .density(2500) // Physics related (higher = heavier), upside down pipe flow if negative
                     .canSwim(false)
             )
         );
@@ -72,7 +72,7 @@ public class ModFluidTypes {
                 FluidType.Properties.create()
                     .lightLevel(2) // Glow?
                     .viscosity(5000) // Physics related (higher = heavier)
-                    .density(5000) // Physics related (higher = heavier), upside down pipe flow
+                    .density(5000) // Physics related (higher = heavier), upside down pipe flow if negative
                     .canSwim(false)
             )
         );
@@ -101,8 +101,8 @@ public class ModFluidTypes {
                 FluidType.Properties.create()
                     .lightLevel(6) // Glow?
                     .viscosity(200) // Physics related (higher = heavier)
-                    .density(-1000) // Physics related (higher = heavier), upside down pipe flow
-                    .motionScale(0.002)
+                    .density(-1000) // Physics related (higher = heavier), upside down pipe flow if negative
+                    .motionScale(0.002D)
                     .temperature(250)
                     .canSwim(false)
             )
@@ -131,10 +131,10 @@ public class ModFluidTypes {
                 0xAAFFFFFF, // 0xAARRGGBB (ARGB format)
                 new Vector3f(1.0f, 0.867f, 0.729f),  // Fog color
                 FluidType.Properties.create()
-                    .lightLevel(6) // Glow?
+                    .lightLevel(8) // Glow?
                     .viscosity(300) // Physics related (higher = heavier)
-                    .density(-800) // Physics related (higher = heavier), upside down pipe flow
-                    .motionScale(0.002)
+                    .density(0) // Physics related (higher = heavier), upside down pipe flow
+                    .motionScale(0.03D)
                     .temperature(250)
                     .canSwim(false)
             )
