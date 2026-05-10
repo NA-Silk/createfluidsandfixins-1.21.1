@@ -47,9 +47,7 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
 
             // Remove current block after moving upward (prevents infinite columns)
             if (!state.isSource()) {
-                if (Math.random() > 0.1f) {
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                }
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
             }
             return;
         }

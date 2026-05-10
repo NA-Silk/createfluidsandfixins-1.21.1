@@ -5,6 +5,7 @@ import com.nasilk.createfluidsandfixins.fluid.ModFluidTypes;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import com.nasilk.createfluidsandfixins.util.ModDispenserBehaviors;
+import com.nasilk.createfluidsandfixins.util.NoiseTracker;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -42,6 +43,7 @@ public class CreateFluidsAndFixins {
 
         // Register ourselves for server and other game events
         NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(NoiseTracker.class);
 
         // Register the commonSetup method for mod loading
         modEventBus.addListener(this::commonSetup);
@@ -64,13 +66,15 @@ public class CreateFluidsAndFixins {
     // Add block items to creative tabs
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
             event.accept(ModFluids.VOID_SEA_SLURRY_BUCKET);
+            event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
             event.accept(ModFluids.DRIFT_CONDENSATE_BUCKET);
+            event.accept(ModFluids.PROPULSITE_FLURRY_BUCKET);
         }
 
         if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.DENSITE_BLOCK);
+            event.accept(ModBlocks.PROPULSITE_BLOCK);
         }
     }
 
@@ -87,12 +91,14 @@ public class CreateFluidsAndFixins {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
-                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_DENSITE_EMULSION.get(), RenderType.translucent());
-                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DENSITE_EMULSION.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_VOID_SEA_SLURRY.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_VOID_SEA_SLURRY.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_DENSITE_EMULSION.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DENSITE_EMULSION.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_DRIFT_CONDENSATE.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DRIFT_CONDENSATE.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_PROPULSITE_FLURRY.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_PROPULSITE_FLURRY.get(), RenderType.translucent());
             });
         }
     }

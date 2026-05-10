@@ -2,7 +2,8 @@ package com.nasilk.createfluidsandfixins.fluid;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.block.ModBlocks;
-import com.nasilk.createfluidsandfixins.fluid.flowingfluid.FluidTransformationSettings;
+import com.nasilk.createfluidsandfixins.fluid.flowingfluid.UpwardTransformBaseFlowingFluid;
+import com.nasilk.createfluidsandfixins.util.FluidTransformationSettings;
 import com.nasilk.createfluidsandfixins.fluid.flowingfluid.TransformBaseFlowingFluid;
 import com.nasilk.createfluidsandfixins.fluid.flowingfluid.UpwardBaseFlowingFluid;
 import com.nasilk.createfluidsandfixins.item.ModItems;
@@ -33,12 +34,42 @@ public class ModFluids {
         DeferredRegister.create(BuiltInRegistries.FLUID, CreateFluidsAndFixins.MOD_ID);
 
 
+    // VOID SEA SLURRY
+    public static final Supplier<FlowingFluid> SOURCE_VOID_SEA_SLURRY = FLUIDS.register(
+        "source_void_sea_slurry",
+        () -> new BaseFlowingFluid.Source(ModFluids.VOID_SEA_SLURRY_PROPERTIES)
+    );
+    public static final Supplier<FlowingFluid> FLOWING_VOID_SEA_SLURRY = FLUIDS.register(
+        "flowing_void_sea_slurry",
+        () -> new BaseFlowingFluid.Flowing(ModFluids.VOID_SEA_SLURRY_PROPERTIES)
+    );
+
+    public static final DeferredBlock<LiquidBlock> VOID_SEA_SLURRY_BLOCK = ModBlocks.BLOCKS.register(
+        "void_sea_slurry_block",
+        () -> new LiquidBlock(ModFluids.SOURCE_VOID_SEA_SLURRY.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).noLootTable())
+    );
+    public static final DeferredItem<Item> VOID_SEA_SLURRY_BUCKET = ModItems.ITEMS.registerItem(
+        "void_sea_slurry_bucket",
+        properties -> new BucketItem(ModFluids.SOURCE_VOID_SEA_SLURRY.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
+    );
+
+    public static final BaseFlowingFluid.Properties VOID_SEA_SLURRY_PROPERTIES = new BaseFlowingFluid.Properties(
+        ModFluidTypes.VOID_SEA_SLURRY_FLUID_TYPE,
+        SOURCE_VOID_SEA_SLURRY,
+        FLOWING_VOID_SEA_SLURRY
+    )
+        .slopeFindDistance(1) // Horizontal searching rate (flow speed)
+        .levelDecreasePerBlock(1) // Spread distance
+        .tickRate(15) // Spread rate (water ~5, inverted scale)
+        .block(ModFluids.VOID_SEA_SLURRY_BLOCK)
+        .bucket(ModFluids.VOID_SEA_SLURRY_BUCKET);
+
+
     // DENSITE EMULSION
     public static final FluidTransformationSettings DENSITE_EMULSION_SETTINGS = new FluidTransformationSettings(
-        0.5f, // Transform rate
+        0.5f, // Transform rate [0.0f, 1,0f]
         15, // Max skylight
-        -64, // min Y
-        319, // max Y
+        new FluidTransformationSettings.YRange(-64, 319), // y level range
         false, // Require cold biome
         false, // Require rain
         false, // Require thunder
@@ -50,6 +81,7 @@ public class ModFluids {
             () -> Blocks.FROSTED_ICE,
             ModBlocks.DENSITE_BLOCK
         ),
+        new FluidTransformationSettings.VibrationSettings(false, null, null, null), // Vibration requirements
         false, // Transform flowing fluids
         false, // Vaporize in ultrawarm dimensions
         Set.of(Level.OVERWORLD, Level.NETHER, Level.END), // Allowed dimensions
@@ -92,36 +124,6 @@ public class ModFluids {
         .block(ModFluids.DENSITE_EMULSION_BLOCK)
         .bucket(ModFluids.DENSITE_EMULSION_BUCKET);
 
-    // VOID SEA SLURRY
-    public static final Supplier<FlowingFluid> SOURCE_VOID_SEA_SLURRY = FLUIDS.register(
-        "source_void_sea_slurry",
-        () -> new BaseFlowingFluid.Source(ModFluids.VOID_SEA_SLURRY_PROPERTIES)
-    );
-    public static final Supplier<FlowingFluid> FLOWING_VOID_SEA_SLURRY = FLUIDS.register(
-        "flowing_void_sea_slurry",
-        () -> new BaseFlowingFluid.Flowing(ModFluids.VOID_SEA_SLURRY_PROPERTIES)
-    );
-
-    public static final DeferredBlock<LiquidBlock> VOID_SEA_SLURRY_BLOCK = ModBlocks.BLOCKS.register(
-        "void_sea_slurry_block",
-        () -> new LiquidBlock(ModFluids.SOURCE_VOID_SEA_SLURRY.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).noLootTable())
-    );
-    public static final DeferredItem<Item> VOID_SEA_SLURRY_BUCKET = ModItems.ITEMS.registerItem(
-        "void_sea_slurry_bucket",
-        properties -> new BucketItem(ModFluids.SOURCE_VOID_SEA_SLURRY.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
-    );
-
-    public static final BaseFlowingFluid.Properties VOID_SEA_SLURRY_PROPERTIES = new BaseFlowingFluid.Properties(
-        ModFluidTypes.VOID_SEA_SLURRY_FLUID_TYPE,
-        SOURCE_VOID_SEA_SLURRY,
-        FLOWING_VOID_SEA_SLURRY
-    )
-        .slopeFindDistance(1) // Horizontal searching rate (flow speed)
-        .levelDecreasePerBlock(1) // Spread distance
-        .tickRate(15) // Spread rate (water ~5, inverted scale)
-        .block(ModFluids.VOID_SEA_SLURRY_BLOCK)
-        .bucket(ModFluids.VOID_SEA_SLURRY_BUCKET);
-
 
     // DRIFT CONDENSATE
     public static final Supplier<FlowingFluid> SOURCE_DRIFT_CONDENSATE = FLUIDS.register(
@@ -154,7 +156,63 @@ public class ModFluids {
         .bucket(ModFluids.DRIFT_CONDENSATE_BUCKET);
 
 
+    // Temporary placeholder (along with textures)
+    // PROPULSITE FLURRY
+    public static final FluidTransformationSettings PROPULSITE_FLURRY_SETTINGS = new FluidTransformationSettings(
+        1.0f, // Transform rate [0.0f, 1,0f]
+        15, // Max skylight
+        new FluidTransformationSettings.YRange(-64, 319), // y level range
+        false, // Require cold biome
+        false, // Require rain
+        false, // Require thunder
+        false, // Require night
+        Set.of(), // Require adjacent blocks
+        new FluidTransformationSettings.VibrationSettings(true, 10, 16, 40), // Vibration requirements
+        false, // Transform flowing fluids
+        false, // Vaporize in ultrawarm dimensions
+        Set.of(Level.OVERWORLD, Level.NETHER, Level.END), // Allowed dimensions
+        Optional.of(() -> SoundEvents.GLASS_PLACE) // Sound effect
+    );
+    public static final Supplier<FlowingFluid> SOURCE_PROPULSITE_FLURRY = FLUIDS.register(
+        "source_propulsite_flurry",
+        () -> new UpwardTransformBaseFlowingFluid.Source(
+            ModFluids.PROPULSITE_FLURRY_PROPERTIES,
+            ModBlocks.PROPULSITE_BLOCK,
+            PROPULSITE_FLURRY_SETTINGS
+        )
+    );
+    public static final Supplier<FlowingFluid> FLOWING_PROPULSITE_FLURRY = FLUIDS.register(
+        "flowing_propulsite_flurry",
+        () -> new UpwardTransformBaseFlowingFluid.Flowing(
+            ModFluids.PROPULSITE_FLURRY_PROPERTIES,
+            ModBlocks.PROPULSITE_BLOCK,
+            PROPULSITE_FLURRY_SETTINGS
+        )
+    );
+
+    public static final DeferredBlock<LiquidBlock> PROPULSITE_FLURRY_BLOCK = ModBlocks.BLOCKS.register(
+        "propulsite_flurry_block",
+        () -> new LiquidBlock(ModFluids.SOURCE_PROPULSITE_FLURRY.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).randomTicks().noLootTable())
+    );
+    public static final DeferredItem<Item> PROPULSITE_FLURRY_BUCKET = ModItems.ITEMS.registerItem(
+        "propulsite_flurry_bucket",
+        properties -> new BucketItem(ModFluids.SOURCE_PROPULSITE_FLURRY.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
+    );
+
+    public static final UpwardTransformBaseFlowingFluid.Properties PROPULSITE_FLURRY_PROPERTIES = new UpwardTransformBaseFlowingFluid.Properties(
+        ModFluidTypes.PROPULSITE_FLURRY_FLUID_TYPE,
+        SOURCE_PROPULSITE_FLURRY,
+        FLOWING_PROPULSITE_FLURRY
+    )
+        .slopeFindDistance(1) // Horizontal searching rate
+        .levelDecreasePerBlock(1) // Spread distance
+        .tickRate(5) // Spread rate (water ~5, inverted scale)
+        .block(ModFluids.PROPULSITE_FLURRY_BLOCK)
+        .bucket(ModFluids.PROPULSITE_FLURRY_BUCKET);
+
+
     // NEXT FLUID ...
+
 
     public static void register(IEventBus eventBus) {
         FLUIDS.register(eventBus);

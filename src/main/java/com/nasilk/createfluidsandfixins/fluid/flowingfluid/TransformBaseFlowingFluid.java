@@ -1,5 +1,7 @@
 package com.nasilk.createfluidsandfixins.fluid.flowingfluid;
 
+import com.nasilk.createfluidsandfixins.util.FluidTransformationSettings;
+import com.nasilk.createfluidsandfixins.util.NoiseTracker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -12,6 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+
 import java.util.function.Supplier;
 
 public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
@@ -42,63 +45,75 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
     ) {
         super.randomTick(level, pos, state, random);
 
+        // Setup
         if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
 
-        // Source-only restriction
-        if (!settings.transformFlowingFluids && !state.isSource()) {
-            return;
-        }
-
         // Random chance
-        if (random.nextFloat() > settings.transformRate) {
-            return;
-        }
-
-        // Allowed dimensions
-        if (!settings.allowedDimensions.isEmpty() && !settings.allowedDimensions.contains(serverLevel.dimension())) {
-            return;
-        }
-
-        // Vaporize in ultrawarm dimensions
-        if (settings.vaporizeInUltraWarmDimension && serverLevel.dimensionType().ultraWarm()) {
-            serverLevel.removeBlock(pos, false);
+        if (random.nextFloat() > settings.transformRate()) {
             return;
         }
 
         // Skylight requirement
-        if (serverLevel.getBrightness(LightLayer.SKY, pos) > settings.maxSkyLight) {
+        if (serverLevel.getBrightness(LightLayer.SKY, pos) > settings.maxSkyLight()) {
             return;
         }
 
         // Height restrictions
-        if (pos.getY() < settings.minYLevel || pos.getY() > settings.maxYLevel) {
+        if (pos.getY() < settings.yRange().minYLevel() || pos.getY() > settings.yRange().maxYLevel()) {
             return;
         }
 
         // Cold biome requirement
-        if (settings.requireColdBiome && !serverLevel.getBiome(pos).value().coldEnoughToSnow(pos)) {
+        if (settings.requireColdBiome() && !serverLevel.getBiome(pos).value().coldEnoughToSnow(pos)) {
             return;
         }
 
         // Rain requirement
-        if (settings.requireRaining && !serverLevel.isRaining()) {
+        if (settings.requireRaining() && !serverLevel.isRaining()) {
             return;
         }
 
         // Thunder requirement
-        if (settings.requireThundering && !serverLevel.isThundering()) {
+        if (settings.requireThundering() && !serverLevel.isThundering()) {
             return;
         }
 
         // Night requirement
-        if (settings.requireNight && serverLevel.isDay()) {
+        if (settings.requireNight() && serverLevel.isDay()) {
             return;
         }
 
         // Adjacent blocks requirement
-        if (!settings.requireAdjacentBlocks.isEmpty() && !hasAdjacentBlocks(serverLevel, pos)) {
+        if (!settings.requireAdjacentBlocks().isEmpty() && !hasAdjacentBlocks(serverLevel, pos)) {
+            return;
+        }
+
+        // Vibration requirement
+        if (settings.vibrationSettings().requireVibration() && !NoiseTracker.wasLoudRecently(
+            serverLevel,
+            pos,
+            settings.vibrationSettings().vibrationMinimumFrequency(),
+            settings.vibrationSettings().vibrationRadius(),
+            settings.vibrationSettings().vibrationMemoryTicks()
+        )) {
+            return;
+        }
+
+        // Source-only restriction
+        if (!settings.transformFlowingFluids() && !state.isSource()) {
+            return;
+        }
+
+        // Vaporize in ultrawarm dimensions
+        if (settings.vaporizeInUltraWarmDimension() && serverLevel.dimensionType().ultraWarm()) {
+            serverLevel.removeBlock(pos, false);
+            return;
+        }
+
+        // Allowed dimensions
+        if (!settings.allowedDimensions().isEmpty() && !settings.allowedDimensions().contains(serverLevel.dimension())) {
             return;
         }
 
@@ -109,7 +124,7 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
         );
 
         // Optional sound
-        settings.transformSound.ifPresent(sound ->
+        settings.transformSound().ifPresent(sound ->
             serverLevel.playSound(
                 null,
                 pos,
@@ -121,11 +136,12 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
         );
     }
 
+    // ADJACENCY TOOL
     private boolean hasAdjacentBlocks(ServerLevel level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
             Block adjacentBlock = level.getBlockState(pos.relative(direction)).getBlock();
 
-            for (Supplier<Block> blockSupplier : settings.requireAdjacentBlocks) {
+            for (Supplier<Block> blockSupplier : settings.requireAdjacentBlocks()) {
                 if (adjacentBlock == blockSupplier.get()) {
                     return true;
                 }

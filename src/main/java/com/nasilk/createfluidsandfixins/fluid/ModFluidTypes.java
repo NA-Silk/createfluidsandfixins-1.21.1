@@ -20,35 +20,6 @@ public class ModFluidTypes {
         DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, CreateFluidsAndFixins.MOD_ID);
 
 
-    // DENSITE EMULSION
-    public static final ResourceLocation DENSITE_STILL_RL =
-        ResourceLocation.fromNamespaceAndPath(
-            CreateFluidsAndFixins.MOD_ID,
-            "block/source_densite_emulsion"
-        );
-    public static final ResourceLocation DENSITE_FLOWING_RL =
-        ResourceLocation.fromNamespaceAndPath(
-            CreateFluidsAndFixins.MOD_ID,
-            "block/flowing_densite_emulsion"
-        );
-    public static final Supplier<FluidType> DENSITE_EMULSION_FLUID_TYPE =
-        registerFluidType(
-            "densite_emulsion_fluid_type",
-            new BaseFluidType(
-                DENSITE_STILL_RL,
-                DENSITE_FLOWING_RL,
-                null,
-                null, // 0xAARRGGBB (ARGB format)
-                new Vector3f(0.141f, 0.0f, 0.259f), // Fog color
-                FluidType.Properties.create()
-                    .lightLevel(2) // Glow?
-                    .viscosity(5000) // Physics related (higher = heavier)
-                    .density(5000) // Physics related (higher = heavier), upside down pipe flow
-                    .canSwim(false)
-            )
-        );
-
-
     // VOID SEA SLURRY
     public static final ResourceLocation VOID_SEA_SLURRY_STILL_RL =
         ResourceLocation.fromNamespaceAndPath(
@@ -78,23 +49,52 @@ public class ModFluidTypes {
         );
 
 
+    // DENSITE EMULSION
+    public static final ResourceLocation DENSITE_STILL_RL =
+        ResourceLocation.fromNamespaceAndPath(
+            CreateFluidsAndFixins.MOD_ID,
+            "block/source_densite_emulsion"
+        );
+    public static final ResourceLocation DENSITE_FLOWING_RL =
+        ResourceLocation.fromNamespaceAndPath(
+            CreateFluidsAndFixins.MOD_ID,
+            "block/flowing_densite_emulsion"
+        );
+    public static final Supplier<FluidType> DENSITE_EMULSION_FLUID_TYPE =
+        registerFluidType(
+            "densite_emulsion_fluid_type",
+            new BaseFluidType(
+                DENSITE_STILL_RL,
+                DENSITE_FLOWING_RL,
+                null,
+                null, // 0xAARRGGBB (ARGB format)
+                new Vector3f(0.141f, 0.0f, 0.259f), // Fog color
+                FluidType.Properties.create()
+                    .lightLevel(2) // Glow?
+                    .viscosity(5000) // Physics related (higher = heavier)
+                    .density(5000) // Physics related (higher = heavier), upside down pipe flow
+                    .canSwim(false)
+            )
+        );
+
+
     // DRIFT CONDENSATE
-    public static final ResourceLocation DRIFT_STILL_RL =
-            ResourceLocation.fromNamespaceAndPath(
-                    CreateFluidsAndFixins.MOD_ID,
-                    "block/source_drift_condensate"
-            );
-    public static final ResourceLocation DRIFT_FLOWING_RL =
-            ResourceLocation.fromNamespaceAndPath(
-                    CreateFluidsAndFixins.MOD_ID,
-                    "block/flowing_drift_condensate"
-            );
+    public static final ResourceLocation DRIFT_CONDENSATE_STILL_RL =
+        ResourceLocation.fromNamespaceAndPath(
+            CreateFluidsAndFixins.MOD_ID,
+            "block/source_drift_condensate"
+        );
+    public static final ResourceLocation DRIFT_CONDENSATE_FLOWING_RL =
+        ResourceLocation.fromNamespaceAndPath(
+            CreateFluidsAndFixins.MOD_ID,
+            "block/flowing_drift_condensate"
+        );
     public static final Supplier<FluidType> DRIFT_CONDENSATE_FLUID_TYPE =
         registerFluidType(
             "drift_condensate_fluid_type",
             new BaseFluidType(
-                DRIFT_STILL_RL,
-                DRIFT_FLOWING_RL,
+                DRIFT_CONDENSATE_STILL_RL,
+                DRIFT_CONDENSATE_FLOWING_RL,
                 null,
                 0xAAFFFFFF, // 0xAARRGGBB (ARGB format)
                 new Vector3f(1.0f, 0.867f, 0.729f),  // Fog color
@@ -102,6 +102,38 @@ public class ModFluidTypes {
                     .lightLevel(6) // Glow?
                     .viscosity(200) // Physics related (higher = heavier)
                     .density(-1000) // Physics related (higher = heavier), upside down pipe flow
+                    .motionScale(0.002)
+                    .temperature(250)
+                    .canSwim(false)
+            )
+        );
+
+
+    // Temporary placeholder (along with textures)
+    // PROPULSITE FLURRY
+    public static final ResourceLocation PROPULSITE_FLURRY_STILL_RL =
+        ResourceLocation.fromNamespaceAndPath(
+            CreateFluidsAndFixins.MOD_ID,
+            "block/source_propulsite_flurry"
+        );
+    public static final ResourceLocation PROPULSITE_FLURRY_FLOWING_RL =
+        ResourceLocation.fromNamespaceAndPath(
+            CreateFluidsAndFixins.MOD_ID,
+            "block/flowing_propulsite_flurry"
+        );
+    public static final Supplier<FluidType> PROPULSITE_FLURRY_FLUID_TYPE =
+        registerFluidType(
+            "propulsite_flurry_fluid_type",
+            new BaseFluidType(
+                PROPULSITE_FLURRY_STILL_RL,
+                PROPULSITE_FLURRY_FLOWING_RL,
+                null,
+                0xAAFFFFFF, // 0xAARRGGBB (ARGB format)
+                new Vector3f(1.0f, 0.867f, 0.729f),  // Fog color
+                FluidType.Properties.create()
+                    .lightLevel(6) // Glow?
+                    .viscosity(300) // Physics related (higher = heavier)
+                    .density(-800) // Physics related (higher = heavier), upside down pipe flow
                     .motionScale(0.002)
                     .temperature(250)
                     .canSwim(false)

@@ -1,5 +1,6 @@
 package com.nasilk.createfluidsandfixins.fluid.flowingfluid;
 
+import com.nasilk.createfluidsandfixins.util.FluidTransformationSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -48,9 +49,7 @@ public abstract class UpwardTransformBaseFlowingFluid extends TransformBaseFlowi
 
             // Remove current block after moving upward (prevents infinite columns)
             if (!state.isSource()) {
-                if (Math.random() > 0.1f) {
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                }
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
             }
             return;
         }

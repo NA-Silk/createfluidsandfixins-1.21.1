@@ -15,18 +15,17 @@ import net.minecraft.world.level.block.DispenserBlock;
 public class ModDispenserBehaviors {
 
     public static void register() {
-        registerFluidBucket((BucketItem) ModFluids.DENSITE_EMULSION_BUCKET.get());
         registerFluidBucket((BucketItem) ModFluids.VOID_SEA_SLURRY_BUCKET.get());
+        registerFluidBucket((BucketItem) ModFluids.DENSITE_EMULSION_BUCKET.get());
         registerFluidBucket((BucketItem) ModFluids.DRIFT_CONDENSATE_BUCKET.get());
+        registerFluidBucket((BucketItem) ModFluids.PROPULSITE_FLURRY_BUCKET.get());
     }
 
     private static void registerFluidBucket(BucketItem bucketItem) {
         DispenserBlock.registerBehavior(
             bucketItem,
             new DispenseItemBehavior() {
-
-                private final DefaultDispenseItemBehavior defaultBehavior =
-                    new DefaultDispenseItemBehavior();
+                private final DefaultDispenseItemBehavior defaultBehavior = new DefaultDispenseItemBehavior();
 
                 @Override
                 public ItemStack dispense(BlockSource source, ItemStack stack) {
