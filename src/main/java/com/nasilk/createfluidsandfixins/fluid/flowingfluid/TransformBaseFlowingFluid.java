@@ -1,7 +1,7 @@
 package com.nasilk.createfluidsandfixins.fluid.flowingfluid;
 
 import com.nasilk.createfluidsandfixins.util.FluidTransformationSettings;
-import com.nasilk.createfluidsandfixins.util.NoiseTracker;
+import com.nasilk.createfluidsandfixins.event.NoiseTracker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

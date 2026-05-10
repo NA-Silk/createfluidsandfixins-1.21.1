@@ -5,7 +5,7 @@ import com.nasilk.createfluidsandfixins.fluid.ModFluidTypes;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import com.nasilk.createfluidsandfixins.util.ModDispenserBehaviors;
-import com.nasilk.createfluidsandfixins.util.NoiseTracker;
+import com.nasilk.createfluidsandfixins.event.NoiseTracker;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.CreativeModeTabs;

@@ -1,4 +1,4 @@
-package com.nasilk.createfluidsandfixins.util;
+package com.nasilk.createfluidsandfixins.event;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -6,7 +6,6 @@ import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.VanillaGameEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,7 +28,6 @@ public class NoiseTracker {
 
     public static boolean wasLoudRecently(Level level, BlockPos pos, int minimumFrequency, int radius, int memoryTicks) {
         long currentTime = level.getGameTime();
-        // Clean up old entries periodically or check within radius
         return RECENT_LOUD_NOISES.entrySet().stream()
             .anyMatch(entry -> {
                 NoiseEntry noise = entry.getValue();
@@ -38,17 +36,16 @@ public class NoiseTracker {
     }
 
 
+    // Run cleanup once every 100 ticks (5 seconds) to save CPU
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
-        // Clean up once every 100 ticks (5 seconds) to save CPU
         if (event.getServer().getTickCount() % 100 == 0) {
             cleanup(event.getServer().overworld().getGameTime());
         }
     }
 
-    // Call this occasionally (e.g., on ServerTickEvent) to prevent memory leaks
+    // Clean entries older than 100 ticks (5 seconds)
     public static void cleanup(long currentTime) {
-        // This clears the entry if it's older than 5 seconds
         RECENT_LOUD_NOISES.values().removeIf(noise -> currentTime - noise.time() > 100);
     }
 }

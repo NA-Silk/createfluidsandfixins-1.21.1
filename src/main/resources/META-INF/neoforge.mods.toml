@@ -2,10 +2,10 @@
 # It contains the data relating to the loading mods
 # The overall format is standard TOML format, v0.5.0. See here https://github.com/toml-lang/toml
 
-# The name of the mod loader type to load - for regular FML @Mod mods it should blockEntity javafml
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml" #mandatory
 
-# A version range to match for said mod loader - for regular FML @Mod it will blockEntity the FML version (currently 2)
+# A version range to match for said mod loader - for regular FML @Mod it will be the FML version (currently 2)
 loaderVersion="${loader_version_range}" #mandatory
 
 # The license for the mod
@@ -38,7 +38,7 @@ displayURL="https://github.com/NA-Silk/createfluidsandfixins-1.21.1" #optional
 #credits="" #optional
 
 # The authors of the mod, displayed in the mod UI (optional)
-authors="NA-Silk, Pebbbles"
+authors="${mod_authors}"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
@@ -51,7 +51,7 @@ Create: Fluids and Fixins
     config="${mod_id}.mixins.json"
 
 # The [[accessTransformers]] block allows you to declare where your AT file is
-# If this block is omitted, a fallback attempt will blockEntity made to load an AT from META-INF/accesstransformer.cfg
+# If this block is omitted, a fallback attempt will be made to load an AT from META-INF/accesstransformer.cfg
 #[[accessTransformers]]
     #file="META-INF/accesstransformer.cfg"
 
