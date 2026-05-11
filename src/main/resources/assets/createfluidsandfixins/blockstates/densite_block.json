@@ -1,7 +1,25 @@
 {
   "variants": {
-    "": {
-      "model": "createfluidsandfixins:block/densite_block"
-    }
+
+    "power=0":  { "model": "createfluidsandfixins:block/densite_block" },
+
+    "power=1":  { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_1" },
+    "power=2":  { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_1" },
+    "power=3":  { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_1" },
+    "power=4":  { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_1" },
+
+    "power=5":  { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_2" },
+    "power=6":  { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_2" },
+    "power=7":  { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_2" },
+    "power=8":  { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_2" },
+
+    "power=9":  { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_3" },
+    "power=10": { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_3" },
+    "power=11": { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_3" },
+    "power=12": { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_3" },
+
+    "power=13": { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_4" },
+    "power=14": { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_4" },
+    "power=15": { "model": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_4" }
   }
 }

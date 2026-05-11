@@ -1,6 +1,7 @@
 package com.nasilk.createfluidsandfixins.block;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
+import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
@@ -22,12 +23,13 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> DENSITE_BLOCK = registerBlock(
         "densite_block",
-        () -> new Block(BlockBehaviour.Properties.of()
+        () -> new DensiteBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.COLOR_PURPLE)
+            .isRedstoneConductor((state, level, pos) -> true)
             .strength(2.0f, 9.0f)
             .jumpFactor(0.5f)
             .friction(0.9f)
-            .lightLevel(state -> 2) // Add separate glow layer texture later
+            .lightLevel(state -> state.getValue(DensiteBlock.POWER))
             .hasPostProcess((state, pos, level) -> true)
             .emissiveRendering((state, pos, level) -> true)
             .sound(
@@ -41,6 +43,7 @@ public class ModBlocks {
             )
         )
     );
+
 
     public static final DeferredBlock<Block> PROPULSITE_BLOCK = registerBlock(
         "propulsite_block",
