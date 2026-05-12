@@ -4,80 +4,127 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 
 // Very Gemini assisted ... sorry
 public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
+    public int tickRate = 8;
+    public double timeFactor = 0.1, yFactor = 0.2, threshold = 0.8;
+    public int flowLife = 2;
+    public float flowingBlockHeight = 0.88f;
+
     protected UpwardBaseFlowingFluid(Properties properties) {
         super(properties);
     }
 
     // FLOW BEHAVIOR OVERRIDE
+    // Set constants, if desired
+    public BaseFlowingFluid setFlowAnimationOptions(
+        int tickRate,
+        double timeFactor,
+        double yFactor,
+        double threshold,
+        int flowLife,
+        float flowingBlockHeight
+    ) {
+        this.tickRate = tickRate;
+        this.timeFactor = timeFactor;
+        this.yFactor = yFactor;
+        this.threshold = threshold;
+        this.flowLife = flowLife;
+        this.flowingBlockHeight = flowingBlockHeight;
+        return this;
+    }
+
     /**
      * Overriding tick without calling super.tick() prevents the vanilla fluid engine from ever touching this fluid.
      * This allows fully custom behavior at the expense of complexity.
      */
     @Override
     public void tick(Level level, BlockPos pos, FluidState state) {
-        // Confirm serverLevel instance
-        if (level.isClientSide) { return; }
+        if (level.isClientSide) return;
 
-        // Get current FluidState amount
+        // 1. Death Check (prevent the Death Balloon)
+        if (!state.isSource() && state.hasProperty(FALLING) && state.getValue(FALLING)) {
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+            return;
+        }
+
+        // 2. Cleanup & Height Limit
         int amount = state.getAmount();
-
-        // 1. Cleanup & Height Limit
-        // If amount is too low, or we hit the sky, vanish.
         if (amount <= 1 || pos.getY() >= level.getMaxBuildHeight() - 1) {
             if (!state.isSource()) level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
             return;
         }
 
-        // 2. Inflatable Tube Man Animation Logic
-        // Use (Time - Y) so the wave "travels" up the column.
+        // 3. Target Calculation
         long time = level.getGameTime();
-        double wave = (time * 0.2) - (pos.getY() * 0.3);
-
-        int offsetX = (Math.sin(wave) > 0.7) ? 1 : (Math.sin(wave) < -0.7 ? -1 : 0);
-        int offsetZ = (Math.cos(wave) > 0.7) ? 1 : (Math.cos(wave) < -0.7 ? -1 : 0);
-
+        double wave = (time * timeFactor) - (pos.getY() * yFactor);
+        int offsetX = (Math.sin(wave) > threshold) ? 1 : (Math.sin(wave) < -threshold ? -1 : 0);
+        int offsetZ = (Math.cos(wave) > threshold) ? 1 : (Math.cos(wave) < -threshold ? -1 : 0);
         BlockPos targetPos = pos.above().offset(offsetX, 0, offsetZ);
 
-        // 3. Propagation
+        // 4. Propagation
         BlockState targetState = level.getBlockState(targetPos);
-        if (targetState.canBeReplaced()) {
-            // Logic to reach ~15 blocks: drop 1 level every 2 Y-levels.
-            int newAmount = (pos.getY() % 2 == 0) ? amount : amount - 1;
+        FluidState targetFluid = targetState.getFluidState();
 
-            if (newAmount > 0) {
-                // Place the next piece of the tube man
-                level.setBlock(targetPos, this.getFlowing(newAmount, false).createLegacyBlock(), 3);
-                // Force the new block to tick soon
+        // Allow overwriting if AIR, or if it's a dying piece of the SAME fluid
+        boolean isDyingSegment = targetFluid.getType().isSame(this) && targetFluid.hasProperty(FALLING) && targetFluid.getValue(FALLING);
+        if (targetState.canBeReplaced() || isDyingSegment) {
+            // nextAmount = 7 if isSource, else amount || amount - 1 if flowing (dependent on y-level)
+            int nextAmount = state.isSource() ? 7 : ((pos.getY() % 2 == 0) ? amount : amount - 1);
+            if (nextAmount > 0) {
+                // Spawn the next piece (FALLING = false by default)
+                level.setBlock(targetPos, this.getFlowing(nextAmount, false).createLegacyBlock(), 2);
                 level.scheduleTick(targetPos, this, 6);
             }
         }
 
-        // 4. Persistence
-        // Sources stay, flowing blocks vanish after they "pass" their energy upward.
+        // 5. Persistence
         if (!state.isSource()) {
-            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+            // Mark the "Fresh" block for death (FALLING = true) in 2 ticks
+            level.setBlock(pos, state.setValue(FALLING, true).createLegacyBlock(), 2);
+            level.scheduleTick(pos, this, 2);
         } else {
-            // Sources need to keep spawning the next block
-            level.scheduleTick(pos, this, 12);
+            // Source stays alive and pumping
+            level.scheduleTick(pos, this, 8);
         }
+    }
+
+    // VISUAL OVERRIDES
+    // 0.88f = height of a Level 8 flowing block
+    @Override
+    public float getOwnHeight(FluidState state) {
+        return state.isSource() ? 1.0f : flowingBlockHeight;
+    }
+
+    @Override
+    public float getHeight(FluidState state, BlockGetter level, BlockPos pos) {
+        return state.isSource() ? 1.0f : flowingBlockHeight;
     }
 
     // DISABLE VANILLA FLOW BEHAVIOR
     @Override
-    public Vec3 getFlow(BlockGetter level, BlockPos pos, FluidState state) {
-        return Vec3.ZERO;
+    protected FluidState getNewLiquid(Level level, BlockPos pos, BlockState blockState) {
+        return Fluids.EMPTY.defaultFluidState(); // Prevent source creation between two sources
     }
+
+    @Override
+    protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState blockState, Direction direction, FluidState fluidState) {
+        // Do nothing, disables vanilla spreading
+    }
+
+    @Override
+    public Vec3 getFlow(BlockGetter level, BlockPos pos, FluidState state) { return Vec3.ZERO; }
 
     @Override
     protected boolean canSpreadTo(BlockGetter level, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos, BlockState toBlockState, FluidState toFluidState, Fluid fromFluid) {
@@ -94,6 +141,9 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
 
     @Override
     protected int getDropOff(LevelReader level) { return 1; }
+
+    @Override
+    public int getTickDelay(LevelReader level) { return tickRate; }
 
     @Override
     protected boolean canConvertToSource(Level level) { return false; }
