@@ -7,18 +7,18 @@
 ## Mod Description:
 Adds new fluids and corresponding blocks to match the design and usability of *Create Aeronautics*' Levitite. *Create: Fluids and Fixins* extends Levitite into a family of unique fluids/blocks, including three planned additions to the block family and six planned fluids with unique acquisitions, interactions, and uses. 
 
->**Blocks**:
->1. Densite
->2. Propulsite
->3. Oscillite
+**Blocks**:
+1. Densite
+2. Propulsite
+3. Oscillite
 
->**Fluids**:
->1. Void Sea Slurry
->2. Densite Emulsion
->3. Drift Condensate
->4. Propulsite Flurry
->5. Soul Steep
->6. Oscillite Suspension
+**Fluids**:
+1. Void Sea Slurry
+2. Densite Emulsion
+3. Drift Condensate
+4. Propulsite Flurry
+5. Soul Steep
+6. Oscillite Suspension
 
 Additional *Create* and *Create Aeronautics* compatible Contraptions are also planned, including new Sails!
 
