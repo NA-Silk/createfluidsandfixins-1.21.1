@@ -1,36 +1,33 @@
-Create: Fluid and Fixins
-=======
-Current Version: 0.0.1 (pre-release development)
-Last README Update: 5/13/2026
+# Create: Fluid and Fixins
+>Current Version: 0.0.1 (pre-release development)
+>Last README Update: 5/13/2026
 
 
-Mod Description:
-==========
-Adds new fluids and corresponding blocks to match the design and usability of _Create Aeronautics_' Levitite. _Create: Fluids and Fixins_ extends Levitite into a family of unique fluids/blocks, including three planned additions to the block family and six planned fluids with unique acquisitions, interactions, and uses. Additional _Create_ and _Create Aeronautics_ compatible Contraptions are also planned, including new Sails.
+## Mod Description:
+Adds new fluids and corresponding blocks to match the design and usability of _Create Aeronautics_' Levitite. _Create: Fluids and Fixins_ extends Levitite into a family of unique fluids/blocks, including three planned additions to the block family and six planned fluids with unique acquisitions, interactions, and uses. 
+
+> **Blocks**:
+>1. Densite
+>2. Propulsite
+>3. Oscillite
+
+> **Fluids**:
+>1. Void Sea Slurry
+>2. Densite Emulsion
+>3. Drift Condensate
+>4. Propulsite Flurry
+>5. Soul Steep
+>6. Oscillite Suspension
+
+Additional _Create_ and _Create Aeronautics_ compatible Contraptions are also planned, including new Sails.
 
 
-Blocks:
-1) Densite
-2) Propulsite
-3) Oscillite
-
-
-Fluids:
-1) Void Sea Slurry
-2) Densite Emulsion
-3) Drift Condensate
-4) Propulsite Flurry
-5) Soul Steep
-6) Oscillite Suspension
-
-
-Additional Resources: 
-==========
+## Additional Resources:
 [Mojang License Reference](https://github.com/NeoForged/NeoForm/blob/main/Mojang.md)
 [NeoForge Community Documentation](https://docs.neoforged.net/)
 [NeoForged Discord](https://discord.neoforged.net/)
-[Create Repository](/)
-[Create Aeronautics Repository](/)
+[Create Repository](https://github.com/Creators-of-Create/Create)
+[Create Aeronautics Repository](https://github.com/Creators-of-Aeronautics/Simulated-Project)
 
 
 Development Setup:
@@ -45,6 +42,4 @@ Development Setup:
 6. Set "Settings... > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM" := Project SDK
 
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+>If at any point you are missing libraries in your IDE, or you've run into problems you can run `gradlew --refresh-dependencies` to refresh the local cache or `gradlew clean` to reset everything {this does not affect your code} and then start the process again.
