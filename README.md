@@ -5,9 +5,9 @@
 
 
 ## Mod Description:
-Adds new fluids and corresponding blocks to match the design and usability of *Create Aeronautics'* Levitite and Levitite Blend. 
+Adds new fluids and blocks inspired by *Create Aeronautics*' Levitite Blend and Levitite block.
 
-*Create: Fluids and Fixins* extends Levitite into a family of unique fluids/blocks, including three planned additions to the block family and six planned fluids with unique acquisitions, interactions, and uses. 
+*Create: Fluids and Fixins* extends Levitite into a family of unique fluids/blocks, including three planned additions to the block family and six planned fluids with unique acquisitions, interactions, and uses.
 
 **Blocks**:
 1. Densite
@@ -37,8 +37,7 @@ Additional *Create* and *Create Aeronautics* compatible Contraptions are also pl
 [Create Aeronautics Repository](https://github.com/Creators-of-Aeronautics/Simulated-Project)
 
 
-Development Setup:
-==========
+## Development Setup:
 1. Install [IntelliJ IDEA](https://www.jetbrains.com/idea/download/?section=windows)
     - Update PATH variable (restart needed) := CHECK Add "bin" folder to the PATH
 2. Install [Temurin jdk-21.0.11+10](https://adoptium.net/temurin/releases/?version=21&os=windows&arch=any&mode=filter)
