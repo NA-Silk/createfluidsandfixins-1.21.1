@@ -1,17 +1,18 @@
 # Create: Fluid and Fixins
->Current Version: 0.0.1 (pre-release development)
->Last README Update: 5/13/2026
+*Current Version: 0.0.1 (pre-release development)*
+
+*Last README Update: 5/13/2026*
 
 
 ## Mod Description:
-Adds new fluids and corresponding blocks to match the design and usability of _Create Aeronautics_' Levitite. _Create: Fluids and Fixins_ extends Levitite into a family of unique fluids/blocks, including three planned additions to the block family and six planned fluids with unique acquisitions, interactions, and uses. 
+Adds new fluids and corresponding blocks to match the design and usability of *Create Aeronautics*' Levitite. *Create: Fluids and Fixins* extends Levitite into a family of unique fluids/blocks, including three planned additions to the block family and six planned fluids with unique acquisitions, interactions, and uses. 
 
-> **Blocks**:
+>**Blocks**:
 >1. Densite
 >2. Propulsite
 >3. Oscillite
 
-> **Fluids**:
+>**Fluids**:
 >1. Void Sea Slurry
 >2. Densite Emulsion
 >3. Drift Condensate
@@ -19,14 +20,18 @@ Adds new fluids and corresponding blocks to match the design and usability of _C
 >5. Soul Steep
 >6. Oscillite Suspension
 
-Additional _Create_ and _Create Aeronautics_ compatible Contraptions are also planned, including new Sails.
+Additional *Create* and *Create Aeronautics* compatible Contraptions are also planned, including new Sails!
 
 
 ## Additional Resources:
 [Mojang License Reference](https://github.com/NeoForged/NeoForm/blob/main/Mojang.md)
+
 [NeoForge Community Documentation](https://docs.neoforged.net/)
+
 [NeoForged Discord](https://discord.neoforged.net/)
+
 [Create Repository](https://github.com/Creators-of-Create/Create)
+
 [Create Aeronautics Repository](https://github.com/Creators-of-Aeronautics/Simulated-Project)
 
 
