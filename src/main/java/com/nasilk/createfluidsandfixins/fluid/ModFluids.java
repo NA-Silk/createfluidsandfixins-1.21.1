@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
-// NOTE: FluidTransformationSettings only required if using TransformBaseFlowingFluid
+// NOTE: FluidTransformationSettings is required if using TransformBaseFlowingFluid
 public class ModFluids {
     // DEFAULT
     public static final DeferredRegister<Fluid> FLUIDS =
@@ -128,12 +128,12 @@ public class ModFluids {
     public static final Supplier<FlowingFluid> SOURCE_DRIFT_CONDENSATE = FLUIDS.register(
         "source_drift_condensate",
         () -> new UpwardBaseFlowingFluid.Source(ModFluids.DRIFT_CONDENSATE_PROPERTIES)
-            .setFlowAnimationOptions(10,0.2,0.4,0.5,3,1.0f)
+            .setFlowAnimationOptions(10,3,0.2,0.4,0.5,1.0f)
     );
     public static final Supplier<FlowingFluid> FLOWING_DRIFT_CONDENSATE = FLUIDS.register(
         "flowing_drift_condensate",
         () -> new UpwardBaseFlowingFluid.Flowing(ModFluids.DRIFT_CONDENSATE_PROPERTIES)
-            .setFlowAnimationOptions(10,0.2,0.4,0.8,3,1.0f)
+            .setFlowAnimationOptions(10,3,0.2,0.4,0.8,1.0f)
     );
 
     public static final DeferredBlock<LiquidBlock> DRIFT_CONDENSATE_BLOCK = ModBlocks.BLOCKS.register(

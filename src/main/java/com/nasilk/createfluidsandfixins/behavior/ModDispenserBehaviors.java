@@ -26,12 +26,7 @@ public class ModDispenserBehaviors {
                     Level level = source.level();
 
                     if (bucketItem.emptyContents(null, level, targetPos, null)) {
-                        bucketItem.checkExtraContent(
-                            null,
-                            level,
-                            stack,
-                            targetPos
-                        );
+                        bucketItem.checkExtraContent(null, level, stack, targetPos);
                         return new ItemStack(Items.BUCKET);
                     }
                     return defaultBehavior.dispense(source, stack);

@@ -70,6 +70,7 @@ public class CreateFluidsAndFixins {
             event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
             event.accept(ModFluids.DRIFT_CONDENSATE_BUCKET);
             event.accept(ModFluids.PROPULSITE_FLURRY_BUCKET);
+            event.accept(ModItems.CREATIVE_FLUID_ERASER);
         }
 
         if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {

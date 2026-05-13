@@ -17,5 +17,7 @@
   "item.createfluidsandfixins.void_sea_slurry_bucket": "Void Sea Slurry Bucket",
   "item.createfluidsandfixins.densite_emulsion_bucket": "Densite Emulsion Bucket",
   "item.createfluidsandfixins.drift_condensate_bucket": "Drift Condensate Bucket",
-  "item.createfluidsandfixins.propulsite_flurry_bucket": "Propulsite Flurry Bucket"
+  "item.createfluidsandfixins.propulsite_flurry_bucket": "Propulsite Flurry Bucket",
+
+  "item.createfluidsandfixins.creative_fluid_eraser": "Creative Fluid Eraser"
 }
