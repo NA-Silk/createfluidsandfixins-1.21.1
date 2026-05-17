@@ -2,6 +2,7 @@ package com.nasilk.createfluidsandfixins.block;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
+import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
@@ -28,7 +29,7 @@ public class ModBlocks {
             .isRedstoneConductor((state, level, pos) -> true)
             .strength(2.0f, 9.0f)
             .jumpFactor(0.5f)
-            .friction(0.9f)
+            .friction(0.8f)
             .lightLevel(state -> state.getValue(DensiteBlock.POWER))
             .hasPostProcess((state, pos, level) -> true)
             .emissiveRendering((state, pos, level) -> true)
@@ -48,9 +49,12 @@ public class ModBlocks {
     public static final DeferredBlock<Block> PROPULSITE_BLOCK = registerBlock(
         "propulsite_block",
         () -> new TransparentBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
+            .friction(1.05f)
             .sound(SoundType.GLASS)
+            .lightLevel(state -> 6)
             .noOcclusion()
             .isValidSpawn((state, level, pos, value) -> false)
             .isRedstoneConductor((state, level, pos) -> false)
@@ -67,6 +71,45 @@ public class ModBlocks {
             )
         )
     );
+
+    public static final DeferredBlock<Block> PROPULSITE_BROKEN = registerBlock(
+        "propulsite_broken",
+        () -> new PropulsiteBrokenBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_YELLOW)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(0.3F)
+            .friction(1.05f)
+            .sound(SoundType.GLASS)
+            .noOcclusion()
+            .lightLevel(state ->6)
+            .isValidSpawn((state, level, pos, value) -> false)
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos) -> false)
+            .sound(
+                new SoundType(1.0f, 1.0f,
+                    SoundEvents.GLASS_BREAK,
+                    SoundEvents.GLASS_STEP,
+                    SoundEvents.GLASS_PLACE,
+                    SoundEvents.GLASS_HIT,
+                    SoundEvents.GLASS_FALL
+                )
+            )
+        )
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

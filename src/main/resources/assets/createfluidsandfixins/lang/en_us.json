@@ -13,6 +13,8 @@
 
   "block.createfluidsandfixins.densite_block": "Densite Block",
   "block.createfluidsandfixins.propulsite_block": "Propulsite Block",
+  "block.createfluidsandfixins.propulsite_broken": "Propulsite Thruster",
+
 
   "item.createfluidsandfixins.void_sea_slurry_bucket": "Void Sea Slurry Bucket",
   "item.createfluidsandfixins.densite_emulsion_bucket": "Densite Emulsion Bucket",

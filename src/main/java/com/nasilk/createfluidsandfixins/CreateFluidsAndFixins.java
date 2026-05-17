@@ -1,5 +1,6 @@
 package com.nasilk.createfluidsandfixins;
 
+import com.nasilk.createfluidsandfixins.block.ModBlockEntities;
 import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.fluid.ModFluidTypes;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
@@ -38,6 +39,7 @@ public class CreateFluidsAndFixins {
         // Custom registrations
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
         ModFluidTypes.register(modEventBus); // Fluid textures
         ModFluids.register(modEventBus); // Fluid behaviors
 
@@ -76,6 +78,8 @@ public class CreateFluidsAndFixins {
         if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.DENSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_BLOCK);
+            event.accept(ModBlocks.PROPULSITE_BROKEN);
+
         }
     }
 
