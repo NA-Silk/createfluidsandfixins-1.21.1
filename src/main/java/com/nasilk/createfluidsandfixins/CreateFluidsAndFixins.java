@@ -6,7 +6,6 @@ import com.nasilk.createfluidsandfixins.fluid.ModFluidTypes;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import com.nasilk.createfluidsandfixins.behavior.ModDispenserBehaviors;
-import com.nasilk.createfluidsandfixins.event.NoiseTracker;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -45,7 +44,6 @@ public class CreateFluidsAndFixins {
 
         // Register ourselves for server and other game events
         NeoForge.EVENT_BUS.register(this);
-        NeoForge.EVENT_BUS.register(NoiseTracker.class);
 
         // Register the commonSetup method for mod loading
         modEventBus.addListener(this::commonSetup);
@@ -72,6 +70,7 @@ public class CreateFluidsAndFixins {
             event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
             event.accept(ModFluids.DRIFT_CONDENSATE_BUCKET);
             event.accept(ModFluids.PROPULSITE_FLURRY_BUCKET);
+            event.accept(ModFluids.TEMP_BUCKET);
             event.accept(ModItems.CREATIVE_FLUID_ERASER);
         }
 
@@ -79,7 +78,7 @@ public class CreateFluidsAndFixins {
             event.accept(ModBlocks.DENSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_BROKEN);
-
+            event.accept(ModBlocks.TEMP_BLOCK);
         }
     }
 
@@ -104,6 +103,8 @@ public class CreateFluidsAndFixins {
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DRIFT_CONDENSATE.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_PROPULSITE_FLURRY.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_PROPULSITE_FLURRY.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_TEMP.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_TEMP.get(), RenderType.translucent());
             });
         }
     }

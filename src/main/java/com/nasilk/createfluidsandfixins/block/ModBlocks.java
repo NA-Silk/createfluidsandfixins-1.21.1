@@ -45,7 +45,6 @@ public class ModBlocks {
         )
     );
 
-
     public static final DeferredBlock<Block> PROPULSITE_BLOCK = registerBlock(
         "propulsite_block",
         () -> new TransparentBlock(BlockBehaviour.Properties.of()
@@ -98,18 +97,31 @@ public class ModBlocks {
         )
     );
 
-
-
-
-
-
-
-
-
-
-
-
-
+    public static final DeferredBlock<Block> TEMP_BLOCK = registerBlock(
+        "temp_block",
+        () -> new TransparentBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_GRAY)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(0.3F)
+            .friction(1.05f)
+            .sound(SoundType.GLASS)
+            .lightLevel(state -> 6)
+            .noOcclusion()
+            .isValidSpawn((state, level, pos, value) -> false)
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos) -> false)
+            .sound(
+                new SoundType(1.0f, 1.0f,
+                    SoundEvents.GLASS_BREAK,
+                    SoundEvents.GLASS_STEP,
+                    SoundEvents.GLASS_PLACE,
+                    SoundEvents.GLASS_HIT,
+                    SoundEvents.GLASS_FALL
+                )
+            )
+        )
+    );
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

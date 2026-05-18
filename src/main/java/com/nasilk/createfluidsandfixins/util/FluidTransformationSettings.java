@@ -20,6 +20,7 @@ import java.util.function.Supplier;
  * @param requireThundering
  * @param requireNight
  * @param requireAdjacentBlocks         Neighbor requirements
+ * @param lightningSettings             Lightning requirements
  * @param vibrationSettings             Vibration requirements
  * @param transformFlowingFluids        Whether flowing fluid blocks may transform
  * @param vaporizeInUltraWarmDimension  Nether-style vaporization support
@@ -46,6 +47,7 @@ public record FluidTransformationSettings(
     boolean requireThundering,
     boolean requireNight,
     Set<Supplier<Block>> requireAdjacentBlocks,
+    LightningSettings lightningSettings,
     VibrationSettings vibrationSettings,
     boolean transformFlowingFluids,
     boolean vaporizeInUltraWarmDimension,
@@ -56,10 +58,13 @@ public record FluidTransformationSettings(
         int minYLevel,
         int maxYLevel
     ) {}
+    public record LightningSettings(
+        boolean requireLightning,
+        Integer radius
+    ) {}
     public record VibrationSettings(
         boolean requireVibration,
-        Integer vibrationMinimumFrequency,
-        Integer vibrationRadius,
-        Integer vibrationMemoryTicks
+        Integer radius,
+        Integer minimumFrequency
     ) {}
 }

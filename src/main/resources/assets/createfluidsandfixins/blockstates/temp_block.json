@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "createfluidsandfixins:block/temp_block"
+    }
+  }
+}

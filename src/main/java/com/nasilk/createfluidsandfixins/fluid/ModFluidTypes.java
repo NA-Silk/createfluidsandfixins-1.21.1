@@ -140,6 +140,29 @@ public class ModFluidTypes {
         );
 
 
+    // TEMP
+    public static final ResourceLocation TEMP_STILL_RL = ResourceLocation.parse("block/water_still");
+    public static final ResourceLocation TEMP_FLOWING_RL = ResourceLocation.parse("block/water_flow");
+    public static final Supplier<FluidType> TEMP_FLUID_TYPE =
+        registerFluidType(
+            "temp_fluid_type",
+            new BaseFluidType(
+                TEMP_STILL_RL,
+                TEMP_FLOWING_RL,
+                null,
+                0xEE999999, // 0xAARRGGBB (ARGB format)
+                new Vector3f(1.0f, 0.867f, 0.729f),  // Fog color
+                FluidType.Properties.create()
+                    .lightLevel(8) // Glow?
+                    .viscosity(300) // Physics related (higher = heavier)
+                    .density(0) // Physics related (higher = heavier), upside down pipe flow
+                    .motionScale(0.03D)
+                    .temperature(250)
+                    .canSwim(false)
+            )
+        );
+
+
     // NEXT FLUID ... dr pepper
 
 

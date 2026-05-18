@@ -1,7 +1,7 @@
 package com.nasilk.createfluidsandfixins.fluid.flowingfluid;
 
 import com.nasilk.createfluidsandfixins.util.FluidTransformationSettings;
-import com.nasilk.createfluidsandfixins.event.NoiseTracker;
+import com.nasilk.createfluidsandfixins.util.FluidTransformationTriggerType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -40,59 +40,65 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
     @Override
     public void randomTick(Level level, BlockPos pos, FluidState state, RandomSource random) {
         super.randomTick(level, pos, state, random);
+        tryTransform(level, pos, state, FluidTransformationTriggerType.RANDOM_TICK);
+    }
 
-        // Confirm serverLevel instance
-        if (!(level instanceof ServerLevel serverLevel)) { return; }
-
-        // Random chance
-        if (random.nextFloat() > settings.transformRate()) { return; }
+    // TOOLS
+    public void tryTransform(Level level, BlockPos pos, FluidState state, FluidTransformationTriggerType trigger) {
+        if (!(level instanceof ServerLevel serverLevel)) return;
+        if (serverLevel.getRandom().nextFloat() > settings.transformRate()) return;
 
         // Skylight requirement
-        if (serverLevel.getBrightness(LightLayer.SKY, pos) > settings.maxSkyLight()) { return; }
-
+        if (serverLevel.getBrightness(LightLayer.SKY, pos) > settings.maxSkyLight()) return;
         // Height restrictions
-        if (pos.getY() < settings.yRange().minYLevel() || pos.getY() > settings.yRange().maxYLevel()) { return; }
-
+        if (pos.getY() < settings.yRange().minYLevel() || pos.getY() > settings.yRange().maxYLevel()) return;
         // Cold biome requirement
-        if (settings.requireColdBiome() && !serverLevel.getBiome(pos).value().coldEnoughToSnow(pos)) { return; }
-
+        if (settings.requireColdBiome() && !serverLevel.getBiome(pos).value().coldEnoughToSnow(pos)) return;
         // Rain requirement
-        if (settings.requireRaining() && !serverLevel.isRaining()) { return; }
-
+        if (settings.requireRaining() && !serverLevel.isRaining()) return;
         // Thunder requirement
-        if (settings.requireThundering() && !serverLevel.isThundering()) { return; }
-
+        if (settings.requireThundering() && !serverLevel.isThundering()) return;
         // Night requirement
-        if (settings.requireNight() && serverLevel.isDay()) { return; }
-
+        if (settings.requireNight() && serverLevel.isDay()) return;
         // Adjacent blocks requirement
-        if (!settings.requireAdjacentBlocks().isEmpty() && !hasAdjacentBlocks(serverLevel, pos)) { return; }
-
-        // Vibration requirement
-        if (settings.vibrationSettings().requireVibration() && !NoiseTracker.wasLoudRecently(
-            serverLevel,
-            pos,
-            settings.vibrationSettings().vibrationMinimumFrequency(),
-            settings.vibrationSettings().vibrationRadius(),
-            settings.vibrationSettings().vibrationMemoryTicks()
-        )) { return; }
-
+        if (!settings.requireAdjacentBlocks().isEmpty() && !hasAdjacentBlocks(serverLevel, pos)) return;
+        // Trigger Constraints
+        if (settings.lightningSettings().requireLightning() && trigger != FluidTransformationTriggerType.LIGHTNING) return;
+        if (settings.vibrationSettings().requireVibration() && trigger != FluidTransformationTriggerType.VIBRATION && trigger != FluidTransformationTriggerType.LIGHTNING) return;
         // Source-only restriction
-        if (!settings.transformFlowingFluids() && !state.isSource()) { return; }
-
+        if (!settings.transformFlowingFluids() && !state.isSource()) return;
         // Vaporize in ultrawarm dimensions
         if (settings.vaporizeInUltraWarmDimension() && serverLevel.dimensionType().ultraWarm()) {
             serverLevel.removeBlock(pos, false);
             return;
         }
-
         // Allowed dimensions
-        if (!settings.allowedDimensions().isEmpty() && !settings.allowedDimensions().contains(serverLevel.dimension())) { return; }
+        if (!settings.allowedDimensions().isEmpty() && !settings.allowedDimensions().contains(serverLevel.dimension())) return;
 
+        // Transform
+        performTransformation(serverLevel, pos);
+    }
+
+    public FluidTransformationSettings getSettings() {
+        return this.settings;
+    }
+
+    private boolean hasAdjacentBlocks(ServerLevel level, BlockPos pos) {
+        for (Direction direction : Direction.values()) {
+            Block adjacentBlock = level.getBlockState(pos.relative(direction)).getBlock();
+
+            for (Supplier<Block> blockSupplier : settings.requireAdjacentBlocks()) {
+                if (adjacentBlock == blockSupplier.get()) return true;
+            }
+        }
+        return false;
+    }
+
+    private void performTransformation(Level serverLevel, BlockPos pos) {
         // Transform block
         serverLevel.setBlockAndUpdate(pos, transformBlock.get().defaultBlockState());
 
-        // Play optional sound
+        // Play sound
         settings.transformSound().ifPresent(
             sound -> serverLevel.playSound(
                 null,
@@ -103,17 +109,6 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
                 1.0f
             )
         );
-    }
-
-    // ADJACENCY TOOL
-    private boolean hasAdjacentBlocks(ServerLevel level, BlockPos pos) {
-        for (Direction direction : Direction.values()) {
-            Block adjacentBlock = level.getBlockState(pos.relative(direction)).getBlock();
-            for (Supplier<Block> blockSupplier : settings.requireAdjacentBlocks()) {
-                if (adjacentBlock == blockSupplier.get()) { return true; }
-            }
-        }
-        return false;
     }
 
 

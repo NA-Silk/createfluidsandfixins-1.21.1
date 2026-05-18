@@ -14,12 +14,13 @@
   "block.createfluidsandfixins.densite_block": "Densite Block",
   "block.createfluidsandfixins.propulsite_block": "Propulsite Block",
   "block.createfluidsandfixins.propulsite_broken": "Propulsite Thruster",
-
+  "block.createfluidsandfixins.temp_block": "Temp Block",
 
   "item.createfluidsandfixins.void_sea_slurry_bucket": "Void Sea Slurry Bucket",
   "item.createfluidsandfixins.densite_emulsion_bucket": "Densite Emulsion Bucket",
   "item.createfluidsandfixins.drift_condensate_bucket": "Drift Condensate Bucket",
   "item.createfluidsandfixins.propulsite_flurry_bucket": "Propulsite Flurry Bucket",
+  "item.createfluidsandfixins.temp_bucket": "Temp Bucket",
 
   "item.createfluidsandfixins.creative_fluid_eraser": "Creative Fluid Eraser"
 }

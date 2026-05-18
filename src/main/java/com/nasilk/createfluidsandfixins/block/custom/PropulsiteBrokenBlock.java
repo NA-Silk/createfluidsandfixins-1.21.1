@@ -18,19 +18,16 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
 
 public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBlock {
-
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     public PropulsiteBrokenBlock(Properties properties) {
         super(properties);
-
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
-                .setValue(POWERED, false)
+            .setValue(FACING, Direction.NORTH)
+            .setValue(POWERED, false)
         );
     }
-
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -40,23 +37,23 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState()
-                .setValue(FACING, context.getNearestLookingDirection().getOpposite());
+            .setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, POWERED);
-
     }
 
     @Override
-    public void neighborChanged(BlockState state,
-                                Level level,
-                                BlockPos pos,
-                                Block block,
-                                BlockPos fromPos,
-                                boolean isMoving) {
-
+    public void neighborChanged(
+        BlockState state,
+        Level level,
+        BlockPos pos,
+        Block block,
+        BlockPos fromPos,
+        boolean isMoving
+    ) {
         if (level.isClientSide) return;
 
         boolean powered = level.hasNeighborSignal(pos);
@@ -66,18 +63,15 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
         }
     }
 
-
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-            Level level,
-            BlockState state,
-            BlockEntityType<T> type) {
+        Level level,
+        BlockState state,
+        BlockEntityType<T> type
+    ) {
         //formating is a lie told to you by big forma to sell more spaces
-
         return level.isClientSide ? null : (lvl, pos, st, be) -> {
             if (be instanceof PropulsiteBrokenBlockEntity thruster) {
                 thruster.tick();
-
-
             }
         };
     }

@@ -80,7 +80,8 @@ public class ModFluids {
             () -> Blocks.FROSTED_ICE,
             ModBlocks.DENSITE_BLOCK
         ),
-        new FluidTransformationSettings.VibrationSettings(false, null, null, null), // Vibration requirements
+        new FluidTransformationSettings.LightningSettings(false, null), // Lightning requirements
+        new FluidTransformationSettings.VibrationSettings(false, null, null), // Vibration requirements
         false, // Transform flowing fluids
         false, // Vaporize in ultrawarm dimensions
         Set.of(Level.OVERWORLD, Level.NETHER, Level.END), // Allowed dimensions
@@ -167,7 +168,8 @@ public class ModFluids {
         false, // Require thunder
         false, // Require night
         Set.of(), // Require adjacent blocks
-        new FluidTransformationSettings.VibrationSettings(true, 10, 6, 40), // Vibration requirements
+        new FluidTransformationSettings.LightningSettings(true, 6), // Lightning requirements
+        new FluidTransformationSettings.VibrationSettings(false, null, null), // Vibration requirements
         false, // Transform flowing fluids
         false, // Vaporize in ultrawarm dimensions
         Set.of(Level.OVERWORLD, Level.NETHER, Level.END), // Allowed dimensions
@@ -209,6 +211,61 @@ public class ModFluids {
         .tickRate(2) // Spread rate (water ~5, inverted scale)
         .block(ModFluids.PROPULSITE_FLURRY_BLOCK)
         .bucket(ModFluids.PROPULSITE_FLURRY_BUCKET);
+
+
+    // TEMP (VibrationSettings test)
+    public static final FluidTransformationSettings TEMP_SETTINGS = new FluidTransformationSettings(
+            0.01f, // Transform rate [0.0f, 1,0f]
+            15, // Max skylight
+            new FluidTransformationSettings.YRange(-64, 319), // y level range
+            false, // Require cold biome
+            false, // Require rain
+            false, // Require thunder
+            false, // Require night
+            Set.of(), // Require adjacent blocks
+            new FluidTransformationSettings.LightningSettings(false, null), // Lightning requirements
+            new FluidTransformationSettings.VibrationSettings(true, 6, 10), // Vibration requirements
+            false, // Transform flowing fluids
+            false, // Vaporize in ultrawarm dimensions
+            Set.of(Level.OVERWORLD, Level.NETHER, Level.END), // Allowed dimensions
+            Optional.of(() -> SoundEvents.GLASS_PLACE) // Sound effect
+    );
+    public static final Supplier<FlowingFluid> SOURCE_TEMP = FLUIDS.register(
+            "source_temp",
+            () -> new TransformBaseFlowingFluid.Source(
+                    ModFluids.TEMP_PROPERTIES,
+                    ModBlocks.TEMP_BLOCK,
+                    TEMP_SETTINGS
+            )
+    );
+    public static final Supplier<FlowingFluid> FLOWING_TEMP = FLUIDS.register(
+            "flowing_temp",
+            () -> new TransformBaseFlowingFluid.Flowing(
+                    ModFluids.TEMP_PROPERTIES,
+                    ModBlocks.TEMP_BLOCK,
+                    TEMP_SETTINGS
+            )
+    );
+
+    public static final DeferredBlock<LiquidBlock> TEMP_LIQUID_BLOCK = ModBlocks.BLOCKS.register(
+            "temp_liquid_block",
+            () -> new LiquidBlock(ModFluids.SOURCE_TEMP.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).randomTicks().noLootTable())
+    );
+    public static final DeferredItem<Item> TEMP_BUCKET = ModItems.ITEMS.registerItem(
+            "temp_bucket",
+            properties -> new BucketItem(ModFluids.SOURCE_TEMP.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
+    );
+
+    public static final TransformBaseFlowingFluid.Properties TEMP_PROPERTIES = new TransformBaseFlowingFluid.Properties(
+            ModFluidTypes.TEMP_FLUID_TYPE,
+            SOURCE_TEMP,
+            FLOWING_TEMP
+    )
+            .slopeFindDistance(8) // Horizontal searching rate
+            .levelDecreasePerBlock(1) // Spread distance
+            .tickRate(2) // Spread rate (water ~5, inverted scale)
+            .block(ModFluids.TEMP_LIQUID_BLOCK)
+            .bucket(ModFluids.TEMP_BUCKET);
 
 
     // NEXT FLUID ...
