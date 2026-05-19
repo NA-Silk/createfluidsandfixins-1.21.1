@@ -1,6 +1,7 @@
 package com.nasilk.createfluidsandfixins.block;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
+import com.nasilk.createfluidsandfixins.PropulsiteCTBehaviour;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
@@ -17,10 +18,14 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
+import com.tterrag.registrate.util.entry.BlockEntry;
+
+import static com.nasilk.createfluidsandfixins.CreateFluidsAndFixins.MOD_ID;
+import static com.simibubi.create.foundation.data.CreateRegistrate.connectedTextures;
 
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
-        DeferredRegister.createBlocks(CreateFluidsAndFixins.MOD_ID);
+        DeferredRegister.createBlocks(MOD_ID);
 
     public static final DeferredBlock<Block> DENSITE_BLOCK = registerBlock(
         "densite_block",
@@ -45,31 +50,28 @@ public class ModBlocks {
         )
     );
 
-    public static final DeferredBlock<Block> PROPULSITE_BLOCK = registerBlock(
-        "propulsite_block",
-        () -> new TransparentBlock(BlockBehaviour.Properties.of()
-            .mapColor(MapColor.COLOR_YELLOW)
-            .instrument(NoteBlockInstrument.HAT)
-            .strength(0.3F)
-            .friction(1.05f)
-            .sound(SoundType.GLASS)
-            .lightLevel(state -> 6)
-            .noOcclusion()
-            .isValidSpawn((state, level, pos, value) -> false)
-            .isRedstoneConductor((state, level, pos) -> false)
-            .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos) -> false)
-            .sound(
-                new SoundType(1.0f, 1.0f,
-                    SoundEvents.GLASS_BREAK,
-                    SoundEvents.GLASS_STEP,
-                    SoundEvents.GLASS_PLACE,
-                    SoundEvents.GLASS_HIT,
-                    SoundEvents.GLASS_FALL
-                )
-            )
-        )
-    );
+    public static final BlockEntry<TransparentBlock> PROPULSITE_BLOCK =
+            CreateFluidsAndFixins.REGISTRATE
+
+                    .block("propulsite_block",p -> new TransparentBlock(p))
+
+                    .properties(p -> p
+                            .mapColor(MapColor.COLOR_YELLOW)
+                            .instrument(NoteBlockInstrument.HAT)
+                            .strength(0.3F)
+                            .friction(1.01f)
+                            .sound(SoundType.GLASS)
+                            .lightLevel(state -> 6)
+                            .isValidSpawn((state, level, pos, value) -> false)
+                            .isRedstoneConductor((state, level, pos) -> false)
+                            .isSuffocating((state, level, pos) -> false)
+                            .isViewBlocking((state, level, pos) -> false)
+                    )
+
+                    .onRegister(connectedTextures(PropulsiteCTBehaviour::new))
+                    .simpleItem()
+                    .register();
+
 
     public static final DeferredBlock<Block> PROPULSITE_BROKEN = registerBlock(
         "propulsite_broken",
@@ -77,7 +79,7 @@ public class ModBlocks {
             .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
-            .friction(1.05f)
+            .friction(1.01f)
             .sound(SoundType.GLASS)
             .noOcclusion()
             .lightLevel(state ->6)

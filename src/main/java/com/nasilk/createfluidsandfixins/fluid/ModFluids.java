@@ -179,7 +179,7 @@ public class ModFluids {
         "source_propulsite_flurry",
         () -> new TransformBaseFlowingFluid.Source(
             ModFluids.PROPULSITE_FLURRY_PROPERTIES,
-            ModBlocks.PROPULSITE_BLOCK,
+            ModBlocks.PROPULSITE_BLOCK::get, //had to slightly change this because propulsite is no longer a deferred block -pebb
             PROPULSITE_FLURRY_SETTINGS
         )
     );
@@ -187,7 +187,7 @@ public class ModFluids {
         "flowing_propulsite_flurry",
         () -> new TransformBaseFlowingFluid.Flowing(
             ModFluids.PROPULSITE_FLURRY_PROPERTIES,
-            ModBlocks.PROPULSITE_BLOCK,
+            ModBlocks.PROPULSITE_BLOCK::get, //had to slightly change this because propulsite is no longer a deferred block -pebb
             PROPULSITE_FLURRY_SETTINGS
         )
     );
