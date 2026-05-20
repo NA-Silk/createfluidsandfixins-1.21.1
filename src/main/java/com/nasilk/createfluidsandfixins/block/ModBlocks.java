@@ -1,14 +1,13 @@
 package com.nasilk.createfluidsandfixins.block;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
-import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehaviour;
+import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -19,19 +18,13 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.function.Supplier;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
-import static com.nasilk.createfluidsandfixins.CreateFluidsAndFixins.MOD_ID;
-import static com.simibubi.create.foundation.data.CreateRegistrate.connectedTextures;
-
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
-        DeferredRegister.createBlocks(MOD_ID);
+        DeferredRegister.createBlocks(CreateFluidsAndFixins.MOD_ID);
 
     public static HashSet<BlockEntry<?>> CT_BLOCKS = new HashSet<>();
 
@@ -74,7 +67,7 @@ public class ModBlocks {
                     .isSuffocating((state, level, pos) -> false)
                     .isViewBlocking((state, level, pos) -> false)
                 )
-                .onRegister(connectedTextures(PropulsiteCTBehaviour::new))
+                .onRegister(CreateRegistrate.connectedTextures(PropulsiteCTBehavior::new))
                 .register()
         );
 
