@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.nasilk.createfluidsandfixins.mixins",
+  "package": "com.nasilk.createfluidsandfixins.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "FluidDrainingBehaviourMixin",

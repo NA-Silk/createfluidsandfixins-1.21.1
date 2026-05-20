@@ -1,4 +1,4 @@
-package com.nasilk.createfluidsandfixins.mixins;
+package com.nasilk.createfluidsandfixins.mixin;
 
 import com.nasilk.createfluidsandfixins.util.MixinSettings;
 import com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour;

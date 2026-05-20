@@ -6,12 +6,15 @@ import com.nasilk.createfluidsandfixins.fluid.ModFluidTypes;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import com.nasilk.createfluidsandfixins.behavior.ModDispenserBehaviors;
+import com.nasilk.createfluidsandfixins.particle.DensiteParticles;
+import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -41,6 +44,7 @@ public class CreateFluidsAndFixins {
         ModBlockEntities.register(modEventBus);
         ModFluidTypes.register(modEventBus); // Fluid textures
         ModFluids.register(modEventBus); // Fluid behaviors
+        ModParticles.register(modEventBus);
 
         // Register ourselves for server and other game events
         NeoForge.EVENT_BUS.register(this);
@@ -106,6 +110,11 @@ public class CreateFluidsAndFixins {
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_TEMP.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_TEMP.get(), RenderType.translucent());
             });
+        }
+
+        @SubscribeEvent
+        public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
+            event.registerSpriteSet(ModParticles.DENSITE_PARTICLES.get(), DensiteParticles.Provider::new);
         }
     }
 }
