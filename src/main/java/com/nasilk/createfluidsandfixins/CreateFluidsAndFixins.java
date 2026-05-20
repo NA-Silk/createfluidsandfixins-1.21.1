@@ -26,12 +26,17 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import com.simibubi.create.foundation.data.CreateRegistrate;
+
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(CreateFluidsAndFixins.MOD_ID)
 public class CreateFluidsAndFixins {
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "createfluidsandfixins";
+
+    public static final CreateRegistrate REGISTRATE = // Needed for connected textures
+            CreateRegistrate.create(MOD_ID);
 
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -45,6 +50,11 @@ public class CreateFluidsAndFixins {
         ModFluidTypes.register(modEventBus); // Fluid textures
         ModFluids.register(modEventBus); // Fluid behaviors
         ModParticles.register(modEventBus);
+
+        ModSpriteShifts.init(); //needed for connected textures
+       REGISTRATE.registerEventListeners(modEventBus); //needed for connected textures
+
+
 
         // Register ourselves for server and other game events
         NeoForge.EVENT_BUS.register(this);
@@ -80,7 +90,7 @@ public class CreateFluidsAndFixins {
 
         if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.DENSITE_BLOCK);
-            event.accept(ModBlocks.PROPULSITE_BLOCK);
+            //event.accept(ModBlocks.PROPULSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_BROKEN);
             event.accept(ModBlocks.TEMP_BLOCK);
         }
