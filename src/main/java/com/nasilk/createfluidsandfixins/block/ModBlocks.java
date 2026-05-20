@@ -21,6 +21,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.function.Supplier;
 import com.tterrag.registrate.util.entry.BlockEntry;
@@ -32,7 +33,7 @@ public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
         DeferredRegister.createBlocks(MOD_ID);
 
-    public static HashMap<String, BlockEntry<?>> CT_BLOCKS = new HashMap<>();
+    public static HashSet<BlockEntry<?>> CT_BLOCKS = new HashSet<>();
 
     public static final DeferredBlock<Block> DENSITE_BLOCK = registerBlock(
         "densite_block",
@@ -58,7 +59,7 @@ public class ModBlocks {
     );
 
     public static final BlockEntry<TransparentBlock> PROPULSITE_BLOCK =
-        addCTBlock("propulsite_block",
+        addCTBlock(
             CreateFluidsAndFixins.REGISTRATE
                 .block("propulsite_block",p -> new TransparentBlock(p))
                 .properties(p -> p
@@ -129,8 +130,8 @@ public class ModBlocks {
         )
     );
 
-    private static <T extends Block> BlockEntry<T> addCTBlock(String name, BlockEntry<T> block) {
-        CT_BLOCKS.put(name, block);
+    private static <T extends Block> BlockEntry<T> addCTBlock(BlockEntry<T> block) {
+        CT_BLOCKS.add(block);
         return block;
     }
 
@@ -146,8 +147,8 @@ public class ModBlocks {
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
-        for (Map.Entry<String, BlockEntry<?>> entry : CT_BLOCKS.entrySet()) {
-            registerBlockItem(entry.getKey(), entry.getValue());
+        for (BlockEntry<?> block : CT_BLOCKS) {
+            registerBlockItem(block.getRegisteredName().split(":")[1], block);
         }
     }
 }
