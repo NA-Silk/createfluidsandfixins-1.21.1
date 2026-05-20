@@ -5,9 +5,10 @@ import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.fluid.ModFluidTypes;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 import com.nasilk.createfluidsandfixins.item.ModItems;
-import com.nasilk.createfluidsandfixins.behavior.ModDispenserBehaviors;
+import com.nasilk.createfluidsandfixins.behavior.ModDispenserBehavior;
 import com.nasilk.createfluidsandfixins.particle.DensiteParticles;
 import com.nasilk.createfluidsandfixins.particle.ModParticles;
+import com.nasilk.createfluidsandfixins.util.ModSpriteShifts;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -35,8 +36,8 @@ public class CreateFluidsAndFixins {
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "createfluidsandfixins";
 
-    public static final CreateRegistrate REGISTRATE = // Needed for connected textures
-            CreateRegistrate.create(MOD_ID);
+    // Connected textures registrator
+    public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MOD_ID);
 
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -51,10 +52,9 @@ public class CreateFluidsAndFixins {
         ModFluids.register(modEventBus); // Fluid behaviors
         ModParticles.register(modEventBus);
 
-        ModSpriteShifts.init(); //needed for connected textures
-       REGISTRATE.registerEventListeners(modEventBus); //needed for connected textures
-
-
+        // Connected textures
+        ModSpriteShifts.init();
+        REGISTRATE.registerEventListeners(modEventBus);
 
         // Register ourselves for server and other game events
         NeoForge.EVENT_BUS.register(this);
@@ -71,7 +71,7 @@ public class CreateFluidsAndFixins {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            ModDispenserBehaviors.register();
+            ModDispenserBehavior.register();
         });
 
         LOGGER.info("Create: Fluids and Fixins loaded");
@@ -90,7 +90,7 @@ public class CreateFluidsAndFixins {
 
         if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.DENSITE_BLOCK);
-            //event.accept(ModBlocks.PROPULSITE_BLOCK);
+            event.accept(ModBlocks.PROPULSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_BROKEN);
             event.accept(ModBlocks.TEMP_BLOCK);
         }

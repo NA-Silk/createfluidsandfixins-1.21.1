@@ -12,7 +12,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
-public class ModDispenserBehaviors {
+public class ModDispenserBehavior {
     private static void registerFluidBucket(BucketItem bucketItem) {
         DispenserBlock.registerBehavior(
             bucketItem,

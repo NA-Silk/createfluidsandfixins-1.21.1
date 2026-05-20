@@ -1,12 +1,14 @@
 package com.nasilk.createfluidsandfixins.block;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
-import com.nasilk.createfluidsandfixins.PropulsiteCTBehaviour;
+import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehaviour;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -17,6 +19,9 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
@@ -26,6 +31,8 @@ import static com.simibubi.create.foundation.data.CreateRegistrate.connectedText
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
         DeferredRegister.createBlocks(MOD_ID);
+
+    public static HashMap<String, BlockEntry<?>> CT_BLOCKS = new HashMap<>();
 
     public static final DeferredBlock<Block> DENSITE_BLOCK = registerBlock(
         "densite_block",
@@ -51,27 +58,24 @@ public class ModBlocks {
     );
 
     public static final BlockEntry<TransparentBlock> PROPULSITE_BLOCK =
+        addCTBlock("propulsite_block",
             CreateFluidsAndFixins.REGISTRATE
-
-                    .block("propulsite_block",p -> new TransparentBlock(p))
-
-                    .properties(p -> p
-                            .mapColor(MapColor.COLOR_YELLOW)
-                            .instrument(NoteBlockInstrument.HAT)
-                            .strength(0.3F)
-                            .friction(1.01f)
-                            .sound(SoundType.GLASS)
-                            .lightLevel(state -> 6)
-                            .isValidSpawn((state, level, pos, value) -> false)
-                            .isRedstoneConductor((state, level, pos) -> false)
-                            .isSuffocating((state, level, pos) -> false)
-                            .isViewBlocking((state, level, pos) -> false)
-                    )
-
-                    .onRegister(connectedTextures(PropulsiteCTBehaviour::new))
-                    .simpleItem()
-                    .register();
-
+                .block("propulsite_block",p -> new TransparentBlock(p))
+                .properties(p -> p
+                    .mapColor(MapColor.COLOR_YELLOW)
+                    .instrument(NoteBlockInstrument.HAT)
+                    .strength(0.3F)
+                    .friction(1.01f)
+                    .sound(SoundType.GLASS)
+                    .lightLevel(state -> 6)
+                    .isValidSpawn((state, level, pos, value) -> false)
+                    .isRedstoneConductor((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false)
+                )
+                .onRegister(connectedTextures(PropulsiteCTBehaviour::new))
+                .register()
+        );
 
     public static final DeferredBlock<Block> PROPULSITE_BROKEN = registerBlock(
         "propulsite_broken",
@@ -125,17 +129,25 @@ public class ModBlocks {
         )
     );
 
+    private static <T extends Block> BlockEntry<T> addCTBlock(String name, BlockEntry<T> block) {
+        CT_BLOCKS.put(name, block);
+        return block;
+    }
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);
         return toReturn;
     }
 
-    private static <T extends Block> void registerBlockItem(String name, DeferredBlock<T> block) {
+    private static <T extends Block> void registerBlockItem(String name, Supplier<? extends Block> block) {
         ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
+        for (Map.Entry<String, BlockEntry<?>> entry : CT_BLOCKS.entrySet()) {
+            registerBlockItem(entry.getKey(), entry.getValue());
+        }
     }
 }
