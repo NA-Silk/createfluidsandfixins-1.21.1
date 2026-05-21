@@ -5,7 +5,10 @@ import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
+import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.tterrag.registrate.builders.BlockBuilder;
+import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -25,8 +28,6 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
         DeferredRegister.createBlocks(CreateFluidsAndFixins.MOD_ID);
-
-    public static HashSet<BlockEntry<?>> CT_BLOCKS = new HashSet<>();
 
     public static final DeferredBlock<Block> DENSITE_BLOCK = registerBlock(
         "densite_block",
@@ -51,25 +52,22 @@ public class ModBlocks {
         )
     );
 
-    public static final BlockEntry<TransparentBlock> PROPULSITE_BLOCK =
-        addCTBlock(
-            CreateFluidsAndFixins.REGISTRATE
-                .block("propulsite_block",p -> new TransparentBlock(p))
-                .properties(p -> p
-                    .mapColor(MapColor.COLOR_YELLOW)
-                    .instrument(NoteBlockInstrument.HAT)
-                    .strength(0.3F)
-                    .friction(1.01f)
-                    .sound(SoundType.GLASS)
-                    .lightLevel(state -> 6)
-                    .isValidSpawn((state, level, pos, value) -> false)
-                    .isRedstoneConductor((state, level, pos) -> false)
-                    .isSuffocating((state, level, pos) -> false)
-                    .isViewBlocking((state, level, pos) -> false)
-                )
-                .onRegister(CreateRegistrate.connectedTextures(PropulsiteCTBehavior::new))
-                .register()
-        );
+    public static final BlockEntry<TransparentBlock> PROPULSITE_BLOCK = registerCTBlock(
+        "propulsite_block",
+        (properties) -> new TransparentBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_YELLOW)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(0.3F)
+            .friction(1.01f)
+            .sound(SoundType.GLASS)
+            .lightLevel(state -> 6)
+            .isValidSpawn((state, level, pos, value) -> false)
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos) -> false)
+        ),
+        PropulsiteCTBehavior::new
+    );
 
     public static final DeferredBlock<Block> PROPULSITE_BROKEN = registerBlock(
         "propulsite_broken",
@@ -123,9 +121,12 @@ public class ModBlocks {
         )
     );
 
-    private static <T extends Block> BlockEntry<T> addCTBlock(BlockEntry<T> block) {
-        CT_BLOCKS.add(block);
-        return block;
+    private static <T extends Block> BlockEntry<T> registerCTBlock(String name, NonNullFunction<BlockBehaviour.Properties, T> factory, Supplier<ConnectedTextureBehaviour> behavior) {
+        BlockEntry<T> toReturn = CreateFluidsAndFixins.REGISTRATE.block(name, factory)
+            .onRegister(CreateRegistrate.connectedTextures(behavior))
+            .register();
+        registerBlockItem(name, toReturn);
+        return toReturn;
     }
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
@@ -134,14 +135,11 @@ public class ModBlocks {
         return toReturn;
     }
 
-    private static <T extends Block> void registerBlockItem(String name, Supplier<? extends Block> block) {
+    private static <T extends Block> void registerBlockItem(String name, Supplier<T> block) {
         ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
-        for (BlockEntry<?> block : CT_BLOCKS) {
-            registerBlockItem(block.getRegisteredName().split(":")[1], block);
-        }
     }
 }
