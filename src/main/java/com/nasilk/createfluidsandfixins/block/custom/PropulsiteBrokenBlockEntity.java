@@ -116,7 +116,12 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                     position.z,
                     8,0.1,0.1,0.1,0.05
                 );
+            } else {
+                thrustStrength = 0;
             }
+
+            // Force packet update (for tooltips)
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
 
@@ -142,5 +147,28 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                 .forGoggles(tooltip, 1);
 
         return true;
+    }
+
+    // Save data to the network sync packet
+    @Override
+    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+        net.minecraft.nbt.CompoundTag tag = super.getUpdateTag(registries);
+        tag.putDouble("ThrustStrength", this.thrustStrength);
+        return tag;
+    }
+
+    // Wrap the tag into the standard vanilla packet
+    @Override
+    public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    // Handle receiving the packet on the Client side
+    @Override
+    public void onDataPacket(net.minecraft.network.Connection net, net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket pkt, net.minecraft.core.HolderLookup.Provider registries) {
+        net.minecraft.nbt.CompoundTag tag = pkt.getTag();
+        if (tag != null) {
+            this.thrustStrength = tag.getDouble("ThrustStrength");
+        }
     }
 }
