@@ -17,10 +17,13 @@ import org.joml.Vector3d;
 
 public class PropulsiteBrokenBlockEntity extends BlockEntity {
 
+    private static Vector3d position = new Vector3d(0.0D, 0.0D, 0.0D);
+    private static Vector3d force = new Vector3d(0.0D, 0.0D, 0.0D);
+
     public PropulsiteBrokenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PROPULSITE_BROKEN.get(), pos, state);
     }
-
+    // FIRING SEQUENCE vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     private int charge = 0;
     private int cooldown = 0;
     private static final int MAX_CHARGE = 60; //how long it takes for the burst to be ready after receiving redstone power in ticks
@@ -33,81 +36,54 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity {
     private static final int BURST_DURATION = 16; //how long it takes for the full burst to go though in ticks
 
     public void tick() {
+        if (level instanceof ServerLevel serverLevel) {
 
+            Direction facing = getBlockState().getValue(PropulsiteBrokenBlock.FACING);
 
+            position.set(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
 
+            boolean powered = getBlockState().getValue(PropulsiteBrokenBlock.POWERED);
+            if (cooldown > 0) {
 
-        Direction facing = getBlockState().getValue(PropulsiteBrokenBlock.FACING);
+                if (!powered) cooldown--;
 
-        Vector3d thrust = new Vector3d(
-                facing.getStepX(),
-                facing.getStepY(),
-                facing.getStepZ()
-        );
-
-        Vector3d position = new Vector3d(
-                worldPosition.getX() + 0.5,
-                worldPosition.getY() + 0.5,
-                worldPosition.getZ() + 0.5
-        );
-
-        boolean powered = getBlockState().getValue(PropulsiteBrokenBlock.POWERED);
-        if (cooldown > 0) {
-
-            if (!powered) {
-                cooldown--;
+                return;
             }
 
-            return;
-        }
+            if (powered && !armed) {
 
-        if (powered && !armed) {
+                if (charge < MAX_CHARGE) {charge++;
 
-        if (charge < MAX_CHARGE) {
-                charge++;
+                    Vec3 thrustFace = Vec3.atCenterOf(worldPosition).add(Vec3.atLowerCornerOf(facing.getNormal()).scale(0.6));
 
-                 {
-                 Vec3 forward = Vec3.atLowerCornerOf(facing.getNormal());
-                 Vec3 center = Vec3.atCenterOf(worldPosition);
-                 Vec3 thrustFace = center.add(forward.scale(0.6));
+                    double px = thrustFace.x + (serverLevel.random.nextDouble() - 0.5) * 0.15;
+                    double py = thrustFace.y + (serverLevel.random.nextDouble() - 0.5) * 0.15;
+                    double pz = thrustFace.z + (serverLevel.random.nextDouble() - 0.5) * 0.15;
 
-                 double px = thrustFace.x + (level.random.nextDouble() - 0.5) * 0.15;
-                 double py = thrustFace.y + (level.random.nextDouble() - 0.5) * 0.15;
-                 double pz = thrustFace.z + (level.random.nextDouble() - 0.5) * 0.15;
+                     serverLevel.sendParticles (ParticleTypes.WAX_ON,
+                            px, py, pz, 1, 0.0, 0.0, 0.0, 0.0);
 
-                 Vec3 particlePos = new Vec3(px, py, pz);
+                    if (charge >= MAX_CHARGE) {
+                        armed = true;
 
-                 Vec3 motion = thrustFace.subtract(particlePos)
-                         .normalize()
-                         .scale(0.05);
+                        serverLevel.playSound(
+                                null,
+                                worldPosition,
+                                SoundEvents.BEACON_ACTIVATE,
+                                SoundSource.BLOCKS,
+                                1.0F,
+                                1.2F
 
-                     ((ServerLevel) level).sendParticles
-                             (ParticleTypes.WAX_ON,
-                             px, py, pz, 1, 0.0, 0.0, 0.0, 0.0);
-                }
-
-                if (charge >= MAX_CHARGE) {
-                    armed = true;
-
-                    level.playSound(
-                            null,
-                            worldPosition,
-                            SoundEvents.BEACON_ACTIVATE,
-                            SoundSource.BLOCKS,
-                            1.0F,
-                            1.2F
-
-                    );
+                        );
+                    }
                 }
             }
-        }
 
             if (!powered && !armed && charge > 0) {
                 charge -= 2;
 
-                if (charge < 0) {
-                    charge = 0;
-                }
+                if (charge < 0) charge = 0;
+
             }
             if (armed && !powered && !firing) {
 
@@ -117,26 +93,17 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity {
 
             if (firing) {
 
-                if (level == null || level.isClientSide) return;
                 ServerSubLevel subLevel = (ServerSubLevel) Sable.HELPER.getContaining(level, worldPosition);
-                if (subLevel == null) return;
-                RigidBodyHandle handle = RigidBodyHandle.of(subLevel);
-                if (!handle.isValid()) return;
 
-                double progress = (double) firingTick / BURST_DURATION;
+                if (subLevel != null) {
+                    RigidBodyHandle handle = RigidBodyHandle.of(subLevel);
+                    if (!handle.isValid()) return;
 
-                double curve = Math.sin(progress * Math.PI);
+                    double thrustStrength = 60 * Math.sin((double) firingTick / BURST_DURATION * Math.PI); //the curve that determines the total thrust of the burst
 
-                double thrustStrength = 60 * curve; //the curve that determines the total thrust of the burst
-
-                Vector3d firingThrust = new Vector3d(thrust);
-
-                firingThrust.mul(-thrustStrength);
-
-                handle.applyImpulseAtPoint(position, firingThrust);
-
-                ((ServerLevel) level).sendParticles
-                        (ParticleTypes.ELECTRIC_SPARK,
+                    handle.applyImpulseAtPoint(position, force.set(facing.getStepX(), facing.getStepY(), facing.getStepZ()).mul(-thrustStrength));
+                }
+                serverLevel.sendParticles (ParticleTypes.SPORE_BLOSSOM_AIR,
                         position.x, position.y, position.z, 8, 0.1, 0.1, 0.1, 0.05);
 
                 firingTick++;
@@ -145,13 +112,11 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity {
 
                     firing = false;
                     armed = false;
-
                     charge = 0;
-
                     cooldown = MAX_COOLDOWN;
-
+                    // FIRING SEQUENCE ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 }
             }
         }
     }
-
+}

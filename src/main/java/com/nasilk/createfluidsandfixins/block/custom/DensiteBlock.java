@@ -33,27 +33,17 @@ public class DensiteBlock extends Block {
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
-        if (!level.isClientSide) {
-            int power = level.getBestNeighborSignal(pos);
-            if (state.getValue(POWER) != power) {
-                level.setBlock(pos, state.setValue(POWER, power), 3);
+        if (!level.isClientSide) {int power = level.getBestNeighborSignal(pos);
+        if (state.getValue(POWER) != power) {level.setBlock(pos, state.setValue(POWER, power), 3);
             }
         }
     }
 
-    // PARTICLE TESTS
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         CreateFluidsAndFixins.LOGGER.info("Particle effect triggered by onRemove");
         addParticle(level, pos);
         super.onRemove(state, level, pos, newState, isMoving);
-    }
-
-    @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        CreateFluidsAndFixins.LOGGER.info("Particle effect triggered by useWithoutItem");
-        addParticle(level, pos);
-        return InteractionResult.SUCCESS;
     }
 
     private void addParticle(Level level, BlockPos pos) {

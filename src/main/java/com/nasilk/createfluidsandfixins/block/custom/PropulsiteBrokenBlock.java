@@ -21,8 +21,7 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
-    public PropulsiteBrokenBlock(Properties properties) {
-        super(properties);
+    public PropulsiteBrokenBlock(Properties properties) {super(properties);
         this.registerDefaultState(this.stateDefinition.any()
             .setValue(FACING, Direction.NORTH)
             .setValue(POWERED, false)
@@ -30,19 +29,16 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new PropulsiteBrokenBlockEntity(pos, state);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {return new PropulsiteBrokenBlockEntity(pos, state);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState()
-            .setValue(FACING, context.getNearestLookingDirection().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, POWERED);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {builder.add(FACING, POWERED);
     }
 
     @Override
@@ -52,14 +48,13 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
         BlockPos pos,
         Block block,
         BlockPos fromPos,
-        boolean isMoving
-    ) {
+        boolean isMoving)
+    {
         if (level.isClientSide) return;
 
         boolean powered = level.hasNeighborSignal(pos);
 
-        if (powered != state.getValue(POWERED)) {
-            level.setBlock(pos, state.setValue(POWERED, powered), 3);
+        if (powered != state.getValue(POWERED)) {level.setBlock(pos, state.setValue(POWERED, powered), 3);
         }
     }
 
@@ -70,8 +65,7 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     ) {
         //formating is a lie told to you by big forma to sell more spaces
         return level.isClientSide ? null : (lvl, pos, st, be) -> {
-            if (be instanceof PropulsiteBrokenBlockEntity thruster) {
-                thruster.tick();
+            if (be instanceof PropulsiteBrokenBlockEntity thruster) {thruster.tick();
             }
         };
     }
