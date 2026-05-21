@@ -29,7 +29,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 
-
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(CreateFluidsAndFixins.MOD_ID)
 public class CreateFluidsAndFixins {
@@ -73,7 +72,6 @@ public class CreateFluidsAndFixins {
         event.enqueueWork(() -> {
             ModDispenserBehavior.register();
         });
-
         LOGGER.info("Create: Fluids and Fixins loaded");
     }
 

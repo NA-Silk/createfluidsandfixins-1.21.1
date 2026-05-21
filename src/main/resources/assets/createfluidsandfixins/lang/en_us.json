@@ -22,5 +22,17 @@
   "item.createfluidsandfixins.propulsite_flurry_bucket": "Propulsite Flurry Bucket",
   "item.createfluidsandfixins.temp_bucket": "Temp Bucket",
 
-  "item.createfluidsandfixins.creative_fluid_eraser": "Creative Fluid Eraser"
+  "item.createfluidsandfixins.creative_fluid_eraser": "Creative Fluid Eraser",
+
+  "createfluidsandfixins.goggles.thrust": "Thrust: %s",
+  "createfluidsandfixins.goggles.maximum_thrust": "Maximum Thrust: %s",
+  "createfluidsandfixins.unit.gpg": "%s Gpg",
+  "createfluidsandfixins.unit.gpn": "%s GpN",
+  "createfluidsandfixins.unit.kpg": "%s kpg",
+  "createfluidsandfixins.unit.kpn": "%s kpN",
+  "createfluidsandfixins.unit.meter_cubed": "%s m³",
+  "createfluidsandfixins.unit.meters_per_second": "%s m/s",
+  "createfluidsandfixins.unit.mpg": "%s Mpg",
+  "createfluidsandfixins.unit.mpn": "%s MpN",
+  "createfluidsandfixins.unit.pn": "%s pN"
 }

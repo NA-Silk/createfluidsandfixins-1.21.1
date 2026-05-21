@@ -1,12 +1,18 @@
 package com.nasilk.createfluidsandfixins.block.custom;
 
 import com.nasilk.createfluidsandfixins.block.ModBlockEntities;
+import com.nasilk.createfluidsandfixins.util.FFLang;
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import dev.eriksonn.aeronautics.data.AeroLang;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.api.physics.handle.RigidBodyHandle;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -14,8 +20,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
+import java.util.List;
 
-public class PropulsiteBrokenBlockEntity extends BlockEntity {
+public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGoggleInformation {
 
     public PropulsiteBrokenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PROPULSITE_BROKEN.get(), pos, state);
@@ -152,6 +159,29 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity {
 
                 }
             }
-        }
     }
 
+    @Override
+    public boolean addToGoggleTooltip(final List<Component> tooltip, final boolean isPlayerSneaking) {
+        FFLang.emptyLine(tooltip);
+        FFLang.blockName(this.getBlockState()).text(":").forGoggles(tooltip);
+
+        final MutableComponent thrustComponent = FFLang
+                .pixelNewton(Math.abs(20))
+                .style(ChatFormatting.AQUA)
+                .component();
+        FFLang.translate("goggles.thrust", thrustComponent)
+                .style(ChatFormatting.GRAY)
+                .forGoggles(tooltip, 1);
+
+        final MutableComponent maximumThrust = FFLang
+                .pixelNewton(Math.abs(200))
+                .style(ChatFormatting.AQUA)
+                .component();
+        FFLang.translate("goggles.maximum_thrust", maximumThrust)
+                .style(ChatFormatting.GRAY)
+                .forGoggles(tooltip, 1);
+
+        return true;
+    }
+}
