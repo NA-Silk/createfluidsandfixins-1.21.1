@@ -54,7 +54,7 @@ public class ModBlocks {
 
     public static final BlockEntry<TransparentBlock> PROPULSITE_BLOCK = registerCTBlock(
         "propulsite_block",
-        (properties) -> new TransparentBlock(BlockBehaviour.Properties.of()
+        (properties) -> new TransparentBlock(BlockBehaviour.Properties.of() // I don't know what this does, but if I delete it, it crashes the game
             .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)

@@ -36,7 +36,10 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
 
     private static final int MAX_CHARGE = 60; // How long it takes for the burst to be ready after receiving redstone power in ticks
     private static final int MAX_COOLDOWN = 100; // How long it takes for the block to be able to be charged again in ticks
-    private static final int BURST_DURATION = 16; // How long it takes for the full burst to go though in ticks
+    private static final int BURST_DURATION = 40; // How long it takes for the full burst to go though in ticks
+    private static final double AMPLITUDE = 100.0d; // How much total thrust is output over the length of the burst
+    private static final double STANDARD_DEVIATION = 5.0d; // Curve spread
+    private static final double MEAN = 20.0d; // Curve middle
 
     public PropulsiteBrokenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PROPULSITE_BROKEN.get(), pos, state);
@@ -97,7 +100,7 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                     if (!handle.isValid()) return;
 
                     // The curve that determines the total thrust of the burst
-                    thrustStrength = 60 * Math.sin((double) firingTick / BURST_DURATION * Math.PI);
+                    thrustStrength = (AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI))) * Math.exp(-0.5 * Math.pow((firingTick - MEAN) / STANDARD_DEVIATION, 2));
                     handle.applyImpulseAtPoint(position, force.set(facing.getStepX(), facing.getStepY(), facing.getStepZ()).mul(-thrustStrength));
                 }
 
@@ -106,6 +109,7 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                     firing = false;
                     armed = false;
                     charge = 0;
+                    thrustStrength = 0;
                     cooldown = MAX_COOLDOWN;
                 }
 
@@ -116,8 +120,6 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                     position.z,
                     8,0.1,0.1,0.1,0.05
                 );
-            } else {
-                thrustStrength = 0;
             }
 
             // Force packet update (for tooltips)
@@ -127,11 +129,11 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
 
     @Override
     public boolean addToGoggleTooltip(final List<Component> tooltip, final boolean isPlayerSneaking) {
-        FFLang.emptyLine(tooltip);
+        //FFLang.emptyLine(tooltip);
         FFLang.blockName(this.getBlockState()).text(":").forGoggles(tooltip);
 
         final MutableComponent thrustComponent = FFLang
-                .pixelNewton(Math.abs(thrustStrength))
+                .pixelNewton(thrustStrength)
                 .style(ChatFormatting.AQUA)
                 .component();
         FFLang.translate("goggles.thrust", thrustComponent)
@@ -139,10 +141,18 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                 .forGoggles(tooltip, 1);
 
         final MutableComponent maximumThrust = FFLang
-                .pixelNewton(Math.abs(611)) // Hard coded integration approximate for now
+                .pixelNewton(AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2 * Math.PI)))
                 .style(ChatFormatting.AQUA)
                 .component();
         FFLang.translate("goggles.maximum_thrust", maximumThrust)
+                .style(ChatFormatting.GRAY)
+                .forGoggles(tooltip, 1);
+
+        final MutableComponent totalThrust = FFLang
+                .pixelNewton(AMPLITUDE)
+                .style(ChatFormatting.AQUA)
+                .component();
+        FFLang.translate("goggles.total_thrust", totalThrust)
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip, 1);
 
@@ -167,8 +177,6 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
     @Override
     public void onDataPacket(net.minecraft.network.Connection net, net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket pkt, net.minecraft.core.HolderLookup.Provider registries) {
         net.minecraft.nbt.CompoundTag tag = pkt.getTag();
-        if (tag != null) {
-            this.thrustStrength = tag.getDouble("ThrustStrength");
-        }
+        if (tag != null) this.thrustStrength = tag.getDouble("ThrustStrength");
     }
 }

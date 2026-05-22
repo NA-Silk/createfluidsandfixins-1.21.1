@@ -26,6 +26,7 @@
 
   "createfluidsandfixins.goggles.thrust": "Thrust: %s",
   "createfluidsandfixins.goggles.maximum_thrust": "Maximum Thrust: %s",
+  "createfluidsandfixins.goggles.total_thrust": "Total Thrust: %s",
   "createfluidsandfixins.unit.gpg": "%s Gpg",
   "createfluidsandfixins.unit.gpn": "%s GpN",
   "createfluidsandfixins.unit.kpg": "%s kpg",
