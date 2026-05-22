@@ -26,11 +26,8 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
 import java.util.List;
 
+@SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner"})
 public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGoggleInformation {
-    private static final Vector3d position = new Vector3d(0.0D, 0.0D, 0.0D);
-    private static final Vector3d force = new Vector3d(0.0D, 0.0D, 0.0D);
-    private final Direction facing = getBlockState().getValue(PropulsiteBrokenBlock.FACING);
-
     private int charge = 0;
     private int cooldown = 0;
     private int firingTick = 0;
@@ -45,6 +42,7 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
     private static final double AMPLITUDE = 100.0d; // How much total thrust is output over the length of the burst
     private static final double STANDARD_DEVIATION = 5.0d; // Curve spread
     private static final double MEAN = 20.0d; // Curve middle
+    private static final double TERMINAL_VELOCITY = 50.0d; // Maximum falling speed to prevent tunneling, 50 seems to work
 
     public PropulsiteBrokenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PROPULSITE_BROKEN.get(), pos, state);
@@ -52,8 +50,10 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
 
     public void tick() {
         if (level instanceof ServerLevel serverLevel) {
-            boolean powered = getBlockState().getValue(PropulsiteBrokenBlock.POWERED);
-            position.set(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
+            BlockState state = getBlockState();
+            Direction facing = state.getValue(PropulsiteBrokenBlock.FACING);
+            boolean powered = state.getValue(PropulsiteBrokenBlock.POWERED);
+            Vec3 thrustFace = Vec3.atCenterOf(worldPosition).add(Vec3.atLowerCornerOf(facing.getNormal()).scale(0.6));
 
             // Cooldown
             if (cooldown > 0) {
@@ -66,7 +66,6 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                 if (charge < MAX_CHARGE) {
                     charge++;
 
-                    Vec3 thrustFace = Vec3.atCenterOf(worldPosition).add(Vec3.atLowerCornerOf(facing.getNormal()).scale(0.6));
                     serverLevel.sendParticles (
                         ParticleTypes.WAX_ON,
                         thrustFace.x + (serverLevel.random.nextDouble() - 0.5) * 0.15,
@@ -108,7 +107,10 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                     thrustStrength =
                         (AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI))) // Maximum
                         * Math.exp(-0.5 * Math.pow((firingTick - MEAN) / STANDARD_DEVIATION, 2)); // Curve computation
-                    handle.applyImpulseAtPoint(position, force.set(facing.getStepX(), facing.getStepY(), facing.getStepZ()).mul(-thrustStrength));
+
+                    Vector3d position = new Vector3d(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
+                    Vector3d force = new Vector3d(facing.getStepX(), facing.getStepY(), facing.getStepZ()).mul(-thrustStrength);
+                    handle.applyImpulseAtPoint(position, force);
                 }
 
                 firingTick++;
@@ -120,17 +122,56 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                     cooldown = MAX_COOLDOWN;
                 }
 
-                serverLevel.sendParticles(
-                    ParticleTypes.SPORE_BLOSSOM_AIR,
-                    position.x,
-                    position.y,
-                    position.z,
-                    8,0.1,0.1,0.1,0.05
-                );
+                addThrusterParticles(serverLevel, facing, thrustFace);
+            }
+
+            // Handle terminal velocity
+            if (Sable.HELPER.getContaining(level, worldPosition) instanceof ServerSubLevel subLevel) {
+                RigidBodyHandle handle = RigidBodyHandle.of(subLevel);
+                if (!handle.isValid()) return;
+                Vector3d currentVelocity = handle.getLinearVelocity(new Vector3d());
+
+                // Apply opposite velocity if falling faster than 3.0 blocks per tick (~60 blocks/s)
+                if (currentVelocity.y < -TERMINAL_VELOCITY) {
+                    handle.addLinearAndAngularVelocity(
+                        new Vector3d(0.0, -TERMINAL_VELOCITY - currentVelocity.y, 0.0),
+                        new Vector3d(0.0, 0.0, 0.0)
+                    );
+                }
             }
 
             // Force packet update (for tooltips)
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
+    }
+
+    private void addThrusterParticles(ServerLevel serverLevel, Direction facing, Vec3 thrustFace) {
+        double maxThrust = AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI));
+        double thrustRatio = Math.max(0.0, thrustStrength / maxThrust); // [0.0 to 1.0] multiplier based on current thrust strength
+        double baseVelocity = 0.3 + (0.7 * thrustRatio); // Faster jet at peak thrust
+        int particleCount = (int) (15 * thrustRatio) + 2; // Always spawn at least 2
+
+        for (int i = 0; i < particleCount; i++) {
+            // Apply slight random spread to the cone of the thrust
+            double dirX = facing.getStepX() + (serverLevel.random.nextGaussian() * 0.15);
+            double dirY = facing.getStepY() + (serverLevel.random.nextGaussian() * 0.15);
+            double dirZ = facing.getStepZ() + (serverLevel.random.nextGaussian() * 0.15);
+
+            // Normalize the randomized direction and scale by our calculated velocity
+            Vec3 particleVel = new Vec3(dirX, dirY, dirZ).normalize().scale(baseVelocity);
+
+            // By setting count to 0, xOffset, yOffset, and zOffset act as xSpeed, ySpeed, and zSpeed
+            serverLevel.sendParticles(
+                ParticleTypes.FLAME, // Replace later
+                thrustFace.x,
+                thrustFace.y,
+                thrustFace.z,
+                0, // Count = 0 forces the particle to use the offsets as velocity
+                particleVel.x,
+                particleVel.y,
+                particleVel.z,
+                1.0 // Speed multiplier (1.0 means it uses the exact x/y/z vector values above)
+            );
         }
     }
 
