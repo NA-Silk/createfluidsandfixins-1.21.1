@@ -24,7 +24,7 @@ public class CreateFluidsAndFixinsClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        // Some client setup code
+        // Client setup code
         CreateFluidsAndFixins.LOGGER.info("HELLO FROM CLIENT SETUP");
         CreateFluidsAndFixins.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
     }

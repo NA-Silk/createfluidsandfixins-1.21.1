@@ -23,7 +23,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import java.util.List;
 
@@ -106,7 +105,9 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                     if (!handle.isValid()) return;
 
                     // The curve that determines the total thrust of the burst
-                    thrustStrength = (AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI))) * Math.exp(-0.5 * Math.pow((firingTick - MEAN) / STANDARD_DEVIATION, 2));
+                    thrustStrength =
+                        (AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI))) // Maximum
+                        * Math.exp(-0.5 * Math.pow((firingTick - MEAN) / STANDARD_DEVIATION, 2)); // Curve computation
                     handle.applyImpulseAtPoint(position, force.set(facing.getStepX(), facing.getStepY(), facing.getStepZ()).mul(-thrustStrength));
                 }
 
@@ -166,9 +167,8 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
     }
 
     // Save data to the network sync packet
-    @NotNull
     @Override
-    public CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries) {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
         tag.putDouble("ThrustStrength", this.thrustStrength);
         return tag;
@@ -182,7 +182,7 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
 
     // Handle receiving the packet on the Client side
     @Override
-    public void onDataPacket(@NotNull Connection net, ClientboundBlockEntityDataPacket pkt, @NotNull HolderLookup.Provider registries) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
         CompoundTag tag = pkt.getTag();
         this.thrustStrength = tag.getDouble("ThrustStrength");
     }

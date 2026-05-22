@@ -14,8 +14,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.function.Supplier;
 
 public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
@@ -32,6 +30,10 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
         this.settings = settings;
     }
 
+    public FluidTransformationSettings getSettings() {
+        return this.settings;
+    }
+
     // BEHAVIOR OVERRIDES
     @Override
     protected boolean isRandomlyTicking() {
@@ -39,7 +41,7 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
     }
 
     @Override
-    public void randomTick(@NotNull Level level, @NotNull BlockPos pos, @NotNull FluidState state, @NotNull RandomSource random) {
+    public void randomTick(Level level, BlockPos pos, FluidState state, RandomSource random) {
         super.randomTick(level, pos, state, random);
         tryTransform(level, pos, state, FluidTransformationTriggerType.RANDOM_TICK);
     }
@@ -80,10 +82,6 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
         performTransformation(serverLevel, pos);
     }
 
-    public FluidTransformationSettings getSettings() {
-        return this.settings;
-    }
-
     private boolean hasAdjacentBlocks(ServerLevel level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
             Block adjacentBlock = level.getBlockState(pos.relative(direction)).getBlock();
@@ -116,9 +114,9 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
     // INNER CLASSES
     public static class Flowing extends TransformBaseFlowingFluid {
         public Flowing(Properties properties, Supplier<Block> transformBlock, FluidTransformationSettings settings) { super(properties, transformBlock, settings); }
-        @Override public boolean isSource(@NotNull FluidState state) { return false; }
+        @Override public boolean isSource(FluidState state) { return false; }
         @Override public int getAmount(FluidState state) { return state.getValue(LEVEL); }
-        @Override protected void createFluidStateDefinition(@NotNull StateDefinition.Builder<Fluid, FluidState> builder) {
+        @Override protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }
@@ -126,7 +124,7 @@ public abstract class TransformBaseFlowingFluid extends BaseFlowingFluid {
 
     public static class Source extends TransformBaseFlowingFluid {
         public Source(Properties properties, Supplier<Block> transformBlock, FluidTransformationSettings settings) { super(properties, transformBlock, settings); }
-        @Override public boolean isSource(@NotNull FluidState state) { return true; }
-        @Override public int getAmount(@NotNull FluidState state) { return 8; }
+        @Override public boolean isSource(FluidState state) { return true; }
+        @Override public int getAmount(FluidState state) { return 8; }
     }
 }

@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import org.jetbrains.annotations.NotNull;
 
 public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -30,7 +29,7 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     }
 
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new PropulsiteBrokenBlockEntity(pos, state);
     }
 
@@ -44,13 +43,13 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     }
 
     @Override
-    public void neighborChanged(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block block, @NotNull BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if (level.isClientSide) return;
         boolean powered = level.hasNeighborSignal(pos);
         if (powered != state.getValue(POWERED)) level.setBlock(pos, state.setValue(POWERED, powered), 3);
     }
 
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         //formating is a lie told to you by big forma to sell more spaces
         return level.isClientSide ? null : (lvl, pos, st, be) -> {
             if (be instanceof PropulsiteBrokenBlockEntity thruster) thruster.tick();
@@ -58,8 +57,10 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     }
 
     @Override
-    public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
-        addParticle(level, pos);
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock()) && !isMoving) {
+            addParticle(level, pos);
+        }
         super.onRemove(state, level, pos, newState, isMoving);
     }
 

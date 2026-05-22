@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.minecraft.core.registries.Registries;
-
 import java.util.function.Supplier;
 
 @SuppressWarnings("DataFlowIssue")

@@ -23,7 +23,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "SameParameterValue"})
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
         DeferredRegister.createBlocks(CreateFluidsAndFixins.MOD_ID);
@@ -120,7 +120,6 @@ public class ModBlocks {
         )
     );
 
-    @SuppressWarnings("SameParameterValue")
     private static <T extends Block> BlockEntry<T> registerCTBlock(String name, NonNullFunction<BlockBehaviour.Properties, T> factory, Supplier<ConnectedTextureBehaviour> behavior) {
         BlockEntry<T> toReturn = CreateFluidsAndFixins.REGISTRATE.block(name, factory)
             .onRegister(CreateRegistrate.connectedTextures(behavior))

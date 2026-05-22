@@ -13,19 +13,17 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import org.jetbrains.annotations.NotNull;
 
 public class CreativeFluidEraserItem extends Item {
-    public int radius;
+    public final int radius;
 
     public CreativeFluidEraserItem(Properties properties, int radius) {
         super(properties);
         this.radius = radius;
     }
 
-    @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         BlockHitResult blockhitresult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
 

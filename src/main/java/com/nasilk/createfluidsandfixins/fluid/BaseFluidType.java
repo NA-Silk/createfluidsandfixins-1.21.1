@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import java.util.function.Consumer;
 
+@SuppressWarnings("removal")
 public class BaseFluidType extends FluidType {
     private final ResourceLocation stillTexture;
     private final ResourceLocation flowingTexture;
@@ -37,11 +38,9 @@ public class BaseFluidType extends FluidType {
         this.fogColor = fogColor;
     }
 
-    @SuppressWarnings("removal")
     @Override
     public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
         consumer.accept(new IClientFluidTypeExtensions() {
-
             @Override
             public @NotNull ResourceLocation getStillTexture() {
                 return stillTexture;
@@ -65,27 +64,12 @@ public class BaseFluidType extends FluidType {
 
             // Fog glow effect
             @Override
-            public @NotNull Vector3f modifyFogColor(
-                @NotNull Camera camera,
-                float partialTick,
-                @NotNull ClientLevel level,
-                int renderDistance,
-                float darkenWorldAmount,
-                @NotNull Vector3f fluidFogColor
-            ) {
+            public @NotNull Vector3f modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector3f fluidFogColor) {
                 return fogColor;
             }
 
             @Override
-            public void modifyFogRender(
-                @NotNull Camera camera,
-                FogRenderer.@NotNull FogMode mode,
-                float renderDistance,
-                float partialTick,
-                float nearDistance,
-                float farDistance,
-                @NotNull FogShape shape
-            ) {
+            public void modifyFogRender(Camera camera, FogRenderer.FogMode mode, float renderDistance, float partialTick, float nearDistance, float farDistance, FogShape shape) {
                 RenderSystem.setShaderFogStart(0.0f);
                 RenderSystem.setShaderFogEnd(8.0f);
             }

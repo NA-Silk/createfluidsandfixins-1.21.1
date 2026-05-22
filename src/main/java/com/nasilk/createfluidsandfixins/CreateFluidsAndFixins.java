@@ -70,7 +70,9 @@ public class CreateFluidsAndFixins {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        event.enqueueWork(ModDispenserBehavior::register);
+        event.enqueueWork(() -> {
+            ModDispenserBehavior.register();
+        });
         LOGGER.info("Create: Fluids and Fixins loaded");
     }
 
@@ -96,7 +98,6 @@ public class CreateFluidsAndFixins {
     // @SubscribeEvent lets the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
 
