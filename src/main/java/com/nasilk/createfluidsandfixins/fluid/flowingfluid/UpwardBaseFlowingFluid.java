@@ -14,6 +14,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
     public int tickRate = 8, flowLife = 2;
@@ -48,7 +49,7 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
      * This allows fully custom behavior at the expense of complexity.
      */
     @Override
-    public void tick(Level level, BlockPos pos, FluidState state) {
+    public void tick(Level level, @NotNull BlockPos pos, @NotNull FluidState state) {
         if (level.isClientSide) return;
 
         // 1. Death Check (prevent the Death Balloon)
@@ -80,6 +81,7 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
         if (targetState.canBeReplaced() || isDyingSegment) {
             // nextAmount = 7 if isSource, else amount || amount - 1 if flowing (dependent on y-level)
             int nextAmount = state.isSource() ? 7 : ((pos.getY() % 2 == 0) ? amount : amount - 1);
+            //noinspection ConstantValue
             if (nextAmount > 0) {
                 // Spawn the next piece (FALLING = false by default)
                 level.setBlock(targetPos, this.getFlowing(nextAmount, false).createLegacyBlock(), 2);
@@ -106,47 +108,41 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
     }
 
     @Override
-    public float getHeight(FluidState state, BlockGetter level, BlockPos pos) {
+    public float getHeight(FluidState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
         return state.isSource() ? 1.0f : flowingBlockHeight;
     }
 
     // DISABLE VANILLA FLOW BEHAVIOR
+    @NotNull
     @Override
-    protected FluidState getNewLiquid(Level level, BlockPos pos, BlockState blockState) { return Fluids.EMPTY.defaultFluidState(); } // No source creation
+    protected FluidState getNewLiquid(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState blockState) { return Fluids.EMPTY.defaultFluidState(); } // No source creation
 
     @Override
-    protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState blockState, Direction direction, FluidState fluidState) { }
+    protected void spreadTo(@NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState blockState, @NotNull Direction direction, @NotNull FluidState fluidState) { }
+
+    @NotNull
+    @Override
+    public Vec3 getFlow(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull FluidState state) { return Vec3.ZERO; }
 
     @Override
-    public Vec3 getFlow(BlockGetter level, BlockPos pos, FluidState state) { return Vec3.ZERO; }
+    protected boolean canSpreadTo(@NotNull BlockGetter level, @NotNull BlockPos fromPos, @NotNull BlockState fromBlockState, @NotNull Direction direction, @NotNull BlockPos toPos, @NotNull BlockState toBlockState, @NotNull FluidState toFluidState, @NotNull Fluid fromFluid) { return false; } // No horizontal spreading
 
     @Override
-    protected boolean canSpreadTo(
-        BlockGetter level,
-        BlockPos fromPos,
-        BlockState fromBlockState,
-        Direction direction,
-        BlockPos toPos,
-        BlockState toBlockState,
-        FluidState toFluidState,
-        Fluid fromFluid
-    ) { return false; } // No horizontal spreading
+    protected void spread(@NotNull Level level, @NotNull BlockPos pos, @NotNull FluidState state) { } // Do nothing, handle everything in tick()
 
     @Override
-    protected void spread(Level level, BlockPos pos, FluidState state) { } // Do nothing, handle everything in tick()
+    protected int getSlopeFindDistance(@NotNull LevelReader level) { return 0; }
 
     @Override
-    protected int getSlopeFindDistance(LevelReader level) { return 0; }
+    protected int getDropOff(@NotNull LevelReader level) { return 1; }
 
     @Override
-    protected int getDropOff(LevelReader level) { return 1; }
+    public int getTickDelay(@NotNull LevelReader level) { return tickRate; }
 
     @Override
-    public int getTickDelay(LevelReader level) { return tickRate; }
+    protected boolean canConvertToSource(@NotNull Level level) { return false; }
 
-    @Override
-    protected boolean canConvertToSource(Level level) { return false; }
-
+    @NotNull
     @Override
     public FluidState getSource(boolean falling) { return super.getSource(false); }
 
@@ -154,9 +150,9 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
     // INNER CLASSES
     public static class Flowing extends UpwardBaseFlowingFluid {
         public Flowing(Properties properties) { super(properties); }
-        @Override public boolean isSource(FluidState state) { return false; }
+        @Override public boolean isSource(@NotNull FluidState state) { return false; }
         @Override public int getAmount(FluidState state) { return state.getValue(LEVEL); }
-        @Override protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
+        @Override protected void createFluidStateDefinition(@NotNull StateDefinition.Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }
@@ -164,7 +160,7 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
 
     public static class Source extends UpwardBaseFlowingFluid {
         public Source(Properties properties) { super(properties); }
-        @Override public boolean isSource(FluidState state) { return true; }
-        @Override public int getAmount(FluidState state) { return 8; }
+        @Override public boolean isSource(@NotNull FluidState state) { return true; }
+        @Override public int getAmount(@NotNull FluidState state) { return 8; }
     }
 }

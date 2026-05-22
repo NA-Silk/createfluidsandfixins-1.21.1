@@ -1,6 +1,7 @@
-package com.nasilk.createfluidsandfixins.block.custom;
+package com.nasilk.createfluidsandfixins.block.entity;
 
 import com.nasilk.createfluidsandfixins.block.ModBlockEntities;
+import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
 import com.nasilk.createfluidsandfixins.util.FFLang;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import dev.ryanhcode.sable.Sable;
@@ -9,15 +10,20 @@ import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import java.util.List;
 
@@ -132,11 +138,11 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
         //FFLang.emptyLine(tooltip);
         FFLang.blockName(this.getBlockState()).text(":").forGoggles(tooltip);
 
-        final MutableComponent thrustComponent = FFLang
+        final MutableComponent currentThrust = FFLang
                 .pixelNewton(thrustStrength)
                 .style(ChatFormatting.AQUA)
                 .component();
-        FFLang.translate("goggles.thrust", thrustComponent)
+        FFLang.translate("goggles.current_thrust", currentThrust)
                 .style(ChatFormatting.GRAY)
                 .forGoggles(tooltip, 1);
 
@@ -160,23 +166,24 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
     }
 
     // Save data to the network sync packet
+    @NotNull
     @Override
-    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
-        net.minecraft.nbt.CompoundTag tag = super.getUpdateTag(registries);
+    public CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries) {
+        CompoundTag tag = super.getUpdateTag(registries);
         tag.putDouble("ThrustStrength", this.thrustStrength);
         return tag;
     }
 
     // Wrap the tag into the standard vanilla packet
     @Override
-    public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     // Handle receiving the packet on the Client side
     @Override
-    public void onDataPacket(net.minecraft.network.Connection net, net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket pkt, net.minecraft.core.HolderLookup.Provider registries) {
-        net.minecraft.nbt.CompoundTag tag = pkt.getTag();
-        if (tag != null) this.thrustStrength = tag.getDouble("ThrustStrength");
+    public void onDataPacket(@NotNull Connection net, ClientboundBlockEntityDataPacket pkt, @NotNull HolderLookup.Provider registries) {
+        CompoundTag tag = pkt.getTag();
+        this.thrustStrength = tag.getDouble("ThrustStrength");
     }
 }

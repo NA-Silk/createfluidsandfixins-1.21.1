@@ -1,5 +1,6 @@
 package com.nasilk.createfluidsandfixins.block.custom;
 
+import com.nasilk.createfluidsandfixins.block.entity.PropulsiteBrokenBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -15,20 +16,20 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import org.jetbrains.annotations.NotNull;
 
 public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
-    public PropulsiteBrokenBlock(Properties properties) {super(properties);
-        this.registerDefaultState(this.stateDefinition.any()
-            .setValue(FACING, Direction.NORTH)
-            .setValue(POWERED, false)
-        );
+    public PropulsiteBrokenBlock(Properties properties) {
+        super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {return new PropulsiteBrokenBlockEntity(pos, state);
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+        return new PropulsiteBrokenBlockEntity(pos, state);
     }
 
     @Override
@@ -41,24 +42,13 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     }
 
     @Override
-    public void neighborChanged(
-        BlockState state,
-        Level level,
-        BlockPos pos,
-        Block block,
-        BlockPos fromPos,
-        boolean isMoving
-    ) {
+    public void neighborChanged(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block block, @NotNull BlockPos fromPos, boolean isMoving) {
         if (level.isClientSide) return;
         boolean powered = level.hasNeighborSignal(pos);
         if (powered != state.getValue(POWERED)) level.setBlock(pos, state.setValue(POWERED, powered), 3);
     }
 
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-        Level level,
-        BlockState state,
-        BlockEntityType<T> type
-    ) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         //formating is a lie told to you by big forma to sell more spaces
         return level.isClientSide ? null : (lvl, pos, st, be) -> {
             if (be instanceof PropulsiteBrokenBlockEntity thruster) thruster.tick();

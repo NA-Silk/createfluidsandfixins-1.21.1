@@ -6,8 +6,10 @@ import net.createmod.catnip.lang.LangBuilder;
 import net.createmod.catnip.lang.LangNumberFormat;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
+
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class FFLang {
 
     public static LangBuilder builder() {

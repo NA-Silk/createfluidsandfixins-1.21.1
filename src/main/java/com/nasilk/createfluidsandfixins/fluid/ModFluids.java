@@ -26,9 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
-// NOTE: FluidTransformationSettings is required if using TransformBaseFlowingFluid
 public class ModFluids {
-    // DEFAULT
     public static final DeferredRegister<Fluid> FLUIDS =
         DeferredRegister.create(BuiltInRegistries.FLUID, CreateFluidsAndFixins.MOD_ID);
 

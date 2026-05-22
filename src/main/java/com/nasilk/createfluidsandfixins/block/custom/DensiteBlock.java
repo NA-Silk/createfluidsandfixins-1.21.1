@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import org.jetbrains.annotations.NotNull;
 
 public class DensiteBlock extends Block {
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -25,7 +26,7 @@ public class DensiteBlock extends Block {
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+    public void neighborChanged(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Block neighborBlock, @NotNull BlockPos neighborPos, boolean movedByPiston) {
         if (!level.isClientSide) {int power = level.getBestNeighborSignal(pos);
         if (state.getValue(POWER) != power) {level.setBlock(pos, state.setValue(POWER, power), 3);
             }
@@ -33,7 +34,7 @@ public class DensiteBlock extends Block {
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
         addParticle(level, pos);
         super.onRemove(state, level, pos, newState, isMoving);
     }

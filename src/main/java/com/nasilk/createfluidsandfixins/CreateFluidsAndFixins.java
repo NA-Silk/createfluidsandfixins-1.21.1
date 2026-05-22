@@ -69,9 +69,7 @@ public class CreateFluidsAndFixins {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            ModDispenserBehavior.register();
-        });
+        event.enqueueWork(ModDispenserBehavior::register);
         LOGGER.info("Create: Fluids and Fixins loaded");
     }
 

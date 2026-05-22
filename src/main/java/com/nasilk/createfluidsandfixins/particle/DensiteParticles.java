@@ -3,6 +3,7 @@ package com.nasilk.createfluidsandfixins.particle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DensiteParticles extends TextureSheetParticle {
@@ -11,7 +12,7 @@ public class DensiteParticles extends TextureSheetParticle {
         this.hasPhysics = true; // Run collision
         this.friction = 0.6f; // Scatter speed (lower -> faster), default 0.98f
         this.gravity = 0.15f; // Drop speed (higher -> faster), default 0.06f
-        this.lifetime = (int) (30.0f / (this.random.nextFloat() * 0.9f + 0.1f));; // Particle lifetime in ticks, default (int) (4.0F / (this.random.nextFloat() * 0.9F + 0.1F));
+        this.lifetime = (int) (30.0f / (this.random.nextFloat() * 0.9f + 0.1f)); // Particle lifetime in ticks, default (int) (4.0F / (this.random.nextFloat() * 0.9F + 0.1F));
         this.quadSize = 0.1f * (this.random.nextFloat() * 0.5f + 0.5f) * 2.0f; // Particle size, default 0.1F * (this.random.nextFloat() * 0.5F + 0.5F) * 2.0F;
         this.setSpriteFromAge(spriteSet);
         this.xd = xSpeed * 0.2; // x starting speed
@@ -57,6 +58,7 @@ public class DensiteParticles extends TextureSheetParticle {
         }
     }
 
+    @NotNull
     @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
@@ -71,7 +73,7 @@ public class DensiteParticles extends TextureSheetParticle {
 
         @Nullable
         @Override
-        public Particle createParticle(SimpleParticleType simpleParticleType, ClientLevel clientLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
+        public Particle createParticle(@NotNull SimpleParticleType simpleParticleType, @NotNull ClientLevel clientLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
             return new DensiteParticles(clientLevel, pX, pY, pZ, this.spriteSet, pXSpeed, pYSpeed, pZSpeed);
         }
     }

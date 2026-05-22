@@ -9,7 +9,9 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.joml.Vector3f;
 import java.util.function.Supplier;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class ModFluidTypes {
+
     /* DEFAULT
      * public static final ResourceLocation WATER_STILL_RL = ResourceLocation.parse("block/water_still");
      * public static final ResourceLocation WATER_FLOWING_RL = ResourceLocation.parse("block/water_flow");

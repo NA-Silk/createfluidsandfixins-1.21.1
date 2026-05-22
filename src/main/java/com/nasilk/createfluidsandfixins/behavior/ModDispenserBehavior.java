@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
+import org.jetbrains.annotations.NotNull;
 
 public class ModDispenserBehavior {
     private static void registerFluidBucket(BucketItem bucketItem) {
@@ -19,8 +20,10 @@ public class ModDispenserBehavior {
             new DispenseItemBehavior() {
                 private final DefaultDispenseItemBehavior defaultBehavior = new DefaultDispenseItemBehavior();
 
+                @SuppressWarnings("deprecation")
+                @NotNull
                 @Override
-                public ItemStack dispense(BlockSource source, ItemStack stack) {
+                public ItemStack dispense(@NotNull BlockSource source, @NotNull ItemStack stack) {
                     Direction direction = source.state().getValue(DispenserBlock.FACING);
                     BlockPos targetPos = source.pos().relative(direction);
                     Level level = source.level();
