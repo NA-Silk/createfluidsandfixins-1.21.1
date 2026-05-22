@@ -10,10 +10,17 @@ import java.util.function.Supplier;
 
 public class ModParticles {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =
-            DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, CreateFluidsAndFixins.MOD_ID);
+        DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, CreateFluidsAndFixins.MOD_ID);
 
-    public static final Supplier<SimpleParticleType> DENSITE_PARTICLES =
-            PARTICLE_TYPES.register("densite_particles", () -> new SimpleParticleType(true));
+    public static final Supplier<SimpleParticleType> DENSITE_PARTICLES = PARTICLE_TYPES.register(
+        "densite_particles",
+        () -> new SimpleParticleType(true)
+    );
+
+    public static final Supplier<SimpleParticleType> PROPULSITE_PARTICLES = PARTICLE_TYPES.register(
+        "propulsite_particles",
+        () -> new SimpleParticleType(true)
+    );
 
     public static void register(IEventBus eventBus) {
         PARTICLE_TYPES.register(eventBus);

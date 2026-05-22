@@ -1,8 +1,10 @@
 package com.nasilk.createfluidsandfixins.block.custom;
 
 import com.nasilk.createfluidsandfixins.block.entity.PropulsiteBrokenBlockEntity;
+import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -53,5 +55,23 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
         return level.isClientSide ? null : (lvl, pos, st, be) -> {
             if (be instanceof PropulsiteBrokenBlockEntity thruster) thruster.tick();
         };
+    }
+
+    @Override
+    public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
+        addParticle(level, pos);
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    private void addParticle(Level level, BlockPos pos) {
+        if (level instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(
+                    ModParticles.PROPULSITE_PARTICLES.get(),
+                    pos.getX() + 0.5,
+                    pos.getY() + 0.5,
+                    pos.getZ() + 0.5,
+                    8,0.5,0.5,0.5,0.5
+            );
+        }
     }
 }

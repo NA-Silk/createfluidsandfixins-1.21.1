@@ -1,4 +1,4 @@
-package com.nasilk.createfluidsandfixins.particle;
+package com.nasilk.createfluidsandfixins.particle.custom;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;

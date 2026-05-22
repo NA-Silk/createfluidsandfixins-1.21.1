@@ -6,8 +6,9 @@ import com.nasilk.createfluidsandfixins.fluid.ModFluidTypes;
 import com.nasilk.createfluidsandfixins.fluid.ModFluids;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import com.nasilk.createfluidsandfixins.behavior.ModDispenserBehavior;
-import com.nasilk.createfluidsandfixins.particle.DensiteParticles;
+import com.nasilk.createfluidsandfixins.particle.custom.DensiteParticles;
 import com.nasilk.createfluidsandfixins.particle.ModParticles;
+import com.nasilk.createfluidsandfixins.particle.custom.PropulsiteParticles;
 import com.nasilk.createfluidsandfixins.util.ModSpriteShifts;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -121,6 +122,7 @@ public class CreateFluidsAndFixins {
         @SubscribeEvent
         public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
             event.registerSpriteSet(ModParticles.DENSITE_PARTICLES.get(), DensiteParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.PROPULSITE_PARTICLES.get(), PropulsiteParticles.Provider::new);
         }
     }
 }
