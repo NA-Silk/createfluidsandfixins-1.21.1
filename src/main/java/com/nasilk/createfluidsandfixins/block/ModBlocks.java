@@ -3,6 +3,7 @@ package com.nasilk.createfluidsandfixins.block;
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
+import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
@@ -13,7 +14,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.TransparentBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -51,9 +51,9 @@ public class ModBlocks {
         )
     );
 
-    public static final BlockEntry<TransparentBlock> PROPULSITE_BLOCK = registerCTBlock(
+    public static final BlockEntry<Block> PROPULSITE_BLOCK = registerCTBlock(
         "propulsite_block",
-        (properties) -> new TransparentBlock(BlockBehaviour.Properties.of() // I don't know what this does, but if I delete it, it crashes the game
+        (properties) -> new PropulsiteBlock(BlockBehaviour.Properties.of() // I don't know what this does, but if I delete it, it crashes the game
             .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
@@ -96,7 +96,7 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> TEMP_BLOCK = registerBlock(
         "temp_block",
-        () -> new TransparentBlock(BlockBehaviour.Properties.of()
+        () -> new Block(BlockBehaviour.Properties.of()
             .mapColor(MapColor.COLOR_GRAY)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)

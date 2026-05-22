@@ -10,13 +10,19 @@ import com.nasilk.createfluidsandfixins.particle.custom.DensiteParticles;
 import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import com.nasilk.createfluidsandfixins.particle.custom.PropulsiteParticles;
 import com.nasilk.createfluidsandfixins.util.ModSpriteShifts;
+import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -124,6 +130,23 @@ public class CreateFluidsAndFixins {
         public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
             event.registerSpriteSet(ModParticles.DENSITE_PARTICLES.get(), DensiteParticles.Provider::new);
             event.registerSpriteSet(ModParticles.PROPULSITE_PARTICLES.get(), PropulsiteParticles.Provider::new);
+        }
+
+        @SubscribeEvent
+        public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+            IClientBlockExtensions noDefaultParticles = new IClientBlockExtensions() {
+                @Override
+                public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine manager) {
+                    return true; // Cancel default particles
+                }
+            };
+
+            event.registerBlock(
+                noDefaultParticles,
+                ModBlocks.DENSITE_BLOCK.get(),
+                ModBlocks.PROPULSITE_BLOCK.get(),
+                ModBlocks.PROPULSITE_BROKEN.get()
+            );
         }
     }
 }

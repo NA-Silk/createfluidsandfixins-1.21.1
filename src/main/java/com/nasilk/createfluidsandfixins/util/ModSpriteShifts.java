@@ -5,6 +5,7 @@ import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.block.connected.CTSpriteShifter;
 import net.minecraft.resources.ResourceLocation;
 
+@SuppressWarnings("EmptyMethod")
 public class ModSpriteShifts {
     public static final CTSpriteShiftEntry PROPULSITE = CTSpriteShifter.getCT(
         AllCTTypes.OMNIDIRECTIONAL,

@@ -59,19 +59,19 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock()) && !isMoving) {
-            addParticle(level, pos);
+            addParticles(level, pos);
         }
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    private void addParticle(Level level, BlockPos pos) {
+    private void addParticles(Level level, BlockPos pos) {
         if (level instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
                     ModParticles.PROPULSITE_PARTICLES.get(),
                     pos.getX() + 0.5,
                     pos.getY() + 0.5,
                     pos.getZ() + 0.5,
-                    8,0.5,0.5,0.5,0.5
+                    32,0.5,0.5,0.5,0.35
             );
         }
     }
