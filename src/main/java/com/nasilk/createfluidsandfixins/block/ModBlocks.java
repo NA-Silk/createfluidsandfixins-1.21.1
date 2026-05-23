@@ -1,6 +1,7 @@
 package com.nasilk.createfluidsandfixins.block;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
+import com.nasilk.createfluidsandfixins.behavior.DensiteCTBehavior;
 import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBlock;
@@ -28,9 +29,9 @@ public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
         DeferredRegister.createBlocks(CreateFluidsAndFixins.MOD_ID);
 
-    public static final DeferredBlock<Block> DENSITE_BLOCK = registerBlock(
+    public static final BlockEntry<Block> DENSITE_BLOCK = registerCTBlock(
         "densite_block",
-        () -> new DensiteBlock(BlockBehaviour.Properties.of()
+            properties -> new DensiteBlock(properties
             .mapColor(MapColor.COLOR_PURPLE)
             .isRedstoneConductor((state, level, pos) -> true)
             .strength(2.0f, 9.0f)
@@ -48,12 +49,13 @@ public class ModBlocks {
                     SoundEvents.NETHERITE_BLOCK_FALL
                 )
             )
-        )
+        ),
+        DensiteCTBehavior::new
     );
 
     public static final BlockEntry<Block> PROPULSITE_BLOCK = registerCTBlock(
         "propulsite_block",
-        (properties) -> new PropulsiteBlock(BlockBehaviour.Properties.of() // I don't know what this does, but if I delete it, it crashes the game
+            properties -> new PropulsiteBlock(properties
             .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
