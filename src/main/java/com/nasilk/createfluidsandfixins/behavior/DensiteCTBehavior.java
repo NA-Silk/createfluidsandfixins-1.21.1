@@ -12,20 +12,12 @@ import org.jetbrains.annotations.Nullable;
 public class DensiteCTBehavior extends ConnectedTextureBehaviour.Base {
     @Nullable
     @Override
-    public CTSpriteShiftEntry getShift(
-            BlockState state,
-            Direction direction,
-            @Nullable TextureAtlasSprite sprite
-    )
-
-    {int power = state.getValue(DensiteBlock.POWER);
+    public CTSpriteShiftEntry getShift(BlockState state, Direction direction, @Nullable TextureAtlasSprite sprite) {
+        int power = state.getValue(DensiteBlock.POWER);
 
         if (power == 0) return ModSpriteShifts.DENSITE;
-
         if (power <= 4) return ModSpriteShifts.DENSITE_1;
-
         if (power <= 8) return ModSpriteShifts.DENSITE_2;
-
         if (power <= 12) return ModSpriteShifts.DENSITE_3;
 
         return ModSpriteShifts.DENSITE_4;

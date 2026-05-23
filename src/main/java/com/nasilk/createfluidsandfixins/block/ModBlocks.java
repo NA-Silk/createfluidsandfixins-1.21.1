@@ -24,14 +24,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
-@SuppressWarnings({"deprecation", "SameParameterValue"})
+@SuppressWarnings("deprecation")
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
         DeferredRegister.createBlocks(CreateFluidsAndFixins.MOD_ID);
 
     public static final BlockEntry<Block> DENSITE_BLOCK = registerCTBlock(
         "densite_block",
-            properties -> new DensiteBlock(properties
+        (properties) -> new DensiteBlock(properties
             .mapColor(MapColor.COLOR_PURPLE)
             .isRedstoneConductor((state, level, pos) -> true)
             .strength(2.0f, 9.0f)
@@ -55,7 +55,7 @@ public class ModBlocks {
 
     public static final BlockEntry<Block> PROPULSITE_BLOCK = registerCTBlock(
         "propulsite_block",
-            properties -> new PropulsiteBlock(properties
+        (properties) -> new PropulsiteBlock(properties
             .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
