@@ -28,21 +28,29 @@ import java.util.List;
 
 @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner"})
 public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGoggleInformation {
+    // Tick variables
     private int charge = 0;
     private int cooldown = 0;
     private int firingTick = 0;
     private double thrustStrength = 0;
-
     private boolean armed = false;
     private boolean firing = false;
 
+    // Tick constants
     private static final int MAX_CHARGE = 60; // How long it takes for the burst to be ready after receiving redstone power in ticks
     private static final int MAX_COOLDOWN = 100; // How long it takes for the block to be able to be charged again in ticks
     private static final int BURST_DURATION = 40; // How long it takes for the full burst to go though in ticks
     private static final double AMPLITUDE = 100.0d; // How much total thrust is output over the length of the burst
     private static final double STANDARD_DEVIATION = 5.0d; // Curve spread
     private static final double MEAN = 20.0d; // Curve middle
-    private static final double TERMINAL_VELOCITY = 50.0d; // Maximum falling speed to prevent tunneling, 50 seems to work
+    //private static final double TERMINAL_VELOCITY = 50.0d; // Maximum falling speed to prevent tunneling, 50 seems to work
+
+    // Particle constants
+    private static final double MIN_PARTICLE_SPEED = 0.15;
+    private static final double MAX_PARTICLE_SPEED = 0.5;
+    private static final int MIN_PARTICLES = 2;
+    private static final int MAX_PARTICLES = 10;
+    private static final double PARTICLE_SPREAD = 0.15;
 
     public PropulsiteBrokenBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PROPULSITE_BROKEN.get(), pos, state);
@@ -99,7 +107,10 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
 
             // Firing sequence
             if (firing) {
+                ServerSubLevel serverSubLevel = null; // Assigned for external use
                 if (Sable.HELPER.getContaining(level, worldPosition) instanceof ServerSubLevel subLevel) {
+                    serverSubLevel = subLevel;
+
                     RigidBodyHandle handle = RigidBodyHandle.of(subLevel);
                     if (!handle.isValid()) return;
 
@@ -122,9 +133,10 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                     cooldown = MAX_COOLDOWN;
                 }
 
-                addThrusterParticles(serverLevel, facing, thrustFace);
+                addExhaustParticles(serverLevel, serverSubLevel, facing, thrustFace);
             }
 
+            /* I don't know if this is safe or not, so I commented it out for now ... -na
             // Handle terminal velocity
             if (Sable.HELPER.getContaining(level, worldPosition) instanceof ServerSubLevel subLevel) {
                 RigidBodyHandle handle = RigidBodyHandle.of(subLevel);
@@ -139,38 +151,47 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
                     );
                 }
             }
+            */
 
             // Force packet update (for tooltips)
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
 
-    private void addThrusterParticles(ServerLevel serverLevel, Direction facing, Vec3 thrustFace) {
+    private void addExhaustParticles(ServerLevel serverLevel, ServerSubLevel subLevel, Direction facing, Vec3 thrustFace) {
         double maxThrust = AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI));
         double thrustRatio = Math.max(0.0, thrustStrength / maxThrust); // [0.0 to 1.0] multiplier based on current thrust strength
-        double baseVelocity = 0.3 + (0.7 * thrustRatio); // Faster jet at peak thrust
-        int particleCount = (int) (15 * thrustRatio) + 2; // Always spawn at least 2
 
+        double baseVelocity = MIN_PARTICLE_SPEED + ((MAX_PARTICLE_SPEED - MIN_PARTICLE_SPEED) * thrustRatio); // Faster jet at peak thrust
+        int particleCount = MIN_PARTICLES + (int) ((MAX_PARTICLES - MIN_PARTICLES) * thrustRatio);
+
+        // Compute each particle
         for (int i = 0; i < particleCount; i++) {
             // Apply slight random spread to the cone of the thrust
-            double dirX = facing.getStepX() + (serverLevel.random.nextGaussian() * 0.15);
-            double dirY = facing.getStepY() + (serverLevel.random.nextGaussian() * 0.15);
-            double dirZ = facing.getStepZ() + (serverLevel.random.nextGaussian() * 0.15);
+            double dirX = facing.getStepX() + (serverLevel.random.nextGaussian() * PARTICLE_SPREAD);
+            double dirY = facing.getStepY() + (serverLevel.random.nextGaussian() * PARTICLE_SPREAD);
+            double dirZ = facing.getStepZ() + (serverLevel.random.nextGaussian() * PARTICLE_SPREAD);
 
-            // Normalize the randomized direction and scale by our calculated velocity
-            Vec3 particleVel = new Vec3(dirX, dirY, dirZ).normalize().scale(baseVelocity);
+            // Get local/sublevel vectors
+            Vec3 spawnPosition = thrustFace;
+            Vec3 spawnVelocity = new Vec3(dirX, dirY, dirZ).normalize().scale(baseVelocity); // Normalize the direction and scale by baseVelocity
+
+            // Convert sublevel vectors to global vectors
+            if (subLevel != null) {
+                Vec3 globalStartPosition = subLevel.logicalPose().transformPosition(spawnPosition);
+                Vec3 globalEndPosition = subLevel.logicalPose().transformPosition(spawnPosition.add(spawnVelocity));
+
+                spawnPosition = globalStartPosition;
+                spawnVelocity = globalEndPosition.subtract(globalStartPosition);
+            }
 
             // By setting count to 0, xOffset, yOffset, and zOffset act as xSpeed, ySpeed, and zSpeed
             serverLevel.sendParticles(
                 ParticleTypes.FLAME, // Replace later
-                thrustFace.x,
-                thrustFace.y,
-                thrustFace.z,
-                0, // Count = 0 forces the particle to use the offsets as velocity
-                particleVel.x,
-                particleVel.y,
-                particleVel.z,
-                1.0 // Speed multiplier (1.0 means it uses the exact x/y/z vector values above)
+                spawnPosition.x, spawnPosition.y, spawnPosition.z,
+                0,
+                spawnVelocity.x, spawnVelocity.y, spawnVelocity.z,
+                1.0 // Use spawnVelocity values
             );
         }
     }

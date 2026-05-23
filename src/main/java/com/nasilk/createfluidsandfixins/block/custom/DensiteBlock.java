@@ -26,12 +26,13 @@ public class DensiteBlock extends Block {
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
-        if (!level.isClientSide) {int power = level.getBestNeighborSignal(pos);
-        if (state.getValue(POWER) != power) {level.setBlock(pos, state.setValue(POWER, power), 3);
-            }
+        if (!level.isClientSide) {
+            int power = level.getBestNeighborSignal(pos);
+            if (state.getValue(POWER) != power) level.setBlock(pos, state.setValue(POWER, power), 3);
         }
     }
 
+    // PARTICLES
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock()) && !isMoving) {

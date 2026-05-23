@@ -44,9 +44,10 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-        if (level.isClientSide) return;
-        boolean powered = level.hasNeighborSignal(pos);
-        if (powered != state.getValue(POWERED)) level.setBlock(pos, state.setValue(POWERED, powered), 3);
+        if (!level.isClientSide) {
+            boolean powered = level.hasNeighborSignal(pos);
+            if (powered != state.getValue(POWERED)) level.setBlock(pos, state.setValue(POWERED, powered), 3);
+        }
     }
 
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
@@ -56,6 +57,7 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
         };
     }
 
+    // PARTICLES
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock()) && !isMoving) {
