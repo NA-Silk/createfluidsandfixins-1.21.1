@@ -13,6 +13,7 @@ public class PropulsiteThrusterParticles extends SimpleAnimatedParticle {
         double xSpeed, double ySpeed, double zSpeed
     ) {
         super(level, x, y, z, spriteSet, 0.0f);
+        this.setSpriteFromAge(spriteSet);
         this.hasPhysics = true; // Run collision
         this.friction = 0.98f; // Scatter speed (lower -> faster), default 0.98f
         this.lifetime = (int) (10.0f + this.random.nextFloat() * 15.0f); // Short lifetime

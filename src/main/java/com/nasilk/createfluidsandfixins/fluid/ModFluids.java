@@ -149,9 +149,6 @@ public class ModFluids {
         SOURCE_DRIFT_CONDENSATE,
         FLOWING_DRIFT_CONDENSATE
     )
-        //.slopeFindDistance(0) // Horizontal searching rate (flow speed)
-        //.levelDecreasePerBlock(1) // Spread distance
-        //.tickRate(5) // Spread rate (water ~5, inverted scale)
         .block(ModFluids.DRIFT_CONDENSATE_BLOCK)
         .bucket(ModFluids.DRIFT_CONDENSATE_BUCKET);
 
@@ -211,62 +208,90 @@ public class ModFluids {
         .bucket(ModFluids.PROPULSITE_FLURRY_BUCKET);
 
 
-    // OSCILLITE SUSPENSION
-    public static final FluidTransformationSettings OSCILLITE_SUSPENSION_SETTINGS = new FluidTransformationSettings(
-            0.01f, // Transform rate [0.0f, 1,0f]
-            15, // Max skylight
-            new FluidTransformationSettings.YRange(-64, 319), // y level range
-            false, // Require cold biome
-            false, // Require rain
-            false, // Require thunder
-            false, // Require night
-            Set.of(), // Require adjacent blocks
-            new FluidTransformationSettings.LightningSettings(false, null), // Lightning requirements
-            new FluidTransformationSettings.VibrationSettings(true, 6, 10), // Vibration requirements
-            false, // Transform flowing fluids
-            false, // Vaporize in ultrawarm dimensions
-            Set.of(Level.OVERWORLD, Level.NETHER, Level.END), // Allowed dimensions
-            Optional.of(() -> SoundEvents.GLASS_PLACE) // Sound effect
+    // SOUL STEEP
+    public static final Supplier<FlowingFluid> SOURCE_SOUL_STEEP = FLUIDS.register(
+        "source_soul_steep",
+        () -> new BaseFlowingFluid.Source(ModFluids.SOUL_STEEP_PROPERTIES)
     );
-    public static final Supplier<FlowingFluid> SOURCE_OSCILLITE_SUSPENSION = FLUIDS.register(
-            "source_oscillite_suspension",
-            () -> new TransformBaseFlowingFluid.Source(
-                    ModFluids.OSCILLITE_SUSPENSION_PROPERTIES,
-                    ModBlocks.OSCILLITE_BLOCK,
-                    OSCILLITE_SUSPENSION_SETTINGS
-            )
-    );
-    public static final Supplier<FlowingFluid> FLOWING_OSCILLITE_SUSPENSION = FLUIDS.register(
-            "flowing_oscillite_suspension",
-            () -> new TransformBaseFlowingFluid.Flowing(
-                    ModFluids.OSCILLITE_SUSPENSION_PROPERTIES,
-                    ModBlocks.OSCILLITE_BLOCK,
-                    OSCILLITE_SUSPENSION_SETTINGS
-            )
+    public static final Supplier<FlowingFluid> FLOWING_SOUL_STEEP = FLUIDS.register(
+        "flowing_soul_steep",
+        () -> new BaseFlowingFluid.Flowing(ModFluids.SOUL_STEEP_PROPERTIES)
     );
 
-    public static final DeferredBlock<LiquidBlock> OSCILLITE_SUSPENSION_LIQUID_BLOCK = ModBlocks.BLOCKS.register(
-            "oscillite_suspension_liquid_block",
-            () -> new LiquidBlock(ModFluids.SOURCE_OSCILLITE_SUSPENSION.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).randomTicks().noLootTable())
+    public static final DeferredBlock<LiquidBlock> SOUL_STEEP_BLOCK = ModBlocks.BLOCKS.register(
+        "soul_steep_block",
+        () -> new LiquidBlock(ModFluids.SOURCE_SOUL_STEEP.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).noLootTable())
+    );
+    public static final DeferredItem<Item> SOUL_STEEP_BUCKET = ModItems.ITEMS.registerItem(
+        "soul_steep_bucket",
+        properties -> new BucketItem(ModFluids.SOURCE_SOUL_STEEP.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
+    );
+
+    public static final BaseFlowingFluid.Properties SOUL_STEEP_PROPERTIES = new BaseFlowingFluid.Properties(
+        ModFluidTypes.SOUL_STEEP_FLUID_TYPE,
+        SOURCE_SOUL_STEEP,
+        FLOWING_SOUL_STEEP
+    )
+        .slopeFindDistance(8) // Horizontal searching rate (flow speed)
+        .levelDecreasePerBlock(1) // Spread distance
+        .tickRate(2) // Spread rate (water ~5, inverted scale)
+        .block(ModFluids.SOUL_STEEP_BLOCK)
+        .bucket(ModFluids.SOUL_STEEP_BUCKET);
+
+
+    // OSCILLITE SUSPENSION
+    public static final FluidTransformationSettings OSCILLITE_SUSPENSION_SETTINGS = new FluidTransformationSettings(
+        0.01f, // Transform rate [0.0f, 1,0f]
+        15, // Max skylight
+        new FluidTransformationSettings.YRange(-64, 319), // y level range
+        false, // Require cold biome
+        false, // Require rain
+        false, // Require thunder
+        false, // Require night
+        Set.of(), // Require adjacent blocks
+        new FluidTransformationSettings.LightningSettings(false, null), // Lightning requirements
+        new FluidTransformationSettings.VibrationSettings(true, 6, 10), // Vibration requirements
+        false, // Transform flowing fluids
+        false, // Vaporize in ultrawarm dimensions
+        Set.of(Level.OVERWORLD, Level.NETHER, Level.END), // Allowed dimensions
+        Optional.of(() -> SoundEvents.GLASS_PLACE) // Sound effect
+    );
+    public static final Supplier<FlowingFluid> SOURCE_OSCILLITE_SUSPENSION = FLUIDS.register(
+        "source_oscillite_suspension",
+        () -> new TransformBaseFlowingFluid.Source(
+            ModFluids.OSCILLITE_SUSPENSION_PROPERTIES,
+            ModBlocks.OSCILLITE_BLOCK,
+            OSCILLITE_SUSPENSION_SETTINGS
+        )
+    );
+    public static final Supplier<FlowingFluid> FLOWING_OSCILLITE_SUSPENSION = FLUIDS.register(
+        "flowing_oscillite_suspension",
+        () -> new TransformBaseFlowingFluid.Flowing(
+            ModFluids.OSCILLITE_SUSPENSION_PROPERTIES,
+            ModBlocks.OSCILLITE_BLOCK,
+            OSCILLITE_SUSPENSION_SETTINGS
+        )
+    );
+
+    public static final DeferredBlock<LiquidBlock> OSCILLITE_SUSPENSION_BLOCK = ModBlocks.BLOCKS.register(
+        "oscillite_suspension_block",
+        () -> new LiquidBlock(ModFluids.SOURCE_OSCILLITE_SUSPENSION.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).randomTicks().noLootTable())
     );
     public static final DeferredItem<Item> OSCILLITE_SUSPENSION_BUCKET = ModItems.ITEMS.registerItem(
-            "oscillite_suspension_bucket",
-            properties -> new BucketItem(ModFluids.SOURCE_OSCILLITE_SUSPENSION.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
+        "oscillite_suspension_bucket",
+        properties -> new BucketItem(ModFluids.SOURCE_OSCILLITE_SUSPENSION.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
     );
 
     public static final TransformBaseFlowingFluid.Properties OSCILLITE_SUSPENSION_PROPERTIES = new TransformBaseFlowingFluid.Properties(
-            ModFluidTypes.OSCILLITE_SUSPENSION_FLUID_TYPE,
-            SOURCE_OSCILLITE_SUSPENSION,
-            FLOWING_OSCILLITE_SUSPENSION
+        ModFluidTypes.OSCILLITE_SUSPENSION_FLUID_TYPE,
+        SOURCE_OSCILLITE_SUSPENSION,
+        FLOWING_OSCILLITE_SUSPENSION
     )
-            .slopeFindDistance(8) // Horizontal searching rate
-            .levelDecreasePerBlock(1) // Spread distance
-            .tickRate(2) // Spread rate (water ~5, inverted scale)
-            .block(ModFluids.OSCILLITE_SUSPENSION_LIQUID_BLOCK)
-            .bucket(ModFluids.OSCILLITE_SUSPENSION_BUCKET);
-
-
-    // NEXT FLUID ...
+        .slopeFindDistance(8) // Horizontal searching rate
+        .levelDecreasePerBlock(1) // Spread distance
+        .tickRate(2) // Spread rate (water ~5, inverted scale)
+        .block(ModFluids.OSCILLITE_SUSPENSION_BLOCK)
+        .bucket(ModFluids.OSCILLITE_SUSPENSION_BUCKET);
 
 
     public static void register(IEventBus eventBus) {

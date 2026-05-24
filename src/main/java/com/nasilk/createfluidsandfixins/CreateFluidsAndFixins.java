@@ -90,6 +90,7 @@ public class CreateFluidsAndFixins {
             event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
             event.accept(ModFluids.DRIFT_CONDENSATE_BUCKET);
             event.accept(ModFluids.PROPULSITE_FLURRY_BUCKET);
+            event.accept(ModFluids.SOUL_STEEP_BUCKET);
             event.accept(ModFluids.OSCILLITE_SUSPENSION_BUCKET);
             event.accept(ModItems.CREATIVE_FLUID_ERASER);
         }
@@ -122,6 +123,8 @@ public class CreateFluidsAndFixins {
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DRIFT_CONDENSATE.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_PROPULSITE_FLURRY.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_PROPULSITE_FLURRY.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_SOUL_STEEP.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_SOUL_STEEP.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_OSCILLITE_SUSPENSION.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_OSCILLITE_SUSPENSION.get(), RenderType.translucent());
             });
