@@ -56,8 +56,6 @@ public class PropulsiteParticles extends TextureSheetParticle {
         // Fade out
         if (this.age > this.lifetime * 0.5) {
             this.alpha = (this.lifetime - this.age) / (this.lifetime * 0.2f);
-        } else {
-            this.alpha = 1.0f;
         }
     }
 
@@ -76,16 +74,16 @@ public class PropulsiteParticles extends TextureSheetParticle {
         @Nullable
         @Override
         public Particle createParticle(
-                SimpleParticleType simpleParticleType,
-                ClientLevel clientLevel,
-                double pX, double pY, double pZ,
-                double pXSpeed, double pYSpeed, double pZSpeed
+            SimpleParticleType simpleParticleType,
+            ClientLevel clientLevel,
+            double x, double y, double z,
+            double xSpeed, double ySpeed, double zSpeed
         ) {
             return new PropulsiteParticles(
                 clientLevel,
                 this.spriteSet,
-                pX, pY, pZ,
-                pXSpeed, pYSpeed, pZSpeed
+                x, y, z,
+                xSpeed, ySpeed, zSpeed
             );
         }
     }

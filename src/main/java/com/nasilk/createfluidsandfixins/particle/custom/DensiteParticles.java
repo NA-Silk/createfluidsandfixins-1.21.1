@@ -57,8 +57,6 @@ public class DensiteParticles extends TextureSheetParticle {
         // Fade out slowly
         if (this.age > this.lifetime * 0.8) {
             this.alpha = (this.lifetime - this.age) / (this.lifetime * 0.2f);
-        } else {
-            this.alpha = 1.0f;
         }
     }
 
@@ -79,13 +77,13 @@ public class DensiteParticles extends TextureSheetParticle {
         public Particle createParticle(
             SimpleParticleType simpleParticleType,
             ClientLevel clientLevel,
-            double pX, double pY, double pZ,
-            double pXSpeed, double pYSpeed, double pZSpeed
+            double x, double y, double z,
+            double xSpeed, double ySpeed, double zSpeed
         ) {
             return new DensiteParticles(
                 clientLevel, this.spriteSet,
-                pX, pY, pZ,
-                pXSpeed, pYSpeed, pZSpeed
+                x, y, z,
+                xSpeed, ySpeed, zSpeed
             );
         }
     }

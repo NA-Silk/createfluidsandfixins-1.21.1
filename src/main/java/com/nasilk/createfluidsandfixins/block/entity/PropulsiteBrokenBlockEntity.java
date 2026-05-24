@@ -2,6 +2,7 @@ package com.nasilk.createfluidsandfixins.block.entity;
 
 import com.nasilk.createfluidsandfixins.block.ModBlockEntities;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
+import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import com.nasilk.createfluidsandfixins.util.FFLang;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import dev.ryanhcode.sable.Sable;
@@ -187,7 +188,7 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
 
             // By setting count to 0, xOffset, yOffset, and zOffset act as xSpeed, ySpeed, and zSpeed
             serverLevel.sendParticles(
-                ParticleTypes.GUST, // Replace later
+                ModParticles.PROPULSITE_THRUSTER_PARTICLES.get(), // Was ParticleTypes.GUST
                 spawnPosition.x, spawnPosition.y, spawnPosition.z,
                 0,
                 spawnVelocity.x, spawnVelocity.y, spawnVelocity.z,
