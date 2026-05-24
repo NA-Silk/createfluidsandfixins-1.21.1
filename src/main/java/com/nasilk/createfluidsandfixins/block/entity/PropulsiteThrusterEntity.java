@@ -1,6 +1,7 @@
 package com.nasilk.createfluidsandfixins.block.entity;
 
 import com.nasilk.createfluidsandfixins.block.ModBlockEntities;
+import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
 import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import com.nasilk.createfluidsandfixins.util.FFLang;
@@ -8,6 +9,8 @@ import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.api.physics.handle.RigidBodyHandle;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
+import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,6 +24,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -33,7 +37,8 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private int charge = 0;
     private int cooldown = 0;
     private int firingTick = 0;
-    private double thrustStrength = 0;
+    private double thrustStrength = 0.0d;
+    private double amplitude = AMPLITUDE;
     private boolean armed = false;
     private boolean firing = false;
 
@@ -44,7 +49,10 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private static final double AMPLITUDE = 100.0d; // How much total thrust is output over the length of the burst
     private static final double STANDARD_DEVIATION = 5.0d; // Curve spread
     private static final double MEAN = 20.0d; // Curve middle
-    //private static final double TERMINAL_VELOCITY = 50.0d; // Maximum falling speed to prevent tunneling, 50 seems to work
+
+    // Cluster strength constants
+    private static final int MAX_CLUSTER_SIZE = 16;
+    private static final double CLUSTER_SCALE = 0.25d;
 
     // Particle constants
     private static final double MIN_PARTICLE_SPEED = 0.15;
@@ -64,9 +72,15 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
             boolean powered = state.getValue(PropulsiteThrusterBlock.POWERED);
             Vec3 thrustFace = Vec3.atCenterOf(worldPosition).add(Vec3.atLowerCornerOf(facing.getNormal()).scale(0.6));
 
+            // Update amplitude
+            if (firingTick % 20 == 0) updateAmplitude(level, worldPosition);
+
             // Cooldown
             if (cooldown > 0) {
-                if (!powered) cooldown--;
+                if (!powered) {
+                    cooldown--;
+                    this.setChanged();
+                }
                 return;
             }
 
@@ -74,6 +88,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
             if (powered && !armed) {
                 if (charge < MAX_CHARGE) {
                     charge++;
+                    this.setChanged();
 
                     serverLevel.sendParticles (
                         ParticleTypes.WAX_ON,
@@ -85,6 +100,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
 
                     if (charge >= MAX_CHARGE) {
                         armed = true;
+                        this.setChanged();
 
                         serverLevel.playSound(
                             null,
@@ -98,12 +114,16 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
             }
 
             // Discharging
-            if (!powered && !armed && charge > 0) charge = Math.max(charge - 2, 0);
+            if (!powered && !armed && charge > 0) {
+                charge = Math.max(charge - 2, 0);
+                this.setChanged();
+            }
 
             // Firing initialization
             if (armed && !powered && !firing) {
                 firing = true;
                 firingTick = 0;
+                this.setChanged();
             }
 
             // Firing sequence
@@ -117,7 +137,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
 
                     // The curve that determines the total thrust of the burst
                     thrustStrength =
-                        (AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI))) // Maximum
+                        (amplitude / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI))) // Maximum
                         * Math.exp(-0.5 * Math.pow((firingTick - MEAN) / STANDARD_DEVIATION, 2)); // Curve computation
 
                     Vector3d position = new Vector3d(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
@@ -133,34 +153,59 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                     thrustStrength = 0;
                     cooldown = MAX_COOLDOWN;
                 }
+                this.setChanged();
 
+                // Send particles
                 addExhaustParticles(serverLevel, serverSubLevel, facing, thrustFace);
+
+                // Force packet update (for tooltips)
+                if (firingTick % 5 == 0) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
-
-            /* I don't know if this is safe or not, so I commented it out for now ... -na
-            // Handle terminal velocity
-            if (Sable.HELPER.getContaining(level, worldPosition) instanceof ServerSubLevel subLevel) {
-                RigidBodyHandle handle = RigidBodyHandle.of(subLevel);
-                if (!handle.isValid()) return;
-                Vector3d currentVelocity = handle.getLinearVelocity(new Vector3d());
-
-                // Apply opposite velocity if falling faster than 3.0 blocks per tick (~60 blocks/s)
-                if (currentVelocity.y < -TERMINAL_VELOCITY) {
-                    handle.addLinearAndAngularVelocity(
-                        new Vector3d(0.0, -TERMINAL_VELOCITY - currentVelocity.y, 0.0),
-                        new Vector3d(0.0, 0.0, 0.0)
-                    );
-                }
-            }
-            */
-
-            // Force packet update (for tooltips)
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
 
+    public void updateAmplitude(Level level, BlockPos pos) {
+        // Using specialized set and queue for long efficiency
+        LongOpenHashSet cluster = new LongOpenHashSet();
+        LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
+
+        long startLong = pos.asLong();
+        cluster.add(startLong);
+        queue.enqueue(startLong);
+
+        // Perform breadth-first search (BFS) on cluster blocks
+        int propulsiteCount = 0;
+        int thrusterCount = 1;
+        while (!queue.isEmpty() && cluster.size() <= MAX_CLUSTER_SIZE) {
+            BlockPos currentPos = BlockPos.of(queue.dequeueLong());
+
+            // Search each direction around currentPos for propulsite
+            for (Direction direction : Direction.values()) {
+                BlockPos neighborPos = currentPos.relative(direction);
+                long neighborLong = neighborPos.asLong();
+
+                // Update cluster and queue if the neighbor block is a new densite
+                if (cluster.contains(neighborLong)) continue;
+                if (level.getBlockState(neighborPos).is(ModBlocks.PROPULSITE_BLOCK)) propulsiteCount++;
+                else if (level.getBlockState(neighborPos).is(ModBlocks.PROPULSITE_THRUSTER)) thrusterCount++;
+                else continue;
+                cluster.add(neighborLong);
+                queue.enqueue(neighborLong);
+            }
+        }
+
+        // Set updated amplitude
+        amplitude = (1.0d + (CLUSTER_SCALE * propulsiteCount) / thrusterCount) * AMPLITUDE;
+
+        // Tell the game this block needs to be saved to disk
+        this.setChanged();
+
+        // Tell the server to send the new amplitude to the client for the Goggle tooltips
+        if (!level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+    }
+
     private void addExhaustParticles(ServerLevel serverLevel, ServerSubLevel subLevel, Direction facing, Vec3 thrustFace) {
-        double maxThrust = AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI));
+        double maxThrust = amplitude / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI));
         double thrustRatio = Math.max(0.0, thrustStrength / maxThrust); // [0.0 to 1.0] multiplier based on current thrust strength
 
         double baseVelocity = MIN_PARTICLE_SPEED + ((MAX_PARTICLE_SPEED - MIN_PARTICLE_SPEED) * thrustRatio); // Faster jet at peak thrust
@@ -199,7 +244,6 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
 
     @Override
     public boolean addToGoggleTooltip(final List<Component> tooltip, final boolean isPlayerSneaking) {
-        //FFLang.emptyLine(tooltip);
         FFLang.blockName(this.getBlockState()).text(":").forGoggles(tooltip);
 
         final MutableComponent currentThrust = FFLang
@@ -211,7 +255,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 .forGoggles(tooltip, 1);
 
         final MutableComponent maximumThrust = FFLang
-                .pixelNewton(AMPLITUDE / (STANDARD_DEVIATION * Math.sqrt(2 * Math.PI)))
+                .pixelNewton(amplitude / (STANDARD_DEVIATION * Math.sqrt(2 * Math.PI)))
                 .style(ChatFormatting.AQUA)
                 .component();
         FFLang.translate("goggles.maximum_thrust", maximumThrust)
@@ -219,7 +263,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 .forGoggles(tooltip, 1);
 
         final MutableComponent totalThrust = FFLang
-                .pixelNewton(AMPLITUDE)
+                .pixelNewton(amplitude)
                 .style(ChatFormatting.AQUA)
                 .component();
         FFLang.translate("goggles.total_thrust", totalThrust)
@@ -234,6 +278,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
         tag.putDouble("ThrustStrength", this.thrustStrength);
+        tag.putDouble("Amplitude", this.amplitude);
         return tag;
     }
 
@@ -248,5 +293,28 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
         CompoundTag tag = pkt.getTag();
         this.thrustStrength = tag.getDouble("ThrustStrength");
+        this.amplitude = tag.getDouble("Amplitude");
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        tag.putDouble("Amplitude", this.amplitude);
+        tag.putInt("Charge", this.charge);
+        tag.putInt("Cooldown", this.cooldown);
+        tag.putBoolean("Armed", this.armed);
+        tag.putBoolean("Firing", this.firing);
+        tag.putInt("FiringTick", this.firingTick);
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        if (tag.contains("Amplitude")) this.amplitude = tag.getDouble("Amplitude");
+        this.charge = tag.getInt("Charge");
+        this.cooldown = tag.getInt("Cooldown");
+        this.armed = tag.getBoolean("Armed");
+        this.firing = tag.getBoolean("Firing");
+        this.firingTick = tag.getInt("FiringTick");
     }
 }
