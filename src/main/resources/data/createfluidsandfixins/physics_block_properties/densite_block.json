@@ -3,7 +3,8 @@
 
   "properties": {
     "sable:mass": 1.00,
-    "sable:restitution": 0.0
+    "sable:restitution": 0.0,
+    "sable:floating_material": "createfluidsandfixins:densite_block"
   },
 
   "overrides": {

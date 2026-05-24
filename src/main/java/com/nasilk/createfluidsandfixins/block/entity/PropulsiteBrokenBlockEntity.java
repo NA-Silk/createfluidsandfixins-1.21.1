@@ -187,7 +187,7 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
 
             // By setting count to 0, xOffset, yOffset, and zOffset act as xSpeed, ySpeed, and zSpeed
             serverLevel.sendParticles(
-                ParticleTypes.FLAME, // Replace later
+                ParticleTypes.GUST, // Replace later
                 spawnPosition.x, spawnPosition.y, spawnPosition.z,
                 0,
                 spawnVelocity.x, spawnVelocity.y, spawnVelocity.z,

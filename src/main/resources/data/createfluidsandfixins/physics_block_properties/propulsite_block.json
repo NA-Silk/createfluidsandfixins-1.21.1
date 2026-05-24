@@ -1,0 +1,7 @@
+{
+  "selector": "createfluidsandfixins:propulsite_block",
+  "properties": {
+    "sable:mass": 1.00,
+    "sable:floating_material": "createfluidsandfixins:propulsite_block"
+  }
+}
