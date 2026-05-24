@@ -52,14 +52,14 @@ public abstract class UpwardBaseFlowingFluid extends BaseFlowingFluid {
 
         // 1. Death Check (prevent the Death Balloon)
         if (!state.isSource() && state.hasProperty(FALLING) && state.getValue(FALLING)) {
-            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
             return;
         }
 
         // 2. Cleanup & Height Limit
         int amount = state.getAmount();
         if (amount <= 1 || pos.getY() >= level.getMaxBuildHeight() - 1) {
-            if (!state.isSource()) level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+            if (!state.isSource()) level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
             return;
         }
 

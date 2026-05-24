@@ -46,7 +46,7 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if (!level.isClientSide) {
             boolean powered = level.hasNeighborSignal(pos);
-            if (powered != state.getValue(POWERED)) level.setBlock(pos, state.setValue(POWERED, powered), 3);
+            if (powered != state.getValue(POWERED)) level.setBlockAndUpdate(pos, state.setValue(POWERED, powered));
         }
     }
 

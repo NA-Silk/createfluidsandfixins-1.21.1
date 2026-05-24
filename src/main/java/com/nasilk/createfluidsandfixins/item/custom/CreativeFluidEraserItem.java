@@ -44,7 +44,7 @@ public class CreativeFluidEraserItem extends Item {
                     for (int z = -radius; z <= radius; z++) {
                         BlockPos currentPos = targetPos.offset(x, y, z);
                         if (level.getFluidState(currentPos).getType().isSame(targetFluid)) {
-                            level.setBlock(currentPos, Blocks.AIR.defaultBlockState(), 3);
+                            level.setBlockAndUpdate(currentPos, Blocks.AIR.defaultBlockState());
                         }
                     }
                 }
