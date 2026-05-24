@@ -1,6 +1,6 @@
 package com.nasilk.createfluidsandfixins.block.custom;
 
-import com.nasilk.createfluidsandfixins.block.entity.PropulsiteBrokenBlockEntity;
+import com.nasilk.createfluidsandfixins.block.entity.PropulsiteThrusterEntity;
 import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,18 +19,18 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
-public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBlock {
+public class PropulsiteThrusterBlock extends TransparentBlock  implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
-    public PropulsiteBrokenBlock(Properties properties) {
+    public PropulsiteThrusterBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
     }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new PropulsiteBrokenBlockEntity(pos, state);
+        return new PropulsiteThrusterEntity(pos, state);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class PropulsiteBrokenBlock extends TransparentBlock  implements EntityBl
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         //formating is a lie told to you by big forma to sell more spaces
         return level.isClientSide ? null : (lvl, pos, st, be) -> {
-            if (be instanceof PropulsiteBrokenBlockEntity thruster) thruster.tick();
+            if (be instanceof PropulsiteThrusterEntity thruster) thruster.tick();
         };
     }
 

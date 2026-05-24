@@ -41,6 +41,6 @@ public class ModDispenserBehavior {
         registerFluidBucket((BucketItem) ModFluids.DENSITE_EMULSION_BUCKET.get());
         registerFluidBucket((BucketItem) ModFluids.DRIFT_CONDENSATE_BUCKET.get());
         registerFluidBucket((BucketItem) ModFluids.PROPULSITE_FLURRY_BUCKET.get());
-        registerFluidBucket((BucketItem) ModFluids.TEMP_BUCKET.get());
+        registerFluidBucket((BucketItem) ModFluids.OSCILLITE_SUSPENSION_BUCKET.get());
     }
 }

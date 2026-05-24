@@ -9,6 +9,7 @@ import com.nasilk.createfluidsandfixins.behavior.ModDispenserBehavior;
 import com.nasilk.createfluidsandfixins.particle.custom.DensiteParticles;
 import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import com.nasilk.createfluidsandfixins.particle.custom.PropulsiteParticles;
+import com.nasilk.createfluidsandfixins.particle.custom.PropulsiteThrusterParticles;
 import com.nasilk.createfluidsandfixins.util.ModSpriteShifts;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -89,15 +90,15 @@ public class CreateFluidsAndFixins {
             event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
             event.accept(ModFluids.DRIFT_CONDENSATE_BUCKET);
             event.accept(ModFluids.PROPULSITE_FLURRY_BUCKET);
-            event.accept(ModFluids.TEMP_BUCKET);
+            event.accept(ModFluids.OSCILLITE_SUSPENSION_BUCKET);
             event.accept(ModItems.CREATIVE_FLUID_ERASER);
         }
 
         if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(ModBlocks.DENSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_BLOCK);
-            event.accept(ModBlocks.PROPULSITE_BROKEN);
-            event.accept(ModBlocks.TEMP_BLOCK);
+            event.accept(ModBlocks.PROPULSITE_THRUSTER);
+            event.accept(ModBlocks.OSCILLITE_BLOCK);
         }
     }
 
@@ -121,8 +122,8 @@ public class CreateFluidsAndFixins {
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DRIFT_CONDENSATE.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_PROPULSITE_FLURRY.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_PROPULSITE_FLURRY.get(), RenderType.translucent());
-                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_TEMP.get(), RenderType.translucent());
-                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_TEMP.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_OSCILLITE_SUSPENSION.get(), RenderType.translucent());
+                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_OSCILLITE_SUSPENSION.get(), RenderType.translucent());
             });
         }
 
@@ -130,7 +131,7 @@ public class CreateFluidsAndFixins {
         public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
             event.registerSpriteSet(ModParticles.DENSITE_PARTICLES.get(), DensiteParticles.Provider::new);
             event.registerSpriteSet(ModParticles.PROPULSITE_PARTICLES.get(), PropulsiteParticles.Provider::new);
-            event.registerSpriteSet(ModParticles.PROPULSITE_THRUSTER_PARTICLES.get(), PropulsiteParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.PROPULSITE_THRUSTER_PARTICLES.get(), PropulsiteThrusterParticles.Provider::new);
         }
 
         @SubscribeEvent
@@ -146,7 +147,7 @@ public class CreateFluidsAndFixins {
                 noDefaultParticles,
                 ModBlocks.DENSITE_BLOCK.get(),
                 ModBlocks.PROPULSITE_BLOCK.get(),
-                ModBlocks.PROPULSITE_BROKEN.get()
+                ModBlocks.PROPULSITE_THRUSTER.get()
             );
         }
     }

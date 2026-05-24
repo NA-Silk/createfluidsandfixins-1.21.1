@@ -141,15 +141,15 @@ public class ModFluidTypes {
         );
 
 
-    // TEMP
-    public static final ResourceLocation TEMP_STILL_RL = ResourceLocation.parse("block/water_still");
-    public static final ResourceLocation TEMP_FLOWING_RL = ResourceLocation.parse("block/water_flow");
-    public static final Supplier<FluidType> TEMP_FLUID_TYPE =
+    // OSCILLITE SUSPENSION
+    public static final ResourceLocation OSCILLITE_SUSPENSION_STILL_RL = ResourceLocation.parse("block/water_still");
+    public static final ResourceLocation OSCILLITE_SUSPENSION_FLOWING_RL = ResourceLocation.parse("block/water_flow");
+    public static final Supplier<FluidType> OSCILLITE_SUSPENSION_FLUID_TYPE =
         registerFluidType(
-            "temp_fluid_type",
+            "oscillite_suspension_fluid_type",
             new BaseFluidType(
-                TEMP_STILL_RL,
-                TEMP_FLOWING_RL,
+                OSCILLITE_SUSPENSION_STILL_RL,
+                OSCILLITE_SUSPENSION_FLOWING_RL,
                 null,
                 0xEE999999, // 0xAARRGGBB (ARGB format)
                 new Vector3f(1.0f, 0.867f, 0.729f),  // Fog color

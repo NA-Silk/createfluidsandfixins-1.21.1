@@ -1,7 +1,7 @@
 package com.nasilk.createfluidsandfixins.block.entity;
 
 import com.nasilk.createfluidsandfixins.block.ModBlockEntities;
-import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
+import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
 import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import com.nasilk.createfluidsandfixins.util.FFLang;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
@@ -28,7 +28,7 @@ import org.joml.Vector3d;
 import java.util.List;
 
 @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner"})
-public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGoggleInformation {
+public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggleInformation {
     // Tick variables
     private int charge = 0;
     private int cooldown = 0;
@@ -53,15 +53,15 @@ public class PropulsiteBrokenBlockEntity extends BlockEntity implements IHaveGog
     private static final int MAX_PARTICLES = 10;
     private static final double PARTICLE_SPREAD = 0.15;
 
-    public PropulsiteBrokenBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.PROPULSITE_BROKEN.get(), pos, state);
+    public PropulsiteThrusterEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.PROPULSITE_THRUSTER.get(), pos, state);
     }
 
     public void tick() {
         if (level instanceof ServerLevel serverLevel) {
             BlockState state = getBlockState();
-            Direction facing = state.getValue(PropulsiteBrokenBlock.FACING);
-            boolean powered = state.getValue(PropulsiteBrokenBlock.POWERED);
+            Direction facing = state.getValue(PropulsiteThrusterBlock.FACING);
+            boolean powered = state.getValue(PropulsiteThrusterBlock.POWERED);
             Vec3 thrustFace = Vec3.atCenterOf(worldPosition).add(Vec3.atLowerCornerOf(facing.getNormal()).scale(0.6));
 
             // Cooldown

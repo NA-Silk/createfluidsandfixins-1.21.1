@@ -5,7 +5,7 @@ import com.nasilk.createfluidsandfixins.behavior.DensiteCTBehavior;
 import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBlock;
-import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBrokenBlock;
+import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -70,9 +70,9 @@ public class ModBlocks {
         PropulsiteCTBehavior::new
     );
 
-    public static final DeferredBlock<Block> PROPULSITE_BROKEN = registerBlock(
-        "propulsite_broken",
-        () -> new PropulsiteBrokenBlock(BlockBehaviour.Properties.of()
+    public static final DeferredBlock<Block> PROPULSITE_THRUSTER = registerBlock(
+        "propulsite_thruster",
+        () -> new PropulsiteThrusterBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
@@ -96,8 +96,8 @@ public class ModBlocks {
         )
     );
 
-    public static final DeferredBlock<Block> TEMP_BLOCK = registerBlock(
-        "temp_block",
+    public static final DeferredBlock<Block> OSCILLITE_BLOCK = registerBlock(
+        "oscillite_block",
         () -> new Block(BlockBehaviour.Properties.of()
             .mapColor(MapColor.COLOR_GRAY)
             .instrument(NoteBlockInstrument.HAT)
