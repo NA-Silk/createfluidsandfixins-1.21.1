@@ -1,19 +1,20 @@
 package com.nasilk.createfluidsandfixins.particle.custom;
 
+import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class DensiteParticles extends TextureSheetParticle {
+public class DensiteParticles extends TerrainParticle {
     protected DensiteParticles(
         ClientLevel level,
-        SpriteSet spriteSet,
+        BlockState state,
         double x, double y, double z,
         double xSpeed, double ySpeed, double zSpeed
     ) {
-        super(level, x, y, z, xSpeed, ySpeed, zSpeed);
-        this.setSpriteFromAge(spriteSet);
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed, state);
         this.hasPhysics = true; // Run collision
         this.friction = 0.6f; // Scatter speed (lower -> faster), default 0.98f
         this.gravity = 0.15f; // Drop speed (higher -> faster), default 0.06f
@@ -60,17 +61,8 @@ public class DensiteParticles extends TextureSheetParticle {
         }
     }
 
-    @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
-    }
-
     public static class Provider implements ParticleProvider<SimpleParticleType> {
-        private final SpriteSet spriteSet;
-
-        public Provider(SpriteSet spriteSet) {
-            this.spriteSet = spriteSet;
-        }
+        public Provider(SpriteSet ignoredSpriteSet) {}
 
         @Nullable
         @Override
@@ -81,7 +73,8 @@ public class DensiteParticles extends TextureSheetParticle {
             double xSpeed, double ySpeed, double zSpeed
         ) {
             return new DensiteParticles(
-                clientLevel, this.spriteSet,
+                clientLevel,
+                ModBlocks.DENSITE_BLOCK.getDefaultState(),
                 x, y, z,
                 xSpeed, ySpeed, zSpeed
             );

@@ -61,8 +61,7 @@ public class PropulsiteParticles extends TerrainParticle {
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {
-        public Provider(SpriteSet spriteSet) {
-        }
+        public Provider(SpriteSet ignoredSpriteSet) {}
 
         @Nullable
         @Override
