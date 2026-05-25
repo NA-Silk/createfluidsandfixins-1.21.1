@@ -41,7 +41,7 @@ public class DensiteBlock extends Block {
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         // Make sure the new neighbor is not Densite (the new one will check for updates)
-        if (!level.isClientSide && neighborBlock != this) {
+        if (!level.isClientSide && !level.getBlockState(neighborPos).is(this)) {
             level.scheduleTick(pos, this, 1);
         }
     }
