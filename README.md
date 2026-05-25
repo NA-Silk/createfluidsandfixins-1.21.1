@@ -1,4 +1,4 @@
-# Create: Fluid and Fixins
+# Create: Fluids and Fixins
 *Current Version: 0.0.1 (pre-release development)*
 
 *Last README Update: 5/13/2026*
