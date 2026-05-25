@@ -1,19 +1,20 @@
 package com.nasilk.createfluidsandfixins.particle.custom;
 
+import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class PropulsiteParticles extends TextureSheetParticle {
+public class PropulsiteParticles extends TerrainParticle {
     protected PropulsiteParticles(
         ClientLevel level,
-        SpriteSet spriteSet,
+        BlockState state,
         double x, double y, double z,
         double xSpeed, double ySpeed, double zSpeed
     ) {
-        super(level, x, y, z, xSpeed, ySpeed, zSpeed);
-        this.setSpriteFromAge(spriteSet);
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed, state);
         this.hasPhysics = true; // Run collision
         this.friction = 0.5f; // Scatter speed (lower -> faster), default 0.98f
         this.gravity = 0.0f; // Drop speed (higher -> faster), default 0.06f
@@ -59,16 +60,8 @@ public class PropulsiteParticles extends TextureSheetParticle {
         }
     }
 
-    @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
-    }
-
     public static class Provider implements ParticleProvider<SimpleParticleType> {
-        private final SpriteSet spriteSet;
-
         public Provider(SpriteSet spriteSet) {
-            this.spriteSet = spriteSet;
         }
 
         @Nullable
@@ -81,7 +74,7 @@ public class PropulsiteParticles extends TextureSheetParticle {
         ) {
             return new PropulsiteParticles(
                 clientLevel,
-                this.spriteSet,
+                ModBlocks.PROPULSITE_BLOCK.getDefaultState(),
                 x, y, z,
                 xSpeed, ySpeed, zSpeed
             );
