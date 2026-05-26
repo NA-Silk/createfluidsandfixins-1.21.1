@@ -1,8 +1,11 @@
 package com.nasilk.createfluidsandfixins.block.custom;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -11,15 +14,24 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
-public class Pebble extends Block {
-
+public class Pebble extends FallingBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public Pebble (BlockBehaviour.Properties properties) {
         super(properties);
+        this.registerDefaultState(
+            this.stateDefinition.any().setValue(FACING, Direction.NORTH)
+        );
+    }
 
-        this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH));
+    @Override
+    protected MapCodec<? extends FallingBlock> codec() {
+        return null;
+    }
+
+    @Override
+    protected void falling(FallingBlockEntity fallingEntity) {
+        fallingEntity.setHurtsEntities(4.0F, 80);
     }
 
     @Override

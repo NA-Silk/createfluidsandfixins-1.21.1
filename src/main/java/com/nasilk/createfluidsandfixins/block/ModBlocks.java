@@ -8,6 +8,7 @@ import com.nasilk.createfluidsandfixins.block.custom.Pebble;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
+import com.nasilk.createfluidsandfixins.item.custom.PebbleItem;
 import com.nasilk.createfluidsandfixins.util.ModSounds;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
 import com.simibubi.create.foundation.data.CreateRegistrate;
@@ -23,10 +24,11 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "SameParameterValue"})
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS =
         DeferredRegister.createBlocks(CreateFluidsAndFixins.MOD_ID);
@@ -125,28 +127,24 @@ public class ModBlocks {
     );
 
     public static final DeferredBlock<Block> PEBBLE = registerBlockWithCustomItem(
-            "pebble",
-            () -> new Pebble(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.COLOR_GRAY)
-                    .instrument(NoteBlockInstrument.BASS)
-                    .noOcclusion()
-                    .isViewBlocking((s,l,p) -> false)
-                    .strength(0.9F)
-                    .sound(new SoundType(
-                            1.0F, 1.0F,
-                            SoundEvents.STONE_BREAK,
-                            SoundEvents.STONE_STEP,
-                            ModSounds.PEBBLE_PLACE.get(),
-                            SoundEvents.STONE_HIT,
-                            SoundEvents.STONE_FALL
-                    ))
-            ),
-            (block) -> () -> new com.nasilk.createfluidsandfixins.item.custom.PebbleItem(block.get(), new Item.Properties())
+        "pebble",
+        () -> new Pebble(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_GRAY)
+            .instrument(NoteBlockInstrument.BASS)
+            .noOcclusion()
+            .isViewBlocking((s,l,p) -> false)
+            .strength(0.9F)
+            .sound(new SoundType(
+                1.0F, 1.0F,
+                SoundEvents.STONE_BREAK,
+                SoundEvents.STONE_STEP,
+                ModSounds.PEBBLE_PLACE.get(),
+                SoundEvents.STONE_HIT,
+                SoundEvents.ANVIL_FALL
+            ))
+        ),
+        (block) -> () -> new PebbleItem(block.get(), new Item.Properties())
     );
-
-
-
-
 
     private static <T extends Block> BlockEntry<T> registerCTBlock(String name, NonNullFunction<BlockBehaviour.Properties, T> factory, Supplier<ConnectedTextureBehaviour> behavior) {
         BlockEntry<T> toReturn = CreateFluidsAndFixins.REGISTRATE.block(name, factory)
@@ -161,8 +159,9 @@ public class ModBlocks {
         registerBlockItem(name, toReturn);
         return toReturn;
     }
-                             //Needed this for some Dumbshit
-    private static <T extends Block> DeferredBlock<T> registerBlockWithCustomItem(String name, Supplier<T> block, java.util.function.Function<DeferredBlock<T>, Supplier<? extends Item>> itemFactory) {
+
+    //Needed this for some Dumbshit
+    private static <T extends Block> DeferredBlock<T> registerBlockWithCustomItem(String name, Supplier<T> block, Function<DeferredBlock<T>, Supplier<? extends Item>> itemFactory) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         ModItems.ITEMS.register(name, itemFactory.apply(toReturn));
         return toReturn;

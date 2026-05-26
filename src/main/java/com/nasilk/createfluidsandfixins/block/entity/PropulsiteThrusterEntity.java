@@ -1,5 +1,6 @@
 package com.nasilk.createfluidsandfixins.block.entity;
 
+import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.block.ModBlockEntities;
 import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
@@ -42,6 +43,8 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private double thrust = 0.0d;
     private boolean armed = false;
     private boolean firing = false;
+
+    private int tickCounter = 0;
     Direction facing = Direction.NORTH;
 
     // Tick constants
@@ -73,6 +76,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private Vector3d thrustFace =  new Vector3d(0.0D, 0.0D, 0.0D);
     public void tick() {
         if (level instanceof ServerLevel serverLevel) {
+            tickCounter++;
             BlockState state = getBlockState();
             boolean powered = state.getValue(PropulsiteThrusterBlock.POWERED);
 
@@ -81,7 +85,10 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
             thrustFace.set(JOMLConversion.toJOML(Vec3.atCenterOf(worldPosition)).fma(0.6, thrustDirection));
 
             // Update amplitude
-            if (firingTick % 20 == 0) updateAmplitude(serverLevel, worldPosition); // TODO: fix this
+            if (tickCounter % 20 == 0) {
+                updateAmplitude(serverLevel, worldPosition);
+                tickCounter = 1;
+            }
 
             // Cooldown
             if (cooldown > 0) {
@@ -172,8 +179,8 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 this.setChanged();
 
                 // Effects
-                addExhaustParticles(serverLevel, serverSubLevel, facing, thrustFace);
-                pushEntities(serverLevel);
+                addExhaustParticles(serverLevel, serverSubLevel);
+                pushEntities(serverLevel, serverSubLevel);
 
                 // Force packet update (for tooltips)
                 if (firingTick % 5 == 0) serverLevel.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
@@ -181,10 +188,14 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         }
     }
 
-    private static final Vector3d STORED_TRANSFORMED_THRUST = new Vector3d();
-    private static final Vector3d globalThrust = new Vector3d();
-    private void pushEntities(ServerLevel serverLevel) { // TODO: finish this
+    private void pushEntities(ServerLevel serverLevel, ServerSubLevel subLevel) { // TODO: finish this
+        if (thrust < 0.20d) return;
 
+        double dirX = facing.getStepX();
+        double dirY = facing.getStepY();
+        double dirZ = facing.getStepZ();
+
+        CreateFluidsAndFixins.LOGGER.info("Thrust: {}", thrust);
     }
 
     public void updateAmplitude(Level level, BlockPos pos) {
@@ -227,7 +238,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         if (!level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
     }
 
-    private void addExhaustParticles(ServerLevel serverLevel, ServerSubLevel subLevel, Direction facing, Vector3d thrustFace) {
+    private void addExhaustParticles(ServerLevel serverLevel, ServerSubLevel subLevel) {
         double maxThrust = amplitude / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI));
         double thrustRatio = Math.max(0.0, thrust / maxThrust); // [0.0 to 1.0] multiplier based on current thrust strength
 
@@ -335,7 +346,6 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         tag.putDouble("Thrust", this.thrust);
         tag.putBoolean("Armed", this.armed);
         tag.putBoolean("Firing", this.firing);
-        tag.putString("Facing", this.facing.getSerializedName());
     }
 
     @Override
@@ -348,7 +358,6 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         this.thrust = tag.getDouble("Thrust");
         this.armed = tag.getBoolean("Armed");
         this.firing = tag.getBoolean("Firing");
-        this.facing = Direction.byName(tag.getString("Facing"));
     }
 
 

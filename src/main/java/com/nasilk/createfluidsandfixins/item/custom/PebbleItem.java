@@ -10,7 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 public class PebbleItem extends BlockItem {
-
     public PebbleItem(Block block, Properties properties) {
         super(block, properties);
     }
@@ -32,7 +31,6 @@ public class PebbleItem extends BlockItem {
             }
             return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
         }
-
         return InteractionResultHolder.pass(itemstack);
     }
 }

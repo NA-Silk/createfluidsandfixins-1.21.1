@@ -35,6 +35,9 @@ public class PropulsiteThrusterBlock extends TransparentBlock  implements Entity
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
+        if (context.getPlayer().isCrouching()) {
+            return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
+        }
         return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
@@ -86,11 +89,11 @@ public class PropulsiteThrusterBlock extends TransparentBlock  implements Entity
     private void addParticles(Level level, BlockPos pos) {
         if (level instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
-                    ModParticles.PROPULSITE_PARTICLES.get(),
-                    pos.getX() + 0.5,
-                    pos.getY() + 0.5,
-                    pos.getZ() + 0.5,
-                    32,0.5,0.5,0.5,0.35
+                ModParticles.PROPULSITE_PARTICLES.get(),
+                pos.getX() + 0.5,
+                pos.getY() + 0.5,
+                pos.getZ() + 0.5,
+                32,0.5,0.5,0.5,0.35
             );
         }
     }

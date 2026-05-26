@@ -53,7 +53,7 @@ public class CreateFluidsAndFixins {
     // The constructor for the mod class is the first code that is run when the mod is loaded
     public CreateFluidsAndFixins(IEventBus modEventBus, ModContainer modContainer) {
         // Custom registrations
-        ModSounds.SOUND_EVENTS.register(modEventBus); // Custom sounds
+        ModSounds.register(modEventBus); // Custom sounds
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModCreativeModeTabs.register(modEventBus); // Unique CreativeMode Tab
