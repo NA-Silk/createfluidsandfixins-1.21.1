@@ -8,6 +8,7 @@ import com.nasilk.createfluidsandfixins.util.FFLang;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.api.physics.handle.RigidBodyHandle;
+import dev.ryanhcode.sable.companion.math.JOMLConversion;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
@@ -37,10 +38,11 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private int charge = 0;
     private int cooldown = 0;
     private int firingTick = 0;
-    private double thrustStrength = 0.0d;
     private double amplitude = AMPLITUDE;
+    private double thrust = 0.0d;
     private boolean armed = false;
     private boolean firing = false;
+    Direction facing = Direction.NORTH;
 
     // Tick constants
     private static final int MAX_CHARGE = 60; // How long it takes for the burst to be ready after receiving redstone power in ticks
@@ -65,15 +67,21 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         super(ModBlockEntities.PROPULSITE_THRUSTER.get(), pos, state);
     }
 
+
+    // TICK BEHAVIOR
+    private Vector3d thrustDirection = new Vector3d(0.0D, 0.0D, 0.0D);
+    private Vector3d thrustFace =  new Vector3d(0.0D, 0.0D, 0.0D);
     public void tick() {
         if (level instanceof ServerLevel serverLevel) {
             BlockState state = getBlockState();
-            Direction facing = state.getValue(PropulsiteThrusterBlock.FACING);
             boolean powered = state.getValue(PropulsiteThrusterBlock.POWERED);
-            Vec3 thrustFace = Vec3.atCenterOf(worldPosition).add(Vec3.atLowerCornerOf(facing.getNormal()).scale(0.6));
+
+            facing = state.getValue(PropulsiteThrusterBlock.FACING);
+            thrustDirection.set(JOMLConversion.toJOML(Vec3.atLowerCornerOf(facing.getNormal())));
+            thrustFace.set(JOMLConversion.toJOML(Vec3.atCenterOf(worldPosition)).fma(0.6, thrustDirection));
 
             // Update amplitude
-            if (firingTick % 20 == 0) updateAmplitude(level, worldPosition);
+            if (firingTick % 20 == 0) updateAmplitude(serverLevel, worldPosition); // TODO: fix this
 
             // Cooldown
             if (cooldown > 0) {
@@ -92,9 +100,9 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
 
                     serverLevel.sendParticles (
                         ParticleTypes.WAX_ON,
-                        thrustFace.x + (serverLevel.random.nextDouble() - 0.5) * 0.15,
-                        thrustFace.y + (serverLevel.random.nextDouble() - 0.5) * 0.15,
-                        thrustFace.z + (serverLevel.random.nextDouble() - 0.5) * 0.15,
+                        thrustFace.x() + (serverLevel.random.nextDouble() - 0.5) * 0.15,
+                        thrustFace.y() + (serverLevel.random.nextDouble() - 0.5) * 0.15,
+                        thrustFace.z() + (serverLevel.random.nextDouble() - 0.5) * 0.15,
                         1,0.0,0.0,0.0,0.0
                     );
 
@@ -107,7 +115,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                             worldPosition,
                             SoundEvents.BEACON_ACTIVATE,
                             SoundSource.BLOCKS,
-                            1.0F,1.2F
+                            1.5F,1.2F
                         );
                     }
                 }
@@ -124,24 +132,32 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 firing = true;
                 firingTick = 0;
                 this.setChanged();
+
+                serverLevel.playSound(
+                    null,
+                    worldPosition,
+                    SoundEvents.ENDER_DRAGON_SHOOT,
+                    SoundSource.BLOCKS,
+                    1.5F,1.0F
+                );
             }
 
             // Firing sequence
             if (firing) {
                 ServerSubLevel serverSubLevel = null; // Assigned for external use
-                if (Sable.HELPER.getContaining(level, worldPosition) instanceof ServerSubLevel subLevel) {
+                if (Sable.HELPER.getContaining(serverLevel, worldPosition) instanceof ServerSubLevel subLevel) {
                     serverSubLevel = subLevel;
 
                     RigidBodyHandle handle = RigidBodyHandle.of(subLevel);
                     if (!handle.isValid()) return;
 
                     // The curve that determines the total thrust of the burst
-                    thrustStrength =
+                    thrust =
                         (amplitude / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI))) // Maximum
                         * Math.exp(-0.5 * Math.pow((firingTick - MEAN) / STANDARD_DEVIATION, 2)); // Curve computation
 
                     Vector3d position = new Vector3d(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
-                    Vector3d force = new Vector3d(facing.getStepX(), facing.getStepY(), facing.getStepZ()).mul(-thrustStrength);
+                    Vector3d force = new Vector3d(facing.getStepX(), facing.getStepY(), facing.getStepZ()).mul(-thrust);
                     handle.applyImpulseAtPoint(position, force);
                 }
 
@@ -150,18 +166,25 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                     firing = false;
                     armed = false;
                     charge = 0;
-                    thrustStrength = 0;
+                    thrust = 0;
                     cooldown = MAX_COOLDOWN;
                 }
                 this.setChanged();
 
-                // Send particles
+                // Effects
                 addExhaustParticles(serverLevel, serverSubLevel, facing, thrustFace);
+                pushEntities(serverLevel);
 
                 // Force packet update (for tooltips)
-                if (firingTick % 5 == 0) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                if (firingTick % 5 == 0) serverLevel.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
         }
+    }
+
+    private static final Vector3d STORED_TRANSFORMED_THRUST = new Vector3d();
+    private static final Vector3d globalThrust = new Vector3d();
+    private void pushEntities(ServerLevel serverLevel) { // TODO: finish this
+
     }
 
     public void updateAmplitude(Level level, BlockPos pos) {
@@ -204,9 +227,9 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         if (!level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
     }
 
-    private void addExhaustParticles(ServerLevel serverLevel, ServerSubLevel subLevel, Direction facing, Vec3 thrustFace) {
+    private void addExhaustParticles(ServerLevel serverLevel, ServerSubLevel subLevel, Direction facing, Vector3d thrustFace) {
         double maxThrust = amplitude / (STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI));
-        double thrustRatio = Math.max(0.0, thrustStrength / maxThrust); // [0.0 to 1.0] multiplier based on current thrust strength
+        double thrustRatio = Math.max(0.0, thrust / maxThrust); // [0.0 to 1.0] multiplier based on current thrust strength
 
         double baseVelocity = MIN_PARTICLE_SPEED + ((MAX_PARTICLE_SPEED - MIN_PARTICLE_SPEED) * thrustRatio); // Faster jet at peak thrust
         int particleCount = MIN_PARTICLES + (int) ((MAX_PARTICLES - MIN_PARTICLES) * thrustRatio);
@@ -219,16 +242,18 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
             double dirZ = facing.getStepZ() + (serverLevel.random.nextGaussian() * PARTICLE_SPREAD);
 
             // Get local/sublevel vectors
-            Vec3 spawnPosition = thrustFace;
-            Vec3 spawnVelocity = new Vec3(dirX, dirY, dirZ).normalize().scale(baseVelocity); // Normalize the direction and scale by baseVelocity
+            Vector3d spawnPosition = new Vector3d(thrustFace);
+            Vector3d spawnVelocity = new Vector3d(dirX, dirY, dirZ).normalize().mul(baseVelocity); // Normalize the direction and scale by baseVelocity
 
             // Convert sublevel vectors to global vectors
             if (subLevel != null) {
-                Vec3 globalStartPosition = subLevel.logicalPose().transformPosition(spawnPosition);
-                Vec3 globalEndPosition = subLevel.logicalPose().transformPosition(spawnPosition.add(spawnVelocity));
+                Vector3d endPosition = new Vector3d(spawnPosition).add(spawnVelocity);
 
-                spawnPosition = globalStartPosition;
-                spawnVelocity = globalEndPosition.subtract(globalStartPosition);
+                Vector3d globalStartPosition = subLevel.logicalPose().transformPosition(spawnPosition);
+                Vector3d globalEndPosition = subLevel.logicalPose().transformPosition(endPosition);
+
+                spawnPosition.set(globalStartPosition);
+                spawnVelocity.set(globalEndPosition.sub(globalStartPosition)); // NOTE: globalEndPosition is also mutated, I don't like pass-by-reference
             }
 
             // By setting count to 0, xOffset, yOffset, and zOffset act as xSpeed, ySpeed, and zSpeed
@@ -242,12 +267,14 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         }
     }
 
+
+    // GOGGLE TOOLTIPS
     @Override
     public boolean addToGoggleTooltip(final List<Component> tooltip, final boolean isPlayerSneaking) {
         FFLang.blockName(this.getBlockState()).text(":").forGoggles(tooltip);
 
         final MutableComponent currentThrust = FFLang
-                .pixelNewton(thrustStrength)
+                .pixelNewton(thrust)
                 .style(ChatFormatting.AQUA)
                 .component();
         FFLang.translate("goggles.current_thrust", currentThrust)
@@ -277,9 +304,17 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
-        tag.putDouble("ThrustStrength", this.thrustStrength);
+        tag.putDouble("Thrust", this.thrust);
         tag.putDouble("Amplitude", this.amplitude);
         return tag;
+    }
+
+    // Handle receiving the packet on the Client side
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
+        CompoundTag tag = pkt.getTag();
+        this.thrust = tag.getDouble("Thrust");
+        this.amplitude = tag.getDouble("Amplitude");
     }
 
     // Wrap the tag into the standard vanilla packet
@@ -288,33 +323,53 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    // Handle receiving the packet on the Client side
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
-        CompoundTag tag = pkt.getTag();
-        this.thrustStrength = tag.getDouble("ThrustStrength");
-        this.amplitude = tag.getDouble("Amplitude");
-    }
 
+    // DATA PERSISTENCE
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        tag.putDouble("Amplitude", this.amplitude);
         tag.putInt("Charge", this.charge);
         tag.putInt("Cooldown", this.cooldown);
+        tag.putInt("FiringTick", this.firingTick);
+        tag.putDouble("Amplitude", this.amplitude);
+        tag.putDouble("Thrust", this.thrust);
         tag.putBoolean("Armed", this.armed);
         tag.putBoolean("Firing", this.firing);
-        tag.putInt("FiringTick", this.firingTick);
+        tag.putString("Facing", this.facing.getSerializedName());
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        if (tag.contains("Amplitude")) this.amplitude = tag.getDouble("Amplitude");
         this.charge = tag.getInt("Charge");
         this.cooldown = tag.getInt("Cooldown");
+        this.firingTick = tag.getInt("FiringTick");
+        this.amplitude = tag.getDouble("Amplitude");
+        this.thrust = tag.getDouble("Thrust");
         this.armed = tag.getBoolean("Armed");
         this.firing = tag.getBoolean("Firing");
-        this.firingTick = tag.getInt("FiringTick");
+        this.facing = Direction.byName(tag.getString("Facing"));
+    }
+
+
+    // GETTERS & SETTERS (for compatibility)
+    @SuppressWarnings("unused")
+    public Direction getBlockDirection() {
+        return this.facing;
+    }
+
+    @SuppressWarnings("unused")
+    public double getAirflow() {
+        return 0;
+    }
+
+    @SuppressWarnings("unused")
+    public double getThrust() {
+        return this.thrust;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean isActive() {
+        return this.firing;
     }
 }
