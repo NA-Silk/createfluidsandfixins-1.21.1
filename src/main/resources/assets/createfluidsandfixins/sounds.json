@@ -1,8 +1,13 @@
+
 {
   "block.pebble_place": {
     "subtitle": "subtitles.createfluidsandfixins.block.pebble_place",
     "sounds": [
-      "createfluidsandfixins:block/pebble_place"
+      {
+        "name": "createfluidsandfixins:block/pebble_place",
+        "pitch": 1.2,
+        "volume": 1.0
+      }
     ]
   }
 }
