@@ -4,9 +4,11 @@ import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.behavior.DensiteCTBehavior;
 import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
+import com.nasilk.createfluidsandfixins.block.custom.Pebble;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
+import com.nasilk.createfluidsandfixins.util.ModSounds;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
@@ -122,6 +124,30 @@ public class ModBlocks {
         )
     );
 
+    public static final DeferredBlock<Block> PEBBLE = registerBlockWithCustomItem(
+            "pebble",
+            () -> new Pebble(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_GRAY)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .noOcclusion()
+                    .isViewBlocking((s,l,p) -> false)
+                    .strength(0.9F)
+                    .sound(new SoundType(
+                            1.0F, 1.0F,
+                            SoundEvents.STONE_BREAK,
+                            SoundEvents.STONE_STEP,
+                            ModSounds.PEBBLE_PLACE.get(),
+                            SoundEvents.STONE_HIT,
+                            SoundEvents.STONE_FALL
+                    ))
+            ),
+            (block) -> () -> new com.nasilk.createfluidsandfixins.item.custom.PebbleItem(block.get(), new Item.Properties())
+    );
+
+
+
+
+
     private static <T extends Block> BlockEntry<T> registerCTBlock(String name, NonNullFunction<BlockBehaviour.Properties, T> factory, Supplier<ConnectedTextureBehaviour> behavior) {
         BlockEntry<T> toReturn = CreateFluidsAndFixins.REGISTRATE.block(name, factory)
             .onRegister(CreateRegistrate.connectedTextures(behavior))
@@ -133,6 +159,12 @@ public class ModBlocks {
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);
+        return toReturn;
+    }
+                             //Needed this for some Dumbshit
+    private static <T extends Block> DeferredBlock<T> registerBlockWithCustomItem(String name, Supplier<T> block, java.util.function.Function<DeferredBlock<T>, Supplier<? extends Item>> itemFactory) {
+        DeferredBlock<T> toReturn = BLOCKS.register(name, block);
+        ModItems.ITEMS.register(name, itemFactory.apply(toReturn));
         return toReturn;
     }
 

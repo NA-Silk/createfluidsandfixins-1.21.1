@@ -10,12 +10,13 @@ import com.nasilk.createfluidsandfixins.particle.custom.DensiteParticles;
 import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import com.nasilk.createfluidsandfixins.particle.custom.PropulsiteParticles;
 import com.nasilk.createfluidsandfixins.particle.custom.PropulsiteThrusterParticles;
+import com.nasilk.createfluidsandfixins.util.ModCreativeModeTabs;
+import com.nasilk.createfluidsandfixins.util.ModSounds;
 import com.nasilk.createfluidsandfixins.util.ModSpriteShifts;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
@@ -52,8 +53,10 @@ public class CreateFluidsAndFixins {
     // The constructor for the mod class is the first code that is run when the mod is loaded
     public CreateFluidsAndFixins(IEventBus modEventBus, ModContainer modContainer) {
         // Custom registrations
+        ModSounds.SOUND_EVENTS.register(modEventBus); // Custom sounds
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModCreativeModeTabs.register(modEventBus); // Unique CreativeMode Tab
         ModBlockEntities.register(modEventBus);
         ModFluidTypes.register(modEventBus); // Fluid textures
         ModFluids.register(modEventBus); // Fluid behaviors
@@ -85,17 +88,17 @@ public class CreateFluidsAndFixins {
 
     // Add block items to creative tabs
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if(event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+        if(event.getTab() == ModCreativeModeTabs.FLUIDSANDFIXINS_TAB.get()) {
             event.accept(ModFluids.VOID_SEA_SLURRY_BUCKET);
             event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
             event.accept(ModFluids.DRIFT_CONDENSATE_BUCKET);
             event.accept(ModFluids.PROPULSITE_FLURRY_BUCKET);
             event.accept(ModFluids.SOUL_STEEP_BUCKET);
             event.accept(ModFluids.OSCILLITE_SUSPENSION_BUCKET);
-            event.accept(ModItems.CREATIVE_FLUID_ERASER);
-        }
 
-        if(event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+            event.accept(ModItems.CREATIVE_FLUID_ERASER);
+
+            event.accept(ModBlocks.PEBBLE);
             event.accept(ModBlocks.DENSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_THRUSTER);

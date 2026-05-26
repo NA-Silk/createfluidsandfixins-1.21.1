@@ -11,12 +11,15 @@
   "createfluidsandfixins.configuration.magicNumberIntroduction": "Magic Number Text",
   "createfluidsandfixins.configuration.magicNumber": "Magic Number",
 
+  "creativetab.createfluidsandfixins.createfluidsandfixins_tab": "Create: Fluids and Fix-ins",
+
   "block.createfluidsandfixins.densite_block": "Densite Block",
   "block.createfluidsandfixins.propulsite_block": "Propulsite Block",
   "block.createfluidsandfixins.propulsite_thruster": "Propulsite Thruster",
   "block.createfluidsandfixins.oscillite_block": "Oscillite Block",
+  "block.createfluidsandfixins.pebble": "Pebbles",
 
-  "item.createfluidsandfixins.creative_fluid_eraser": "Creative Fluid Eraser",
+  "item.createfluidsandfixins.creative_fluid_eraser": "Creative Fluid Eraser™",
   "item.createfluidsandfixins.void_sea_slurry_bucket": "Void Sea Slurry Bucket",
   "item.createfluidsandfixins.densite_emulsion_bucket": "Densite Emulsion Bucket",
   "item.createfluidsandfixins.drift_condensate_bucket": "Drift Condensate Bucket",
