@@ -298,7 +298,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         for (Entity entity : entities) {
             if (entity instanceof AbstractContraptionEntity) continue;
 
-            final Vec3 entityPosition = entity.getBoundingBox().getCenter(); // Infuriating Vec3
+            final Vec3 entityPosition = entity.getBoundingBox().getCenter(); // Infuriating Vec3 TODO find a way around this
             cache.relativeEntityPosition.set(entityPosition.x, entityPosition.y, entityPosition.z).sub(cache.globalThrusterPosition);
 
             /* TODO
