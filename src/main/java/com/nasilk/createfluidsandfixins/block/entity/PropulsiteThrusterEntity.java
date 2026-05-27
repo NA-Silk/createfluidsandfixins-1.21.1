@@ -57,14 +57,14 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
 
     // Cluster strength constants
     private static final int MAX_CLUSTER_SIZE = 16;
-    private static final double CLUSTER_SCALE = 0.25d;
+    private static final double CLUSTER_SCALE = 2.0d;
 
     // Particle constants
     private static final double MIN_PARTICLE_SPEED = 0.15;
     private static final double MAX_PARTICLE_SPEED = 0.5;
-    private static final int MIN_PARTICLES = 2;
-    private static final int MAX_PARTICLES = 10;
-    private static final double PARTICLE_SPREAD = 0.15;
+    private static final int MIN_PARTICLES = 3;
+    private static final int MAX_PARTICLES = 11;
+    private static final double PARTICLE_SPREAD = 0.10;
 
     public PropulsiteThrusterEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PROPULSITE_THRUSTER.get(), pos, state);
@@ -90,7 +90,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 tickCounter = 1;
             }
 
-            // Cooldown
+            // Cooldown TODO custom cooling down sound, maybe smoke particle too?
             if (cooldown > 0) {
                 if (!powered) {
                     cooldown--;
@@ -99,14 +99,15 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 return;
             }
 
-            // Charging
+            // Charging TODO custom charging sound
             if (powered && !armed) {
                 if (charge < MAX_CHARGE) {
                     charge++;
                     this.setChanged();
 
                     serverLevel.sendParticles (
-                        ParticleTypes.WAX_ON,
+                            // TODO find a better particle for this guy, a vanilla one should be fine if not use one of the new ones for the block, i want them spawning aound the area and being pulled into the thrust face
+                        ParticleTypes.VAULT_CONNECTION, //Charging particles
                         thrustFace.x() + (serverLevel.random.nextDouble() - 0.5) * 0.15,
                         thrustFace.y() + (serverLevel.random.nextDouble() - 0.5) * 0.15,
                         thrustFace.z() + (serverLevel.random.nextDouble() - 0.5) * 0.15,
@@ -120,7 +121,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                         serverLevel.playSound(
                             null,
                             worldPosition,
-                            SoundEvents.BEACON_ACTIVATE,
+                            SoundEvents.BEACON_ACTIVATE, //TODO custom arming sound, or something that fits
                             SoundSource.BLOCKS,
                             1.5F,1.2F
                         );
@@ -143,7 +144,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 serverLevel.playSound(
                     null,
                     worldPosition,
-                    SoundEvents.ENDER_DRAGON_SHOOT,
+                    SoundEvents.ENDER_DRAGON_SHOOT, //Firing sound
                     SoundSource.BLOCKS,
                     1.5F,1.0F
                 );
@@ -218,7 +219,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 BlockPos neighborPos = currentPos.relative(direction);
                 long neighborLong = neighborPos.asLong();
 
-                // Update cluster and queue if the neighbor block is a new densite
+                // Update cluster and queue if the neighbor block is a new propulsite
                 if (cluster.contains(neighborLong)) continue;
                 if (level.getBlockState(neighborPos).is(ModBlocks.PROPULSITE_BLOCK)) propulsiteCount++;
                 else if (level.getBlockState(neighborPos).is(ModBlocks.PROPULSITE_THRUSTER)) thrusterCount++;

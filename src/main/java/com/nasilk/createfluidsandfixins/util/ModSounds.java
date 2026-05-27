@@ -14,12 +14,28 @@ public class ModSounds {
 
     public static final DeferredHolder<SoundEvent, SoundEvent> PEBBLE_PLACE = SOUND_EVENTS.register(
         "block.pebble_place",
-        () -> SoundEvent.createVariableRangeEvent(
-            ResourceLocation.fromNamespaceAndPath(
-                CreateFluidsAndFixins.MOD_ID, "block.pebble_place"
+            () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(
+                   CreateFluidsAndFixins.MOD_ID, "block.pebble_place"
             )
         )
     );
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> PROPULSITE_BREAK = SOUND_EVENTS.register(
+            "block.propulsite_break",
+            () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(
+                    CreateFluidsAndFixins.MOD_ID, "block.propulsite_break"
+            )
+        )
+    );
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> PROPULSITE_PLACE = SOUND_EVENTS.register(
+            "block.propulsite_place",
+            () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(
+                    CreateFluidsAndFixins.MOD_ID, "block.propulsite_place"
+            )
+        )
+    );
+
 
     public static void register(IEventBus eventBus) {
         SOUND_EVENTS.register(eventBus);

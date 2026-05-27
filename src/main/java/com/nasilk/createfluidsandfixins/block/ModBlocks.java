@@ -63,13 +63,20 @@ public class ModBlocks {
             .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
-            .friction(1.00f)
-            .sound(SoundType.GLASS)
             .lightLevel(state -> 6)
             .isValidSpawn((state, level, pos, value) -> false)
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
             .isViewBlocking((state, level, pos) -> false)
+                .sound(
+                    new SoundType(1.0f, 1.0f,
+                        ModSounds.PROPULSITE_BREAK.get(),
+                        SoundEvents.AMETHYST_BLOCK_STEP,
+                        ModSounds.PROPULSITE_PLACE.get(),
+                        SoundEvents.AMETHYST_BLOCK_HIT,
+                        SoundEvents.AMETHYST_BLOCK_FALL
+                    )
+                )
         ),
         PropulsiteCTBehavior::new
     );
@@ -80,21 +87,19 @@ public class ModBlocks {
             .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
-            .friction(1.00f)
-            .sound(SoundType.GLASS)
             .noOcclusion()
-            .lightLevel(state ->6)
+            .lightLevel(state -> 6)
             .isValidSpawn((state, level, pos, value) -> false)
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
             .isViewBlocking((state, level, pos) -> false)
             .sound(
                 new SoundType(1.0f, 1.0f,
-                    SoundEvents.GLASS_BREAK,
-                    SoundEvents.GLASS_STEP,
-                    SoundEvents.GLASS_PLACE,
-                    SoundEvents.GLASS_HIT,
-                    SoundEvents.GLASS_FALL
+                    ModSounds.PROPULSITE_BREAK.get(),
+                    SoundEvents.AMETHYST_BLOCK_STEP,
+                    ModSounds.PROPULSITE_PLACE.get(),
+                    SoundEvents.AMETHYST_BLOCK_HIT,
+                    SoundEvents.AMETHYST_BLOCK_FALL
                 )
             )
         )
@@ -107,7 +112,6 @@ public class ModBlocks {
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
             .friction(1.05f)
-            .sound(SoundType.GLASS)
             .lightLevel(state -> 6)
             .noOcclusion()
             .isValidSpawn((state, level, pos, value) -> false)

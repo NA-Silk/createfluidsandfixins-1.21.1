@@ -20,7 +20,6 @@ public class ModItems {
         )
     );
 
-
     public static void register(IEventBus eventbus) {
       ITEMS.register(eventbus);
     }

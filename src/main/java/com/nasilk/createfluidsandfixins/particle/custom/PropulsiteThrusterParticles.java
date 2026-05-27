@@ -24,11 +24,22 @@ public class PropulsiteThrusterParticles extends SimpleAnimatedParticle {
         this.zd = zSpeed; // z starting speed
         double speedMagnitude = Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed + zSpeed * zSpeed);
         this.quadSize = (float) (0.15f + speedMagnitude * 0.2f); // Speed dependent particle size
+       // this.quadSize *= 0.85f + random.nextFloat() * 0.3f; // Random particle size
+
 
         /* Optional tint
         this.setColor(0xFFFFFF);
          */
     }
+
+    @Override
+    public int getLightColor(float partialTick) {return 240; // Makes Particles Fullbrite
+    }
+
+    @Override
+    public ParticleRenderType getRenderType() {return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT; // Allows for better overlap
+    }
+
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
@@ -36,6 +47,7 @@ public class PropulsiteThrusterParticles extends SimpleAnimatedParticle {
         public Provider(SpriteSet spriteSet) {
             this.spriteSet = spriteSet;
         }
+
 
         @Nullable
         @Override

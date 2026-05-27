@@ -9,5 +9,21 @@
         "volume": 1.0
       }
     ]
+  },
+  "block.propulsite_break": {
+    "sounds": [
+      "createfluidsandfixins:block/propulsite_break_1",
+      "createfluidsandfixins:block/propulsite_break_2",
+      "createfluidsandfixins:block/propulsite_break_3",
+      "createfluidsandfixins:block/propulsite_break_4"
+    ]
+  },
+  "block.propulsite_place": {
+    "sounds": [
+      "createfluidsandfixins:block/propulsite_place_1",
+      "createfluidsandfixins:block/propulsite_place_2",
+      "createfluidsandfixins:block/propulsite_place_3",
+      "createfluidsandfixins:block/propulsite_place_4"
+    ]
   }
 }
