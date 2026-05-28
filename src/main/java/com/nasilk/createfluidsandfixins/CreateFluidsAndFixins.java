@@ -97,6 +97,7 @@ public class CreateFluidsAndFixins {
             event.accept(ModFluids.OSCILLITE_SUSPENSION_BUCKET);
 
             event.accept(ModItems.CREATIVE_FLUID_ERASER);
+            event.accept(ModItems.FLUIDITE_INTERFACER_ITEM);
 
             event.accept(ModBlocks.PEBBLE);
             event.accept(ModBlocks.DENSITE_BLOCK);

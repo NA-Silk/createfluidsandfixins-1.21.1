@@ -15,11 +15,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public class CreativeFluidEraserItem extends Item {
-    public final int radius;
+    public final int RADIUS = 32;
 
-    public CreativeFluidEraserItem(Properties properties, int radius) {
+    public CreativeFluidEraserItem(Properties properties) {
         super(properties);
-        this.radius = radius;
     }
 
     @Override
@@ -39,9 +38,9 @@ public class CreativeFluidEraserItem extends Item {
             Fluid targetFluid = fluidState.getType();
 
             // Delete logic
-            for (int x = -radius; x <= radius; x++) {
-                for (int y = -radius; y <= radius; y++) {
-                    for (int z = -radius; z <= radius; z++) {
+            for (int x = -RADIUS; x <= RADIUS; x++) {
+                for (int y = -RADIUS; y <= RADIUS; y++) {
+                    for (int z = -RADIUS; z <= RADIUS; z++) {
                         BlockPos currentPos = targetPos.offset(x, y, z);
                         if (level.getFluidState(currentPos).getType().isSame(targetFluid)) {
                             level.setBlockAndUpdate(currentPos, Blocks.AIR.defaultBlockState());

@@ -1,10 +1,8 @@
 package com.nasilk.createfluidsandfixins.item;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
-import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.item.custom.CreativeFluidEraserItem;
-import com.nasilk.createfluidsandfixins.item.custom.PebbleItem;
-import net.minecraft.world.item.Item;
+import com.nasilk.createfluidsandfixins.item.custom.FluiditeInterfacerItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -14,10 +12,12 @@ public class ModItems {
 
     public static final DeferredItem<CreativeFluidEraserItem> CREATIVE_FLUID_ERASER = ITEMS.registerItem(
         "creative_fluid_eraser",
-        (properties) -> new CreativeFluidEraserItem(
-            properties.stacksTo(1),
-            32
-        )
+        (properties) -> new CreativeFluidEraserItem(properties.stacksTo(1))
+    );
+
+    public static final DeferredItem<FluiditeInterfacerItem> FLUIDITE_INTERFACER_ITEM = ITEMS.registerItem(
+        "fluidite_interfacer_item",
+        (properties) -> new FluiditeInterfacerItem(properties.stacksTo(16))
     );
 
     public static void register(IEventBus eventbus) {
