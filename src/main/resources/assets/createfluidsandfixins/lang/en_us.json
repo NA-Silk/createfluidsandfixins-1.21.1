@@ -21,6 +21,8 @@
 
   "subtitles.createfluidsandfixins.block.pebble_place": "Hello there!",
 
+  "death.attack.propulsite_thruster": "%1$s was killed combining biology and physics",
+
   "item.createfluidsandfixins.creative_fluid_eraser": "Creative Fluid Eraser™",
   "item.createfluidsandfixins.void_sea_slurry_bucket": "Void Sea Slurry Bucket",
   "item.createfluidsandfixins.densite_emulsion_bucket": "Densite Emulsion Bucket",

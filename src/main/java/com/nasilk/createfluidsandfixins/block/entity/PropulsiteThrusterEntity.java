@@ -3,6 +3,7 @@ package com.nasilk.createfluidsandfixins.block.entity;
 import com.nasilk.createfluidsandfixins.block.ModBlockEntities;
 import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
+import com.nasilk.createfluidsandfixins.damage.ModDamageTypes;
 import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import com.nasilk.createfluidsandfixins.util.FFLang;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
@@ -66,6 +67,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private Direction facingValidation = null;
     private final Vector3d localMin = new Vector3d();
     private final Vector3d localMax = new Vector3d();
+    private DamageSource thrusterDamageSource = null;
 
     // Tick constants TODO consider JSONifying these for fast /reload testing
     private static final int MAX_CHARGE = 60; // How long it takes for the burst to be ready after receiving redstone power in ticks
@@ -87,6 +89,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private static final double PUSH_DECAY_RATE = 3.0d; // Acceleration distance dropoff rate
     private static final double PUSH_FACTOR = 0.1d; // Acceleration multiplier
     private static final double PUSH_SHIFT_FACTOR = 0.125d; // Acceleration multiplier while holding shift
+    private static final double DAMAGE_MULTIPLIER = 5.0d; // Thruster damage multiplier
     private static final double SQR_MAX_PUSH_RADIUS = MAX_PUSH_RADIUS * MAX_PUSH_RADIUS; // Precomputed radial distance squared
 
     // Particle constants
@@ -377,10 +380,15 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                     )
             );
             entity.fallDistance = 0;
-            // TODO add damage scaled with accelerationScalar
 
             // Sync client-side (player) motion
             if (entity instanceof ServerPlayer serverPlayer) serverPlayer.hurtMarked = true;
+
+            // Handle damage effect
+            float appliedDamage = (float) (accelerationScalar * DAMAGE_MULTIPLIER);
+            if (appliedDamage < 0.5d) continue;
+            if (thrusterDamageSource == null) thrusterDamageSource = ModDamageTypes.getSource(serverLevel, ModDamageTypes.PROPULSITE_THRUSTER);
+            entity.hurt(thrusterDamageSource, appliedDamage);
         }
     }
 

@@ -1,0 +1,5 @@
+{
+  "message_id": "propulsite_thruster",
+  "exhaustion": 0.1,
+  "scaling": "always"
+}
