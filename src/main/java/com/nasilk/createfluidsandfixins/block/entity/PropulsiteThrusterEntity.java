@@ -1,6 +1,5 @@
 package com.nasilk.createfluidsandfixins.block.entity;
 
-import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.block.ModBlockEntities;
 import com.nasilk.createfluidsandfixins.block.ModBlocks;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
@@ -8,6 +7,8 @@ import com.nasilk.createfluidsandfixins.particle.ModParticles;
 import com.nasilk.createfluidsandfixins.util.FFLang;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
+import com.simibubi.create.content.equipment.armor.DivingBootsItem;
+import com.simibubi.create.content.kinetics.fan.AirCurrent;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.api.physics.handle.RigidBodyHandle;
 import dev.ryanhcode.sable.companion.math.BoundingBox3d;
@@ -24,12 +25,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
 import java.util.List;
@@ -63,7 +67,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private final Vector3d localMin = new Vector3d();
     private final Vector3d localMax = new Vector3d();
 
-    // Tick constants
+    // Tick constants TODO consider JSONifying these for fast /reload testing
     private static final int MAX_CHARGE = 60; // How long it takes for the burst to be ready after receiving redstone power in ticks
     private static final int MAX_COOLDOWN = 100; // How long it takes for the block to be able to be charged again in ticks
     private static final int BURST_DURATION = 40; // How long it takes for the full burst to go though in ticks
@@ -72,9 +76,18 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private static final double MEAN = 20.0d; // Curve middle
     private static final double NORM_DENOMINATOR = STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI); // Precomputed denominator
 
-    // Cluster strength constants
+    // BFS constants
     private static final int MAX_CLUSTER_SIZE = 16;
     private static final double CLUSTER_SCALE = 2.0d;
+
+    // Entity pushing constants
+    private static final double MAX_ACCELERATION = 6.0d; // Maximum acceleration allowed in blocks per tick
+    private static final double MAX_PUSH_RANGE = 8.0d; // Length effectiveness distance
+    private static final double MAX_PUSH_RADIUS = 0.75d; // Radial effectiveness distance
+    private static final double PUSH_DECAY_RATE = 3.0d; // Acceleration distance dropoff rate
+    private static final double PUSH_FACTOR = 0.1d; // Acceleration multiplier
+    private static final double PUSH_SHIFT_FACTOR = 0.125d; // Acceleration multiplier while holding shift
+    private static final double SQR_MAX_PUSH_RADIUS = MAX_PUSH_RADIUS * MAX_PUSH_RADIUS; // Precomputed radial distance squared
 
     // Particle constants
     private static final int MIN_PARTICLES = 3;
@@ -88,15 +101,16 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         // Tick
         final Vector3d thrusterForce =  new Vector3d();
 
+        // BFS
+        final LongOpenHashSet cluster = new LongOpenHashSet(MAX_CLUSTER_SIZE);
+        final long[] queue = new long[MAX_CLUSTER_SIZE];
+
         // Entity pushing
         final BoundingBox3d aabb = new BoundingBox3d();
         final Vector3d globalThrusterDirection = new Vector3d();
         final Vector3d globalThrusterPosition = new Vector3d();
-        final Vector3d relativeEntityPosition = new Vector3d();
-
-        // BFS
-        final LongOpenHashSet cluster = new LongOpenHashSet(MAX_CLUSTER_SIZE);
-        final long[] queue = new long[MAX_CLUSTER_SIZE];
+        final Vector3d relEntityPosition = new Vector3d();
+        final Vector3d relEntityRadialDistance = new Vector3d();
 
         // Particles
         final Vector3d spawnPosition =  new Vector3d();
@@ -219,94 +233,12 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 this.setChanged();
 
                 // Effects
-                addExhaustParticles(serverLevel, serverSubLevel);
                 pushEntities(serverLevel, serverSubLevel);
+                addThrusterParticles(serverLevel, serverSubLevel);
 
                 // Force packet update (for tooltips)
                 if (firingTick % 5 == 0) serverLevel.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
-        }
-    }
-
-    // TODO move these
-    private static final double MAX_PUSH_RANGE = 6.0d;
-    private static final double MAX_PUSH_RADIUS = 0.75d;
-    private void pushEntities(ServerLevel serverLevel, ServerSubLevel subLevel) {
-        if (thrust < 0.10d) return;
-        CreateFluidsAndFixins.LOGGER.info("Thrust: {}", thrust); // TODO remove this
-        Cache cache = CACHE.get();
-
-        // Recompute localMin and localMax if facing has changed (from level shifting)
-        if (facingValidation != facing) {
-            facingValidation = facing;
-
-            // Reset localMin and localMax
-            localMin.set(-MAX_PUSH_RADIUS);
-            localMax.set(MAX_PUSH_RADIUS);
-
-            // Get step variations
-            int stepX = facing.getStepX(); // 1 if East,  -1 if West,  0 otherwise
-            int stepY = facing.getStepY(); // 1 if Up,    -1 if Down,  0 otherwise
-            int stepZ = facing.getStepZ(); // 1 if South, -1 if North, 0 otherwise
-
-            // Translate step values into bounding box direction TODO make this more intelligible
-            if (stepX == 1) { // East
-                localMin.x = 0.5; // Start at Eastern face
-                localMax.x = 0.5 + MAX_PUSH_RANGE; // End further East
-            } else if (stepX == -1) { // West
-                localMin.x = -0.5 - MAX_PUSH_RANGE;
-                localMax.x = -0.5;
-            } else if (stepY == 1) { // Up
-                localMin.y = 0.5;
-                localMax.y = 0.5 + MAX_PUSH_RANGE;
-            } else if (stepY == -1) { // Down
-                localMin.y = -0.5 - MAX_PUSH_RANGE;
-                localMax.y = -0.5;
-            } else if (stepZ == 1) { // South
-                localMin.z = 0.5;
-                localMax.z = 0.5 + MAX_PUSH_RANGE;
-            } else if (stepZ == -1) { // North
-                localMin.z = -0.5 - MAX_PUSH_RANGE;
-                localMax.z = -0.5;
-            } else {
-                CreateFluidsAndFixins.LOGGER.error("Invalid step number"); // TODO probably remove this
-            }
-            CreateFluidsAndFixins.LOGGER.info("Steps recomputed:\nstepX = {}\tstepY = {}\tstepZ = {}", stepX, stepY, stepZ); // TODO remove this
-        }
-
-        // Getting bounding box
-        cache.aabb.setUnchecked(
-            localMin.x + thrusterPosition.x, localMin.y + thrusterPosition.y, localMin.z + thrusterPosition.z,
-            localMax.x + thrusterPosition.x, localMax.y + thrusterPosition.y, localMax.z + thrusterPosition.z
-        );
-
-        // Convert sublevel (local) vectors to global vectors (call by reference)
-        cache.globalThrusterDirection.set(thrusterDirection);
-        cache.globalThrusterPosition.set(thrusterPosition);
-        if (subLevel != null) {
-            cache.aabb.transform(subLevel.logicalPose(), cache.aabb);
-            subLevel.logicalPose().transformNormal(cache.globalThrusterDirection);
-            subLevel.logicalPose().transformPosition(cache.globalThrusterPosition);
-        }
-
-        // Get entities within the bounding box
-        List<Entity> entities = serverLevel.getEntities(null, cache.aabb.toMojang());
-        if (entities.isEmpty()) return;
-        CreateFluidsAndFixins.LOGGER.info("Entities detected: {}", entities.size()); // TODO remove this
-
-        // Iterate through entities to apply acceleration
-        for (Entity entity : entities) {
-            if (entity instanceof AbstractContraptionEntity) continue;
-
-            final Vec3 entityPosition = entity.getBoundingBox().getCenter(); // Infuriating Vec3 TODO find a way around this
-            cache.relativeEntityPosition.set(entityPosition.x, entityPosition.y, entityPosition.z).sub(cache.globalThrusterPosition);
-
-            /* TODO
-             Add dot product-based distance computation and difference-based radial distance computation,
-             then check if the entity is within MAX_PUSH_RANGE and MAX_PUSH_RADIUS,
-             then compute acceleration exponentially decaying with relative distance magnitude,
-             then apply acceleration to the entity (less if crouching, don't apply if negligible). */
-
         }
     }
 
@@ -365,7 +297,94 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         if (!level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
     }
 
-    private void addExhaustParticles(ServerLevel serverLevel, ServerSubLevel subLevel) {
+    private void pushEntities(ServerLevel serverLevel, ServerSubLevel subLevel) {
+        if (thrust < 0.1) return;
+        Cache cache = CACHE.get();
+
+        // Recompute localMin and localMax if facing has changed (from level shifting)
+        if (facingValidation != facing) {
+            facingValidation = facing;
+
+            // Reset localMin and localMax
+            localMin.set(-MAX_PUSH_RADIUS);
+            localMax.set(MAX_PUSH_RADIUS);
+
+            // Get step variations
+            int stepX = facing.getStepX(); // 1 if East,  -1 if West,  0 otherwise
+            int stepY = facing.getStepY(); // 1 if Up,    -1 if Down,  0 otherwise
+            int stepZ = facing.getStepZ(); // 1 if South, -1 if North, 0 otherwise
+
+            // Translate step values into bounding box direction
+            if      (stepX == 1)  { localMin.x = 0.5d;                      localMax.x = 0.5d + MAX_PUSH_RANGE; } // East
+            else if (stepX == -1) { localMin.x = -0.5d - MAX_PUSH_RANGE;    localMax.x = -0.5d;                 } // West
+            else if (stepY == 1)  { localMin.y = 0.5d;                      localMax.y = 0.5d + MAX_PUSH_RANGE; } // Up
+            else if (stepY == -1) { localMin.y = -0.5d - MAX_PUSH_RANGE;    localMax.y = -0.5d;                 } // Down
+            else if (stepZ == 1)  { localMin.z = 0.5d;                      localMax.z = 0.5d + MAX_PUSH_RANGE; } // South
+            else if (stepZ == -1) { localMin.z = -0.5d - MAX_PUSH_RANGE;    localMax.z = -0.5d;                 } // North
+        }
+
+        // Getting bounding box
+        cache.aabb.setUnchecked(
+                localMin.x + thrusterPosition.x, localMin.y + thrusterPosition.y, localMin.z + thrusterPosition.z,
+                localMax.x + thrusterPosition.x, localMax.y + thrusterPosition.y, localMax.z + thrusterPosition.z
+        );
+
+        // Convert sublevel (local) vectors to global vectors (call by reference)
+        cache.globalThrusterDirection.set(thrusterDirection);
+        cache.globalThrusterPosition.set(thrusterPosition);
+        if (subLevel != null) {
+            cache.aabb.transform(subLevel.logicalPose(), cache.aabb);
+            subLevel.logicalPose().transformNormal(cache.globalThrusterDirection);
+            subLevel.logicalPose().transformPosition(cache.globalThrusterPosition);
+        }
+
+        // Get entities within the bounding box
+        List<Entity> entities = serverLevel.getEntities(null, cache.aabb.toMojang());
+        if (entities.isEmpty()) return;
+
+        // Iterate through entities to apply acceleration
+        for (Entity entity : entities) {
+            if (entity instanceof AbstractContraptionEntity || AirCurrent.isPlayerCreativeFlying(entity) || DivingBootsItem.isWornBy(entity)) continue;
+
+            // Get entity position relative to the thruster
+            AABB entityBoundingBox = entity.getBoundingBox(); // Avoids a Vec3 allocation from entity.getBoundingBox().getCenter()
+            double entityX = (entityBoundingBox.minX + entityBoundingBox.maxX) * 0.5d;
+            double entityY = (entityBoundingBox.minY + entityBoundingBox.maxY) * 0.5d;
+            double entityZ = (entityBoundingBox.minZ + entityBoundingBox.maxZ) * 0.5d;
+            cache.relEntityPosition.set(entityX, entityY, entityZ).sub(cache.globalThrusterPosition);
+
+            // Length distance scalar
+            double relEntityLengthScalar = cache.globalThrusterDirection.dot(cache.relEntityPosition);
+            if (relEntityLengthScalar < 0.5d || relEntityLengthScalar > 0.5d + MAX_PUSH_RANGE) continue;
+
+            // Radial distance scalar
+            cache.relEntityRadialDistance.set(cache.relEntityPosition).fma(-relEntityLengthScalar, cache.globalThrusterDirection);
+            if (cache.relEntityRadialDistance.lengthSquared() > SQR_MAX_PUSH_RADIUS) continue;
+
+            // Acceleration scalar
+            double distanceRatio = (relEntityLengthScalar - 0.5d) / MAX_PUSH_RANGE; // [0.0 to 1.0] distanct ratio
+            double accelerationScalar = thrust * PUSH_FACTOR * Math.exp(-PUSH_DECAY_RATE * distanceRatio);
+            if (entity.isShiftKeyDown()) accelerationScalar *= PUSH_SHIFT_FACTOR;
+            if (accelerationScalar < 0.1d) continue;
+
+            // Handle acceleration effect
+            Vec3 entityVelocity = entity.getDeltaMovement(); // Internal minecraft reference, no extra allocation (yay)
+            entity.setDeltaMovement(
+                    entityVelocity.add(
+                            Math.clamp(accelerationScalar * cache.globalThrusterDirection.x, -MAX_ACCELERATION, MAX_ACCELERATION),
+                            Math.clamp(accelerationScalar * cache.globalThrusterDirection.y, -MAX_ACCELERATION, MAX_ACCELERATION),
+                            Math.clamp(accelerationScalar * cache.globalThrusterDirection.z, -MAX_ACCELERATION, MAX_ACCELERATION)
+                    )
+            );
+            entity.fallDistance = 0;
+            // TODO add damage scaled with accelerationScalar
+
+            // Sync client-side (player) motion
+            if (entity instanceof ServerPlayer serverPlayer) serverPlayer.hurtMarked = true;
+        }
+    }
+
+    private void addThrusterParticles(ServerLevel serverLevel, ServerSubLevel subLevel) {
         Cache cache = CACHE.get();
 
         double maxThrust = amplitude / NORM_DENOMINATOR;
@@ -398,7 +417,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
 
             // By setting count to 0, xOffset, yOffset, and zOffset act as xSpeed, ySpeed, and zSpeed
             serverLevel.sendParticles(
-                ModParticles.PROPULSITE_THRUSTER_PARTICLES.get(), // Was ParticleTypes.GUST
+                ModParticles.PROPULSITE_THRUSTER_PARTICLES.get(),
                 cache.spawnPosition.x, cache.spawnPosition.y, cache.spawnPosition.z,
                 0,
                 cache.spawnVelocity.x, cache.spawnVelocity.y, cache.spawnVelocity.z,
@@ -440,26 +459,26 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         return true;
     }
 
-    // Save data to the network sync packet
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        // Save data to the network sync packet
         CompoundTag tag = super.getUpdateTag(registries);
         tag.putDouble("Thrust", this.thrust);
         tag.putDouble("Amplitude", this.amplitude);
         return tag;
     }
 
-    // Handle receiving the packet on the Client side
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
+        // Handle receiving the packet on the Client side
         CompoundTag tag = pkt.getTag();
         this.thrust = tag.getDouble("Thrust");
         this.amplitude = tag.getDouble("Amplitude");
     }
 
-    // Wrap the tag into the standard vanilla packet
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        // Wrap the tag into the standard vanilla packet
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
