@@ -523,7 +523,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         return this.facing;
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "SameReturnValue"})
     public double getAirflow() {
         return 0;
     }

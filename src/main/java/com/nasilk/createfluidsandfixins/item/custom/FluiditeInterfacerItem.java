@@ -11,14 +11,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-
 import java.util.HashMap;
-import java.util.function.Supplier;
 
 public class FluiditeInterfacerItem extends Item {
     public final HashMap<Block, Block> BLOCK_MAP = new HashMap<>();
