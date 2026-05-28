@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
@@ -23,6 +24,7 @@ public class FluiditeInterfacerItem extends Item {
     public FluiditeInterfacerItem(Properties properties) {
         super(properties);
         BLOCK_MAP.put(ModBlocks.PROPULSITE_BLOCK.get(), ModBlocks.PROPULSITE_THRUSTER.get());
+        BLOCK_MAP.put(Blocks.BLUE_WOOL, Blocks.RED_WOOL); // Non-directional test, can be replaced
     }
 
     @Override
@@ -39,12 +41,15 @@ public class FluiditeInterfacerItem extends Item {
         if (!level.isClientSide() && !state.isEmpty()) {
             // Find matching block
             Block transformBlock = BLOCK_MAP.get(state.getBlock());
-
-            // Replace logic
             if (transformBlock == null) return InteractionResultHolder.pass(itemStack);
-            Direction direction = blockhitresult.getDirection();
-            level.setBlockAndUpdate(targetPos, transformBlock.defaultBlockState().setValue(BlockStateProperties.FACING, direction));
 
+            // Handle non-directional blocks
+            if (transformBlock.defaultBlockState().hasProperty(BlockStateProperties.FACING)) {
+                Direction direction = blockhitresult.getDirection();
+                level.setBlockAndUpdate(targetPos, transformBlock.defaultBlockState().setValue(BlockStateProperties.FACING, direction));
+            } else {
+                level.setBlockAndUpdate(targetPos, transformBlock.defaultBlockState());
+            }
             return InteractionResultHolder.success(itemStack);
         }
         return InteractionResultHolder.pass(itemStack);
