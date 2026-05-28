@@ -4,7 +4,7 @@ import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.behavior.DensiteCTBehavior;
 import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
 import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
-import com.nasilk.createfluidsandfixins.block.custom.Pebble;
+import com.nasilk.createfluidsandfixins.block.custom.PebbleBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
@@ -132,7 +132,7 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> PEBBLE = registerBlockWithCustomItem(
         "pebble",
-        () -> new Pebble(BlockBehaviour.Properties.of()
+        () -> new PebbleBlock(BlockBehaviour.Properties.of()
             .mapColor(MapColor.COLOR_GRAY)
             .instrument(NoteBlockInstrument.BASS)
             .noOcclusion()
@@ -144,10 +144,10 @@ public class ModBlocks {
                 SoundEvents.STONE_STEP,
                 ModSounds.PEBBLE_PLACE.get(),
                 SoundEvents.STONE_HIT,
-                SoundEvents.ANVIL_FALL
+                SoundEvents.STONE_FALL
             ))
         ),
-        (block) -> () -> new PebbleItem(block.get(), new Item.Properties())
+        (block) -> new PebbleItem(block, new Item.Properties())
     );
 
     private static <T extends Block> BlockEntry<T> registerCTBlock(String name, NonNullFunction<BlockBehaviour.Properties, T> factory, Supplier<ConnectedTextureBehaviour> behavior) {
@@ -164,10 +164,9 @@ public class ModBlocks {
         return toReturn;
     }
 
-    //Needed this for some Dumbshit
-    private static <T extends Block> DeferredBlock<T> registerBlockWithCustomItem(String name, Supplier<T> block, Function<DeferredBlock<T>, Supplier<? extends Item>> itemFactory) {
+    private static <T extends Block> DeferredBlock<T> registerBlockWithCustomItem(String name, Supplier<T> block, Function<T, Item> itemFactory) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
-        ModItems.ITEMS.register(name, itemFactory.apply(toReturn));
+        ModItems.ITEMS.register(name, () -> itemFactory.apply(toReturn.get()));
         return toReturn;
     }
 

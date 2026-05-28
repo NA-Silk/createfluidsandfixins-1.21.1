@@ -1,5 +1,6 @@
 package com.nasilk.createfluidsandfixins.item.custom;
 
+import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,6 +17,7 @@ public class PebbleItem extends BlockItem implements Equipable {
     public PebbleItem(Block block, Properties properties) {
         super(block, properties);
         DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
+        GogglesItem.addIsWearingPredicate(player -> player.getItemBySlot(EquipmentSlot.HEAD).is(this));
     }
 
     @Override
