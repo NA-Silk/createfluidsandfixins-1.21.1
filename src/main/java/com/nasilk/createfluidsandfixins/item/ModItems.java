@@ -1,8 +1,8 @@
 package com.nasilk.createfluidsandfixins.item;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
+import com.nasilk.createfluidsandfixins.item.custom.ChoraIngotItem;
 import com.nasilk.createfluidsandfixins.item.custom.CreativeFluidEraserItem;
-import com.nasilk.createfluidsandfixins.item.custom.FluiditeInterfacerItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -15,9 +15,9 @@ public class ModItems {
         (properties) -> new CreativeFluidEraserItem(properties.stacksTo(1))
     );
 
-    public static final DeferredItem<FluiditeInterfacerItem> FLUIDITE_INTERFACER_ITEM = ITEMS.registerItem(
-        "fluidite_interfacer_item",
-        (properties) -> new FluiditeInterfacerItem(properties.stacksTo(16))
+    public static final DeferredItem<ChoraIngotItem> CHORA_INGOT = ITEMS.registerItem(
+        "chora_ingot",
+        (properties) -> new ChoraIngotItem(properties.stacksTo(64))
     );
 
     public static void register(IEventBus eventbus) {

@@ -75,6 +75,7 @@ public class DensiteBlock extends Block {
 
         // Perform breadth-first search (BFS) on cluster blocks for maximum power
         int maxPower = 0;
+        BFS:
         while (head < tail) {
             // Dequeue a block position
             BlockPos currentPos = BlockPos.of(queue[head++]); // Dequeue
@@ -84,14 +85,17 @@ public class DensiteBlock extends Block {
 
             // Search each direction around currentPos for other Densite blocks
             for (Direction direction : Direction.values()) {
+                // Exit loop if queue is filled
+                if (tail >= MAX_CLUSTER_SIZE) break BFS;
+
+                // Get position and skip if unloaded || already counted || not Densite
                 BlockPos neighborPos = currentPos.relative(direction);
                 long neighborLong = neighborPos.asLong();
+                if (cluster.contains(neighborLong) || !level.isLoaded(neighborPos) || !level.getBlockState(neighborPos).is(this)) continue;
 
-                // Update cluster and queue if the neighbor block is a new densite
-                if (tail < MAX_CLUSTER_SIZE && !cluster.contains(neighborLong) && level.getBlockState(neighborPos).is(this)) {
-                    cluster.add(neighborLong);
-                    queue[tail++] = neighborLong; // Enqueue
-                }
+                // Update cluster and queue
+                cluster.add(neighborLong);
+                queue[tail++] = neighborLong; // Enqueue
             }
         }
 
@@ -102,7 +106,15 @@ public class DensiteBlock extends Block {
 
             // Safety check: still Densite & power level is actually different
             if (currentState.is(this) && currentState.getValue(POWER) != maxPower) {
-                level.setBlockAndUpdate(currentPos, currentState.setValue(POWER, maxPower));
+                level.setBlock(currentPos, currentState.setValue(POWER, maxPower), 2);
+
+                // Manually update loaded neighbors (more careful than setBlockAndUpdate() / flag 3)
+                for (Direction direction : Direction.values()) {
+                    BlockPos neighborPos = currentPos.relative(direction);
+                    if (level.isLoaded(neighborPos) && !level.getBlockState(neighborPos).is(this)) {
+                        level.neighborChanged(neighborPos, this, currentPos);
+                    }
+                }
             }
         }
     }
@@ -113,8 +125,8 @@ public class DensiteBlock extends Block {
         for (Direction direction : Direction.values()) {
             BlockPos neighborPos = pos.relative(direction);
 
-            // Update maxPower if the neighbor block is Densite
-            if (!level.getBlockState(neighborPos).is(this)) {
+            // Update maxPower if the neighbor block is Densite and in a loaded chunk
+            if (level.isLoaded(neighborPos) && !level.getBlockState(neighborPos).is(this)) {
                 maxPower = Math.max(maxPower, level.getSignal(neighborPos, direction));
             }
         }

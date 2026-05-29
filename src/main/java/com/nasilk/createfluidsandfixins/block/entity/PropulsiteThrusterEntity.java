@@ -79,7 +79,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
     private static final double NORM_DENOMINATOR = STANDARD_DEVIATION * Math.sqrt(2.0 * Math.PI); // Precomputed denominator
 
     // BFS constants
-    private static final int MAX_CLUSTER_SIZE = 16;
+    private static final int MAX_CLUSTER_SIZE = 16; // 15 Propulsite + 1 Thruster
     private static final double CLUSTER_SCALE = 2.0d;
 
     // Entity pushing constants
@@ -240,7 +240,7 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 addThrusterParticles(serverLevel, serverSubLevel);
 
                 // Force packet update (for tooltips)
-                if (firingTick % 5 == 0) serverLevel.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                if (firingTick % 5 == 0) serverLevel.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
             }
         }
     }
@@ -264,28 +264,28 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
         // Perform breadth-first search (BFS) on cluster blocks for block counts
         int propulsiteCount = 0;
         int thrusterCount = 1;
+        BFS:
         while (head < tail) {
             // Dequeue a block position
             BlockPos currentPos = BlockPos.of(queue[head++]); // Dequeue
 
-            // Search each direction around currentPos for propulsite
+            // Search each direction around currentPos for Propulsite and other Propulsite Thruster blocks
             for (Direction direction : Direction.values()) {
+                // Exit loop if queue is filled
+                if (tail >= MAX_CLUSTER_SIZE) break BFS;
+
+                // Get position and skip if unloaded || already counted
                 BlockPos neighborPos = currentPos.relative(direction);
                 long neighborLong = neighborPos.asLong();
+                if (cluster.contains(neighborLong) || !level.isLoaded(neighborPos)) continue;
 
-                // Skip if already counted
-                if (cluster.contains(neighborLong)) continue;
-
-                // Update cluster and queue if space allows
-                if (tail < MAX_CLUSTER_SIZE) {
-
-BlockState neighborState = level.getBlockState(neighborPos);
+                // Update counts, cluster, and queue
+                BlockState neighborState = level.getBlockState(neighborPos);
                 if (neighborState.is(ModBlocks.PROPULSITE_BLOCK)) propulsiteCount++;
                 else if (neighborState.is(ModBlocks.PROPULSITE_THRUSTER)) thrusterCount++;
                 else continue;
-                    cluster.add(neighborLong);
-                    queue[tail++] = neighborLong; // Enqueue
-                }
+                cluster.add(neighborLong);
+                queue[tail++] = neighborLong; // Enqueue
             }
         }
 
@@ -296,7 +296,7 @@ BlockState neighborState = level.getBlockState(neighborPos);
         this.setChanged();
 
         // Tell the server to send the new amplitude to the client for the Goggle tooltips
-        if (!level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        if (!level.isClientSide) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
     }
 
     private void pushEntities(ServerLevel serverLevel, ServerSubLevel subLevel) {
@@ -327,8 +327,8 @@ BlockState neighborState = level.getBlockState(neighborPos);
 
         // Getting bounding box
         cache.aabb.setUnchecked(
-                localMin.x + thrusterPosition.x, localMin.y + thrusterPosition.y, localMin.z + thrusterPosition.z,
-                localMax.x + thrusterPosition.x, localMax.y + thrusterPosition.y, localMax.z + thrusterPosition.z
+            localMin.x + thrusterPosition.x, localMin.y + thrusterPosition.y, localMin.z + thrusterPosition.z,
+            localMax.x + thrusterPosition.x, localMax.y + thrusterPosition.y, localMax.z + thrusterPosition.z
         );
 
         // Convert sublevel (local) vectors to global vectors (call by reference)
@@ -341,7 +341,7 @@ BlockState neighborState = level.getBlockState(neighborPos);
         }
 
         // Get entities within the bounding box
-        List<Entity> entities = serverLevel.getEntities(null, cache.aabb.toMojang());
+        List<Entity> entities = serverLevel.getEntities(null, cache.aabb.toMojang()); // toMojang() Allocates a new Mojang AABB...
         if (entities.isEmpty()) return;
 
         // Iterate through entities to apply acceleration
@@ -372,11 +372,11 @@ BlockState neighborState = level.getBlockState(neighborPos);
             // Handle acceleration effect
             Vec3 entityVelocity = entity.getDeltaMovement(); // Internal minecraft reference, no extra allocation (yay)
             entity.setDeltaMovement(
-                    entityVelocity.add(
-                            Math.clamp(accelerationScalar * cache.globalThrusterDirection.x, -MAX_ACCELERATION, MAX_ACCELERATION),
-                            Math.clamp(accelerationScalar * cache.globalThrusterDirection.y, -MAX_ACCELERATION, MAX_ACCELERATION),
-                            Math.clamp(accelerationScalar * cache.globalThrusterDirection.z, -MAX_ACCELERATION, MAX_ACCELERATION)
-                    )
+                entityVelocity.add(
+                    Math.clamp(accelerationScalar * cache.globalThrusterDirection.x, -MAX_ACCELERATION, MAX_ACCELERATION),
+                    Math.clamp(accelerationScalar * cache.globalThrusterDirection.y, -MAX_ACCELERATION, MAX_ACCELERATION),
+                    Math.clamp(accelerationScalar * cache.globalThrusterDirection.z, -MAX_ACCELERATION, MAX_ACCELERATION)
+                )
             );
             entity.fallDistance = 0;
 

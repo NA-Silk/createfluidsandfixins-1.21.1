@@ -8,6 +8,7 @@ import com.nasilk.createfluidsandfixins.block.custom.PebbleBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBlock;
 import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
 import com.nasilk.createfluidsandfixins.item.ModItems;
+import com.nasilk.createfluidsandfixins.item.custom.ChoraCasingItem;
 import com.nasilk.createfluidsandfixins.item.custom.PebbleItem;
 import com.nasilk.createfluidsandfixins.util.ModSounds;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
@@ -130,6 +131,26 @@ public class ModBlocks {
         )
     );
 
+    public static final DeferredBlock<Block> CHORA_CASING = registerBlockWithCustomItem(
+        "chora_casing",
+        () -> new Block(BlockBehaviour.Properties.of() // TODO change properties
+            .mapColor(MapColor.COLOR_GRAY)
+            .instrument(NoteBlockInstrument.BASS)
+            .noOcclusion()
+            .isViewBlocking((s,l,p) -> false)
+            .strength(0.9F)
+            .sound(new SoundType(
+                1.0F, 1.0F,
+                SoundEvents.STONE_BREAK,
+                SoundEvents.STONE_STEP,
+                SoundEvents.STONE_PLACE,
+                SoundEvents.STONE_HIT,
+                SoundEvents.STONE_FALL
+            ))
+        ),
+        (block) -> new ChoraCasingItem(block, new Item.Properties().stacksTo(64))
+    );
+
     public static final DeferredBlock<Block> PEBBLE = registerBlockWithCustomItem(
         "pebble",
         () -> new PebbleBlock(BlockBehaviour.Properties.of()
@@ -147,7 +168,7 @@ public class ModBlocks {
                 SoundEvents.STONE_FALL
             ))
         ),
-        (block) -> new PebbleItem(block, new Item.Properties())
+        (block) -> new PebbleItem(block, new Item.Properties().stacksTo(1))
     );
 
     private static <T extends Block> BlockEntry<T> registerCTBlock(String name, NonNullFunction<BlockBehaviour.Properties, T> factory, Supplier<ConnectedTextureBehaviour> behavior) {
