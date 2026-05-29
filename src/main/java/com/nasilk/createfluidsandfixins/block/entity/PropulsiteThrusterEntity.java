@@ -276,14 +276,13 @@ public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggle
                 // Skip if already counted
                 if (cluster.contains(neighborLong)) continue;
 
-                // Update block counts
-                BlockState neighborState = level.getBlockState(neighborPos);
+                // Update cluster and queue if space allows
+                if (tail < MAX_CLUSTER_SIZE) {
+
+BlockState neighborState = level.getBlockState(neighborPos);
                 if (neighborState.is(ModBlocks.PROPULSITE_BLOCK)) propulsiteCount++;
                 else if (neighborState.is(ModBlocks.PROPULSITE_THRUSTER)) thrusterCount++;
                 else continue;
-
-                // Update cluster and queue if space allows
-                if (tail < MAX_CLUSTER_SIZE) {
                     cluster.add(neighborLong);
                     queue[tail++] = neighborLong; // Enqueue
                 }
