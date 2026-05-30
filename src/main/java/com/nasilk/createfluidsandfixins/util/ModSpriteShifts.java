@@ -50,6 +50,12 @@ public class ModSpriteShifts {
         rl("block/densite_connected_activated/densite_block_connected_4")
     );
 
+    public static final CTSpriteShiftEntry CHORA_CASING = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/chora_casing"),
+            rl("block/chora_casing_connected")
+
+    );
 
     public static void init() {
         CreateFluidsAndFixins.LOGGER.info("Connected textures initialized");

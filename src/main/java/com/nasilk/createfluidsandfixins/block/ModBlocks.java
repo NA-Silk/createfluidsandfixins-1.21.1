@@ -1,12 +1,10 @@
 package com.nasilk.createfluidsandfixins.block;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
+import com.nasilk.createfluidsandfixins.behavior.ChoraCasingCTBehavior;
 import com.nasilk.createfluidsandfixins.behavior.DensiteCTBehavior;
 import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
-import com.nasilk.createfluidsandfixins.block.custom.DensiteBlock;
-import com.nasilk.createfluidsandfixins.block.custom.PebbleBlock;
-import com.nasilk.createfluidsandfixins.block.custom.PropulsiteBlock;
-import com.nasilk.createfluidsandfixins.block.custom.PropulsiteThrusterBlock;
+import com.nasilk.createfluidsandfixins.block.custom.*;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import com.nasilk.createfluidsandfixins.item.custom.ChoraCasingItem;
 import com.nasilk.createfluidsandfixins.item.custom.PebbleItem;
@@ -131,23 +129,25 @@ public class ModBlocks {
         )
     );
 
-    public static final DeferredBlock<Block> CHORA_CASING = registerBlockCustomItem(
+    public static final BlockEntry<Block> CHORA_CASING = registerBlockCTCustomItem(
         "chora_casing",
-        () -> new Block(BlockBehaviour.Properties.of() // TODO change properties
-            .mapColor(MapColor.COLOR_GRAY)
-            .instrument(NoteBlockInstrument.BASS)
+            properties -> new ChoraCasing(properties
+            .mapColor(MapColor.COLOR_RED)
+            .instrument(NoteBlockInstrument.BANJO)
             .noOcclusion()
+            .strength(1.0F, 1.0F)
             .isViewBlocking((s,l,p) -> false)
             .strength(0.9F)
             .sound(new SoundType(
                 1.0F, 1.0F,
-                SoundEvents.STONE_BREAK,
-                SoundEvents.STONE_STEP,
-                SoundEvents.STONE_PLACE,
-                SoundEvents.STONE_HIT,
-                SoundEvents.STONE_FALL
+                SoundEvents.GLASS_BREAK,
+                SoundEvents.GLASS_STEP,
+                SoundEvents.GLASS_PLACE,
+                SoundEvents.GLASS_HIT,
+                SoundEvents.GLASS_FALL
             ))
         ),
+        ChoraCasingCTBehavior::new,
         (block) -> new ChoraCasingItem(block, new Item.Properties().stacksTo(64))
     );
 

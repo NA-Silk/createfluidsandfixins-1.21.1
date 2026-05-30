@@ -15,8 +15,10 @@ public class PropulsiteThrusterParticles extends SimpleAnimatedParticle {
         super(level, x, y, z, spriteSet, 0.0f);
         this.setSpriteFromAge(spriteSet);
         this.hasPhysics = true; // Run collision
-        this.friction = 0.98f; // Scatter speed (lower -> faster), default 0.98f
+        this.friction = 0.95f; // Scatter speed (lower -> faster), default 0.98f
         this.lifetime = (int) (10.0f + this.random.nextFloat() * 15.0f); // Short lifetime
+        this.oRoll = this.random.nextFloat() * ((float)Math.PI * 2F); // Random particle rotation
+        this.roll = this.oRoll; // Random particle rotation
 
         // Explicit speeds induced by 0-count spawning
         this.xd = xSpeed; // x starting speed
@@ -25,6 +27,7 @@ public class PropulsiteThrusterParticles extends SimpleAnimatedParticle {
         double speedMagnitude = Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed + zSpeed * zSpeed);
         this.quadSize = (float) (0.15f + speedMagnitude * 0.2f); // Speed dependent particle size
        // this.quadSize *= 0.85f + random.nextFloat() * 0.3f; // Random particle size
+
 
 
         /* Optional tint
