@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cube_all",
   "render_type": "translucent",
   "textures": {
-    "all": "createfluidsandfixins:block/chora_casing"
+    "all": "createfluidsandfixins:block/chora_casing_propulsite"
   }
 }

@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 public class ModSpriteShifts {
     private static ResourceLocation rl(String path) {
         return ResourceLocation.fromNamespaceAndPath(
-            "createfluidsandfixins",
+            CreateFluidsAndFixins.MOD_ID,
             path
         );
     }
@@ -54,7 +54,12 @@ public class ModSpriteShifts {
             AllCTTypes.OMNIDIRECTIONAL,
             rl("block/chora_casing"),
             rl("block/chora_casing_connected")
+    );
 
+    public static final CTSpriteShiftEntry PROPULSED_CHORA_CASING = CTSpriteShifter.getCT(
+        AllCTTypes.OMNIDIRECTIONAL,
+        rl("block/chora_casing_propulsite"),
+        rl("block/chora_casing_propulsite_connected")
     );
 
     public static void init() {

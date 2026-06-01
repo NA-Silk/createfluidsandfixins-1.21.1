@@ -3,6 +3,7 @@ package com.nasilk.createfluidsandfixins.block;
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
 import com.nasilk.createfluidsandfixins.behavior.ChoraCasingCTBehavior;
 import com.nasilk.createfluidsandfixins.behavior.DensiteCTBehavior;
+import com.nasilk.createfluidsandfixins.behavior.PropulsedChoraCasingCTBehavior;
 import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
 import com.nasilk.createfluidsandfixins.block.custom.*;
 import com.nasilk.createfluidsandfixins.item.ModItems;
@@ -131,7 +132,7 @@ public class ModBlocks {
 
     public static final BlockEntry<Block> CHORA_CASING = registerBlockCTCustomItem(
         "chora_casing",
-            properties -> new ChoraCasing(properties
+            (properties) -> new ChoraCasing(properties
             .mapColor(MapColor.COLOR_RED)
             .instrument(NoteBlockInstrument.BANJO)
             .noOcclusion()
@@ -148,6 +149,28 @@ public class ModBlocks {
             ))
         ),
         ChoraCasingCTBehavior::new,
+        (block) -> new ChoraCasingItem(block, new Item.Properties().stacksTo(64))
+    );
+
+    public static final BlockEntry<Block> PROPULSED_CHORA_CASING = registerBlockCTCustomItem(
+        "chora_casing_propulsite",
+        (properties) -> new ChoraCasing(properties
+            .mapColor(MapColor.COLOR_RED)
+            .instrument(NoteBlockInstrument.BANJO)
+            .noOcclusion()
+            .strength(1.0F, 1.0F)
+            .isViewBlocking((s,l,p) -> false)
+            .strength(0.9F)
+            .sound(new SoundType(
+                1.0F, 1.0F,
+                SoundEvents.GLASS_BREAK,
+                SoundEvents.GLASS_STEP,
+                SoundEvents.GLASS_PLACE,
+                SoundEvents.GLASS_HIT,
+                SoundEvents.GLASS_FALL
+            ))
+        ),
+        PropulsedChoraCasingCTBehavior::new,
         (block) -> new ChoraCasingItem(block, new Item.Properties().stacksTo(64))
     );
 

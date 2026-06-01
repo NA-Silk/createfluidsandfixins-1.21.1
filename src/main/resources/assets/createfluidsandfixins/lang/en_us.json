@@ -1,29 +1,17 @@
 {
-  "itemGroup.createfluidsandfixins": "Example Mod Tab",
-  "block.createfluidsandfixins.example_block": "Example Block",
-  "item.createfluidsandfixins.example_item": "Example Item",
-
   "createfluidsandfixins.configuration.title": "Create: Fluids and Fixins Configs",
   "createfluidsandfixins.configuration.section.createfluidsandfixins.common.toml": "Create: Fluids and Fixins Configs",
   "createfluidsandfixins.configuration.section.createfluidsandfixins.common.toml.title": "Create: Fluids and Fixins Configs",
   "createfluidsandfixins.configuration.items": "Item List",
-  "createfluidsandfixins.configuration.logDirtBlock": "Log Dirt Block",
-  "createfluidsandfixins.configuration.magicNumberIntroduction": "Magic Number Text",
-  "createfluidsandfixins.configuration.magicNumber": "Magic Number",
-
-  "creativetab.createfluidsandfixins.createfluidsandfixins_tab": "Create: Fluids and Fix-ins",
+  "creativetab.createfluidsandfixins.createfluidsandfixins_tab": "Create: Fluids and Fixins",
 
   "block.createfluidsandfixins.densite_block": "Densite Block",
   "block.createfluidsandfixins.propulsite_block": "Propulsite Block",
   "block.createfluidsandfixins.propulsite_thruster": "Propulsite Thruster",
   "block.createfluidsandfixins.oscillite_block": "Oscillite Block",
+  "block.createfluidsandfixins.chora_casing": "Chora Casing",
+  "block.createfluidsandfixins.chora_casing_propulsite": "Propulsed Chora Casing",
   "block.createfluidsandfixins.pebble": "Pebbles",
-
-  "subtitles.createfluidsandfixins.block.pebble_place": "Hello there!",
-
-  "item.createfluidsandfixins.chora_ingot": "Chora Ingot",
-
-  "death.attack.propulsite_thruster": "%1$s was killed combining biology and physics",
 
   "item.createfluidsandfixins.creative_fluid_eraser": "Creative Fluid Eraser™",
   "item.createfluidsandfixins.void_sea_slurry_bucket": "Void Sea Slurry Bucket",
@@ -32,6 +20,7 @@
   "item.createfluidsandfixins.propulsite_flurry_bucket": "Propulsite Flurry Bucket",
   "item.createfluidsandfixins.soul_steep_bucket": "Soul Steep Bucket",
   "item.createfluidsandfixins.oscillite_suspension_bucket": "Oscillite Suspension Bucket",
+  "item.createfluidsandfixins.chora_ingot": "Chora Ingot",
 
   "fluid_type.createfluidsandfixins.void_sea_slurry_fluid_type": "Void Sea Slurry",
   "fluid_type.createfluidsandfixins.densite_emulsion_fluid_type": "Densite Emulsion",
@@ -51,5 +40,8 @@
   "createfluidsandfixins.unit.meters_per_second": "%s m/s",
   "createfluidsandfixins.unit.mpg": "%s Mpg",
   "createfluidsandfixins.unit.mpn": "%s MpN",
-  "createfluidsandfixins.unit.pn": "%s pN"
+  "createfluidsandfixins.unit.pn": "%s pN",
+
+  "subtitles.createfluidsandfixins.block.pebble_place": "Hello there!",
+  "death.attack.propulsite_thruster": "%1$s was killed combining biology and physics"
 }
