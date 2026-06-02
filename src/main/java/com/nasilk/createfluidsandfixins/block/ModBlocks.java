@@ -1,10 +1,7 @@
 package com.nasilk.createfluidsandfixins.block;
 
 import com.nasilk.createfluidsandfixins.CreateFluidsAndFixins;
-import com.nasilk.createfluidsandfixins.behavior.ChoraCasingCTBehavior;
-import com.nasilk.createfluidsandfixins.behavior.DensiteCTBehavior;
-import com.nasilk.createfluidsandfixins.behavior.PropulsedChoraCasingCTBehavior;
-import com.nasilk.createfluidsandfixins.behavior.PropulsiteCTBehavior;
+import com.nasilk.createfluidsandfixins.behavior.*;
 import com.nasilk.createfluidsandfixins.block.custom.*;
 import com.nasilk.createfluidsandfixins.item.ModItems;
 import com.nasilk.createfluidsandfixins.item.custom.ChoraCasingItem;
@@ -46,11 +43,11 @@ public class ModBlocks {
             .emissiveRendering((state, pos, level) -> true)
             .sound(
                 new SoundType(1.0f, 0.1f,
-                    SoundEvents.ENDER_EYE_DEATH,
-                    SoundEvents.NETHERITE_BLOCK_STEP,
-                    SoundEvents.ENDER_EYE_DEATH, // Might need another sound or pitch override
-                    SoundEvents.NETHERITE_BLOCK_HIT,
-                    SoundEvents.NETHERITE_BLOCK_FALL
+                    ModSounds.DENSITE_BREAK.get(),
+                    SoundEvents.AMETHYST_BLOCK_STEP,
+                    ModSounds.DENSITE_PLACE.get(),
+                    SoundEvents.AMETHYST_BLOCK_HIT,
+                    SoundEvents.AMETHYST_BLOCK_FALL
                 )
             )
         ),
@@ -81,6 +78,32 @@ public class ModBlocks {
         PropulsiteCTBehavior::new
     );
 
+    public static final BlockEntry<Block> OSCILLITE_BLOCK = registerBlockCT(
+            "oscillite_block",
+            (properties) -> new Block(properties
+                    .mapColor(MapColor.COLOR_BLUE)
+                    .instrument(NoteBlockInstrument.HAT)
+                    .strength(0.3F)
+                    .friction(1.05f)
+                    .lightLevel(state -> 6)
+                    .noOcclusion()
+                    .isValidSpawn((state, level, pos, value) -> false)
+                    .isRedstoneConductor((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false)
+                    .sound(
+                            new SoundType(1.0f, 1.0f,
+                                    SoundEvents.AMETHYST_BLOCK_BREAK,
+                                    SoundEvents.AMETHYST_BLOCK_STEP,
+                                    SoundEvents.AMETHYST_BLOCK_PLACE,
+                                    SoundEvents.AMETHYST_BLOCK_HIT,
+                                    SoundEvents.AMETHYST_CLUSTER_FALL
+                            )
+                    )
+            ),
+            OscilliteCTBehavior::new
+    );
+
     public static final DeferredBlock<Block> PROPULSITE_THRUSTER = registerBlock(
         "propulsite_thruster",
         () -> new PropulsiteThrusterBlock(BlockBehaviour.Properties.of()
@@ -100,31 +123,6 @@ public class ModBlocks {
                     ModSounds.PROPULSITE_PLACE.get(),
                     SoundEvents.AMETHYST_BLOCK_HIT,
                     SoundEvents.AMETHYST_BLOCK_FALL
-                )
-            )
-        )
-    );
-
-    public static final DeferredBlock<Block> OSCILLITE_BLOCK = registerBlock(
-        "oscillite_block",
-        () -> new Block(BlockBehaviour.Properties.of()
-            .mapColor(MapColor.COLOR_GRAY)
-            .instrument(NoteBlockInstrument.HAT)
-            .strength(0.3F)
-            .friction(1.05f)
-            .lightLevel(state -> 6)
-            .noOcclusion()
-            .isValidSpawn((state, level, pos, value) -> false)
-            .isRedstoneConductor((state, level, pos) -> false)
-            .isSuffocating((state, level, pos) -> false)
-            .isViewBlocking((state, level, pos) -> false)
-            .sound(
-                new SoundType(1.0f, 1.0f,
-                    SoundEvents.GLASS_BREAK,
-                    SoundEvents.GLASS_STEP,
-                    SoundEvents.GLASS_PLACE,
-                    SoundEvents.GLASS_HIT,
-                    SoundEvents.GLASS_FALL
                 )
             )
         )
@@ -174,6 +172,29 @@ public class ModBlocks {
         ),
         PropulsedChoraCasingCTBehavior::new,
         (block) -> new ChoraCasingItem(block, new Item.Properties().stacksTo(64))
+    );
+
+    public static final BlockEntry<Block> OSCILLATING_CHORA_CASING = registerBlockCTCustomItem(
+            "chora_casing_oscillite",
+            (properties) -> new ChoraCasing(properties
+                    .mapColor(MapColor.COLOR_RED)
+                    .instrument(NoteBlockInstrument.BANJO)
+                    .noOcclusion()
+                    .strength(1.0F, 1.0F)
+                    .isViewBlocking((s,l,p) -> false)
+                    .strength(0.9F)
+                    .requiresCorrectToolForDrops()
+                    .sound(new SoundType(
+                            1.0F, 1.0F,
+                            SoundEvents.GLASS_BREAK,
+                            SoundEvents.GLASS_STEP,
+                            SoundEvents.GLASS_PLACE,
+                            SoundEvents.GLASS_HIT,
+                            SoundEvents.GLASS_FALL
+                    ))
+            ),
+            OscillatingChoraCasingCTBehavior::new,
+            (block) -> new ChoraCasingItem(block, new Item.Properties().stacksTo(64))
     );
 
     public static final DeferredBlock<Block> PEBBLE = registerBlockCustomItem(

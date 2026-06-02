@@ -62,6 +62,18 @@ public class ModSpriteShifts {
         rl("block/chora_casing_propulsite_connected")
     );
 
+    public static final CTSpriteShiftEntry OSCILLATING_CHORA_CASING = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/chora_casing_oscillite"),
+            rl("block/chora_casing_oscillite_connected")
+    );
+
+    public static final CTSpriteShiftEntry OSCILLITE = CTSpriteShifter.getCT(
+        AllCTTypes.OMNIDIRECTIONAL,
+        rl("block/oscillite_block"),
+        rl("block/oscillite_block_connected")
+    );
+
     public static void init() {
         CreateFluidsAndFixins.LOGGER.info("Connected textures initialized");
     }

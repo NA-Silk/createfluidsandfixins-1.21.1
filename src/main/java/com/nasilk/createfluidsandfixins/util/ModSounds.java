@@ -36,6 +36,22 @@ public class ModSounds {
         )
     );
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> DENSITE_BREAK = SOUND_EVENTS.register(
+            "block.densite_break",
+            () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(
+                    CreateFluidsAndFixins.MOD_ID, "block.densite_break"
+            )
+        )
+    );
+
+    public static final DeferredHolder<SoundEvent, SoundEvent> DENSITE_PLACE = SOUND_EVENTS.register(
+            "block.densite_place",
+            () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(
+                    CreateFluidsAndFixins.MOD_ID, "block.densite_place"
+            )
+        )
+    );
+
 
     public static void register(IEventBus eventBus) {
         SOUND_EVENTS.register(eventBus);
