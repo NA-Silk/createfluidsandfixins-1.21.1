@@ -18,8 +18,14 @@ public class ModSpriteShifts {
         AllCTTypes.OMNIDIRECTIONAL,
         rl("block/propulsite_block"),
         rl("block/propulsite_block_connected")
-
     );
+
+    public static final CTSpriteShiftEntry OSCILLITE = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/oscillite_block"),
+            rl("block/oscillite_block_connected")
+    );
+
     public static final CTSpriteShiftEntry DENSITE = CTSpriteShifter.getCT(
         AllCTTypes.OMNIDIRECTIONAL,
         rl("block/densite_block"),
@@ -56,6 +62,12 @@ public class ModSpriteShifts {
             rl("block/chora_casing_connected")
     );
 
+    public static final CTSpriteShiftEntry DENSE_CHORA_CASING = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/chora_casing_densite"),
+            rl("block/chora_casing_densite_connected")
+    );
+
     public static final CTSpriteShiftEntry PROPULSED_CHORA_CASING = CTSpriteShifter.getCT(
         AllCTTypes.OMNIDIRECTIONAL,
         rl("block/chora_casing_propulsite"),
@@ -68,10 +80,10 @@ public class ModSpriteShifts {
             rl("block/chora_casing_oscillite_connected")
     );
 
-    public static final CTSpriteShiftEntry OSCILLITE = CTSpriteShifter.getCT(
-        AllCTTypes.OMNIDIRECTIONAL,
-        rl("block/oscillite_block"),
-        rl("block/oscillite_block_connected")
+    public static final CTSpriteShiftEntry LEVITATING_CHORA_CASING = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/chora_casing_levitite"),
+            rl("block/chora_casing_levitite_connected")
     );
 
     public static void init() {

@@ -197,6 +197,52 @@ public class ModBlocks {
             (block) -> new ChoraCasingItem(block, new Item.Properties().stacksTo(64))
     );
 
+    public static final BlockEntry<Block> DENSE_CHORA_CASING = registerBlockCTCustomItem(
+            "chora_casing_densite",
+            (properties) -> new ChoraCasing(properties
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .instrument(NoteBlockInstrument.BANJO)
+                    .noOcclusion()
+                    .strength(1.0F, 1.0F)
+                    .isViewBlocking((s,l,p) -> false)
+                    .strength(0.9F)
+                    .requiresCorrectToolForDrops()
+                    .sound(new SoundType(
+                            1.0F, 1.0F,
+                            SoundEvents.GLASS_BREAK,
+                            SoundEvents.GLASS_STEP,
+                            SoundEvents.GLASS_PLACE,
+                            SoundEvents.GLASS_HIT,
+                            SoundEvents.GLASS_FALL
+                    ))
+            ),
+            DenseChoraCasingCTBehavior::new,
+            (block) -> new ChoraCasingItem(block, new Item.Properties().stacksTo(64))
+    );
+
+    public static final BlockEntry<Block> LEVITATING_CHORA_CASING = registerBlockCTCustomItem(
+            "chora_casing_levitite",
+            (properties) -> new ChoraCasing(properties
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .instrument(NoteBlockInstrument.BANJO)
+                    .noOcclusion()
+                    .strength(1.0F, 1.0F)
+                    .isViewBlocking((s,l,p) -> false)
+                    .strength(0.9F)
+                    .requiresCorrectToolForDrops()
+                    .sound(new SoundType(
+                            1.0F, 1.0F,
+                            SoundEvents.GLASS_BREAK,
+                            SoundEvents.GLASS_STEP,
+                            SoundEvents.GLASS_PLACE,
+                            SoundEvents.GLASS_HIT,
+                            SoundEvents.GLASS_FALL
+                    ))
+            ),
+            LevitatingChoraCasingCTBehavior::new,
+            (block) -> new ChoraCasingItem(block, new Item.Properties().stacksTo(64))
+    );
+
     public static final DeferredBlock<Block> PEBBLE = registerBlockCustomItem(
         "pebble",
         () -> new PebbleBlock(BlockBehaviour.Properties.of()

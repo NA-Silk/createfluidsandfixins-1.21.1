@@ -11,6 +11,9 @@
   "block.createfluidsandfixins.oscillite_block": "Oscillite Block",
   "block.createfluidsandfixins.chora_casing": "Chora Casing",
   "block.createfluidsandfixins.chora_casing_propulsite": "Propulsed Chora Casing",
+  "block.createfluidsandfixins.chora_casing_densite": "Dense Chora Casing",
+  "block.createfluidsandfixins.chora_casing_oscillite": "Oscillating Chora Casing",
+  "block.createfluidsandfixins.chora_casing_levitite": "Levitating Chora Casing",
   "block.createfluidsandfixins.pebble": "Pebbles",
 
   "item.createfluidsandfixins.creative_fluid_eraser": "Creative Fluid Eraser™",
