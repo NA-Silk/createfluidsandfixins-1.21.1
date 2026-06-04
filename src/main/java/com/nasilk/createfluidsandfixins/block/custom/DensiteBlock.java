@@ -80,9 +80,6 @@ public class DensiteBlock extends Block {
             // Dequeue a block position
             BlockPos currentPos = BlockPos.of(queue[head++]); // Dequeue
 
-            // Update maxPower if under 15
-            if (maxPower < 15) maxPower = Math.max(maxPower, getExternalPower(level, currentPos));
-
             // Search each direction around currentPos for other Densite blocks
             for (Direction direction : Direction.values()) {
                 // Exit loop if queue is filled
@@ -93,7 +90,8 @@ public class DensiteBlock extends Block {
                 long neighborLong = neighborPos.asLong();
                 if (cluster.contains(neighborLong) || !level.isLoaded(neighborPos) || !level.getBlockState(neighborPos).is(this)) continue;
 
-                // Update cluster and queue
+                // Update maxPower, cluster, and queue
+                if (maxPower < 15) maxPower = Math.max(maxPower, getExternalPower(level, currentPos));
                 cluster.add(neighborLong);
                 queue[tail++] = neighborLong; // Enqueue
             }

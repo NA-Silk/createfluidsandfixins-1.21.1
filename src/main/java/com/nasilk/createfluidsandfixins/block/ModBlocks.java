@@ -130,7 +130,7 @@ public class ModBlocks {
 
     public static final BlockEntry<Block> CHORA_CASING = registerBlockCTCustomItem(
         "chora_casing",
-            (properties) -> new ChoraCasing(properties
+            (properties) -> new ChoraCasingBlock(properties
             .mapColor(MapColor.COLOR_RED)
             .instrument(NoteBlockInstrument.BANJO)
             .noOcclusion()
@@ -153,7 +153,7 @@ public class ModBlocks {
 
     public static final BlockEntry<Block> PROPULSED_CHORA_CASING = registerBlockCTCustomItem(
         "chora_casing_propulsite",
-        (properties) -> new ChoraCasing(properties
+        (properties) -> new ChoraCasingBlock(properties
             .mapColor(MapColor.COLOR_RED)
             .instrument(NoteBlockInstrument.BANJO)
             .noOcclusion()
@@ -176,7 +176,7 @@ public class ModBlocks {
 
     public static final BlockEntry<Block> OSCILLATING_CHORA_CASING = registerBlockCTCustomItem(
             "chora_casing_oscillite",
-            (properties) -> new ChoraCasing(properties
+            (properties) -> new ChoraCasingBlock(properties
                     .mapColor(MapColor.COLOR_RED)
                     .instrument(NoteBlockInstrument.BANJO)
                     .noOcclusion()
@@ -199,7 +199,7 @@ public class ModBlocks {
 
     public static final BlockEntry<Block> DENSE_CHORA_CASING = registerBlockCTCustomItem(
             "chora_casing_densite",
-            (properties) -> new ChoraCasing(properties
+            (properties) -> new ChoraCasingBlock(properties
                     .mapColor(MapColor.COLOR_PURPLE)
                     .instrument(NoteBlockInstrument.BANJO)
                     .noOcclusion()
@@ -222,7 +222,7 @@ public class ModBlocks {
 
     public static final BlockEntry<Block> LEVITATING_CHORA_CASING = registerBlockCTCustomItem(
             "chora_casing_levitite",
-            (properties) -> new ChoraCasing(properties
+            (properties) -> new ChoraCasingBlock(properties
                     .mapColor(MapColor.COLOR_PURPLE)
                     .instrument(NoteBlockInstrument.BANJO)
                     .noOcclusion()

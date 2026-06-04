@@ -8,23 +8,19 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ChoraCasing extends Block {
-
-    public ChoraCasing(Properties properties) {
+//this is all just custom culling work I straight up don't think it's needed, but I kept the file just incase, you can kill it, or don't
+public class ChoraCasingBlock extends Block {
+    public ChoraCasingBlock(Properties properties) {
         super(properties);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side) {
         return adjacentState.is(this);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos) {
         return Shapes.empty();
     }
 }
-
-//this is all just custom culling work i striaght up dont think its needed but i kept the file just incase, you can kill it, or dont

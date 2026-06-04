@@ -102,8 +102,8 @@ public class CreateFluidsAndFixins {
             event.accept(ModBlocks.PEBBLE);
             event.accept(ModBlocks.CHORA_CASING);
             event.accept(ModBlocks.PROPULSED_CHORA_CASING);
-            event.accept(ModBlocks.OSCILLATING_CHORA_CASING);
             event.accept(ModBlocks.DENSE_CHORA_CASING);
+            event.accept(ModBlocks.OSCILLATING_CHORA_CASING);
             event.accept(ModBlocks.LEVITATING_CHORA_CASING);
             event.accept(ModBlocks.DENSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_BLOCK);
