@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "createfluidsandfixins:block/densite_block_activated/densite_block_activated_3"
-  }
-}

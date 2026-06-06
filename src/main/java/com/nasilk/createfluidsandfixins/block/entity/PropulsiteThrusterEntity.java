@@ -41,12 +41,6 @@ import java.util.List;
 
 @SuppressWarnings({"SpellCheckingInspection", "GrazieInspectionRunner"})
 public class PropulsiteThrusterEntity extends BlockEntity implements IHaveGoggleInformation {
-    /** TODO LONG MESSAGE BELOW NICK
-     after some 3am consideration im probably going to be reworking propulsite thruster a little bit, all the code will still work fine.
-     Just the method to obtain i think, after talks with many devs i think making it its own block aside from propulsite would be right.
-     it would still be propulsite themed and such, maybe a propulsite in an industrial housing, having to craft a casing you fill with the liquid before catylizing.
-     just giving you a heads up. i dont think youll be working on anything that would conflict with this but still i should make my 4am thoughts known */
-
     // Tick variables (saved)
     private int charge = 0;
     private int cooldown = 0;
