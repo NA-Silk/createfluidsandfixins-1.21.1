@@ -56,6 +56,48 @@ public class ModSpriteShifts {
         rl("block/densite_connected_activated/densite_block_connected_4")
     );
 
+    public static final CTSpriteShiftEntry ENCASED_PROPULSITE = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/encased_propulsite_block"),
+            rl("block/encased_propulsite_block_connected")
+    );
+
+    public static final CTSpriteShiftEntry ENCASED_OSCILLITE = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/encased_oscillite_block"),
+            rl("block/encased_oscillite_block_connected")
+    );
+
+    public static final CTSpriteShiftEntry ENCASED_DENSITE = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/encased_densite_block"),
+            rl("block/encased_densite_block_connected")
+    );
+
+    public static final CTSpriteShiftEntry ENCASED_DENSITE_1 = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/encased_densite_block"),
+            rl("block/encased_densite_connected_activated/encased_densite_block_connected_1")
+    );
+
+    public static final CTSpriteShiftEntry ENCASED_DENSITE_2 = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/encased_densite_block"),
+            rl("block/encased_densite_connected_activated/encased_densite_block_connected_2")
+    );
+
+    public static final CTSpriteShiftEntry ENCASED_DENSITE_3 = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/encased_densite_block"),
+            rl("block/encased_densite_connected_activated/encased_densite_block_connected_3")
+    );
+
+    public static final CTSpriteShiftEntry ENCASED_DENSITE_4 = CTSpriteShifter.getCT(
+            AllCTTypes.OMNIDIRECTIONAL,
+            rl("block/encased_densite_block"),
+            rl("block/encased_densite_connected_activated/encased_densite_block_connected_4")
+    );
+
     public static final CTSpriteShiftEntry CHORA_CASING = CTSpriteShifter.getCT(
             AllCTTypes.OMNIDIRECTIONAL,
             rl("block/chora_casing"),

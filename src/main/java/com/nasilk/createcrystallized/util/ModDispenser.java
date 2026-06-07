@@ -1,4 +1,4 @@
-package com.nasilk.createcrystallized.behavior;
+package com.nasilk.createcrystallized.util;
 
 import com.nasilk.createcrystallized.fluid.ModFluids;
 import net.minecraft.core.BlockPos;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
 @SuppressWarnings("deprecation")
-public class ModDispenserBehavior {
+public class ModDispenser {
     private static void registerFluidBucket(BucketItem bucketItem) {
         DispenserBlock.registerBehavior(
             bucketItem,
@@ -41,7 +41,6 @@ public class ModDispenserBehavior {
         registerFluidBucket((BucketItem) ModFluids.DENSITE_EMULSION_BUCKET.get());
         registerFluidBucket((BucketItem) ModFluids.DRIFT_CONDENSATE_BUCKET.get());
         registerFluidBucket((BucketItem) ModFluids.PROPULSITE_FLURRY_BUCKET.get());
-        registerFluidBucket((BucketItem) ModFluids.SOUL_STEEP_BUCKET.get());
         registerFluidBucket((BucketItem) ModFluids.OSCILLITE_SUSPENSION_BUCKET.get());
     }
 }

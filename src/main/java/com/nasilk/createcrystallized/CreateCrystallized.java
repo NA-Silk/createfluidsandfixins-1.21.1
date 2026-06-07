@@ -5,7 +5,7 @@ import com.nasilk.createcrystallized.block.ModBlocks;
 import com.nasilk.createcrystallized.fluid.ModFluidTypes;
 import com.nasilk.createcrystallized.fluid.ModFluids;
 import com.nasilk.createcrystallized.item.ModItems;
-import com.nasilk.createcrystallized.behavior.ModDispenserBehavior;
+import com.nasilk.createcrystallized.util.ModDispenser;
 import com.nasilk.createcrystallized.particle.custom.DensiteParticles;
 import com.nasilk.createcrystallized.particle.ModParticles;
 import com.nasilk.createcrystallized.particle.custom.PropulsiteParticles;
@@ -82,7 +82,7 @@ public class CreateCrystallized {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            ModDispenserBehavior.register();
+            ModDispenser.register();
         });
         LOGGER.info("Create: Fluids and Fixins loaded");
     }
@@ -90,28 +90,39 @@ public class CreateCrystallized {
     // Add block items to creative tabs
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if(event.getTab() == ModCreativeModeTabs.FLUIDSANDFIXINS_TAB.get()) {
+            // Buckets
             event.accept(ModFluids.VOID_SEA_SLURRY_BUCKET);
             event.accept(ModFluids.DENSITE_EMULSION_BUCKET);
             event.accept(ModFluids.DRIFT_CONDENSATE_BUCKET);
             event.accept(ModFluids.PROPULSITE_FLURRY_BUCKET);
-            event.accept(ModFluids.SOUL_STEEP_BUCKET);
             event.accept(ModFluids.OSCILLITE_SUSPENSION_BUCKET);
 
+            // Uncategorized Items
             event.accept(ModItems.CREATIVE_FLUID_ERASER);
             event.accept(ModItems.CHORA_INGOT);
 
+            // Uncategorized Blocks
             event.accept(ModBlocks.PEBBLE);
             event.accept(ModBlocks.AEROLITE_ORE);
             event.accept(ModBlocks.DEEPSLATE_AEROLITE_ORE);
+
+            // Chora Blocks
             event.accept(ModBlocks.CHORA_CASING);
             event.accept(ModBlocks.PROPULSED_CHORA_CASING);
             event.accept(ModBlocks.DENSE_CHORA_CASING);
             event.accept(ModBlocks.OSCILLATING_CHORA_CASING);
             event.accept(ModBlocks.LEVITATING_CHORA_CASING);
+
+            // Crystal Blocks
             event.accept(ModBlocks.DENSITE_BLOCK);
+            event.accept(ModBlocks.ENCASED_DENSITE_BLOCK);
+            /* Crafted Densite */
             event.accept(ModBlocks.PROPULSITE_BLOCK);
+            event.accept(ModBlocks.ENCASED_PROPULSITE_BLOCK);
             event.accept(ModBlocks.PROPULSITE_THRUSTER);
             event.accept(ModBlocks.OSCILLITE_BLOCK);
+            event.accept(ModBlocks.ENCASED_OSCILLITE_BLOCK);
+            /* Crafted Oscillite */
         }
     }
 
@@ -135,8 +146,6 @@ public class CreateCrystallized {
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_DRIFT_CONDENSATE.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_PROPULSITE_FLURRY.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_PROPULSITE_FLURRY.get(), RenderType.translucent());
-                ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_SOUL_STEEP.get(), RenderType.translucent());
-                ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_SOUL_STEEP.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_OSCILLITE_SUSPENSION.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_OSCILLITE_SUSPENSION.get(), RenderType.translucent());
             });

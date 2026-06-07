@@ -79,29 +79,103 @@ public class ModBlocks {
     );
 
     public static final BlockEntry<Block> OSCILLITE_BLOCK = registerBlockCT(
-            "oscillite_block",
-            (properties) -> new Block(properties
-                    .mapColor(MapColor.COLOR_BLUE)
-                    .instrument(NoteBlockInstrument.HAT)
-                    .strength(0.3F)
-                    .friction(1.05f)
-                    .lightLevel(state -> 6)
-                    .noOcclusion()
-                    .isValidSpawn((state, level, pos, value) -> false)
-                    .isRedstoneConductor((state, level, pos) -> false)
-                    .isSuffocating((state, level, pos) -> false)
-                    .isViewBlocking((state, level, pos) -> false)
-                    .sound(
-                            new SoundType(1.0f, 1.0f,
-                                    SoundEvents.AMETHYST_BLOCK_BREAK,
-                                    SoundEvents.AMETHYST_BLOCK_STEP,
-                                    SoundEvents.AMETHYST_BLOCK_PLACE,
-                                    SoundEvents.AMETHYST_BLOCK_HIT,
-                                    SoundEvents.AMETHYST_CLUSTER_FALL
-                            )
-                    )
-            ),
-            OscilliteCTBehavior::new
+        "oscillite_block",
+        (properties) -> new Block(properties
+            .mapColor(MapColor.COLOR_BLUE)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(0.3F)
+            .friction(1.05f)
+            .lightLevel(state -> 6)
+            .noOcclusion()
+            .isValidSpawn((state, level, pos, value) -> false)
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos) -> false)
+            .sound(
+                new SoundType(1.0f, 1.0f,
+                    SoundEvents.AMETHYST_BLOCK_BREAK,
+                    SoundEvents.AMETHYST_BLOCK_STEP,
+                    SoundEvents.AMETHYST_BLOCK_PLACE,
+                    SoundEvents.AMETHYST_BLOCK_HIT,
+                    SoundEvents.AMETHYST_CLUSTER_FALL
+                )
+            )
+        ),
+        OscilliteCTBehavior::new
+    );
+
+    public static final BlockEntry<Block> ENCASED_DENSITE_BLOCK = registerBlockCT(
+        "encased_densite_block",
+        (properties) -> new DensiteBlock(properties
+            .mapColor(MapColor.COLOR_PURPLE)
+            .isRedstoneConductor((state, level, pos) -> true)
+            .strength(2.0f, 9.0f)
+            .jumpFactor(0.5f)
+            .friction(0.8f)
+            .lightLevel(state -> state.getValue(DensiteBlock.POWER))
+            .hasPostProcess((state, pos, level) -> true)
+            .emissiveRendering((state, pos, level) -> true)
+            .sound(
+                new SoundType(1.0f, 0.1f,
+                    ModSounds.DENSITE_BREAK.get(),
+                    SoundEvents.AMETHYST_BLOCK_STEP,
+                    ModSounds.DENSITE_PLACE.get(),
+                    SoundEvents.AMETHYST_BLOCK_HIT,
+                    SoundEvents.AMETHYST_BLOCK_FALL
+                )
+            )
+        ),
+        EncasedDensiteCTBehavior::new
+    );
+
+    public static final BlockEntry<Block> ENCASED_PROPULSITE_BLOCK = registerBlockCT(
+        "encased_propulsite_block",
+        (properties) -> new PropulsiteBlock(properties
+            .mapColor(MapColor.COLOR_YELLOW)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(0.3F)
+            .lightLevel(state -> 6)
+            .isValidSpawn((state, level, pos, value) -> false)
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos) -> false)
+            .sound(
+                new SoundType(1.0f, 1.0f,
+                    ModSounds.PROPULSITE_BREAK.get(),
+                    SoundEvents.AMETHYST_BLOCK_STEP,
+                    ModSounds.PROPULSITE_PLACE.get(),
+                    SoundEvents.AMETHYST_BLOCK_HIT,
+                    SoundEvents.AMETHYST_BLOCK_FALL
+                )
+            )
+        ),
+        EncasedPropulsiteCTBehavior::new
+    );
+
+    public static final BlockEntry<Block> ENCASED_OSCILLITE_BLOCK = registerBlockCT(
+        "encased_oscillite_block",
+        (properties) -> new Block(properties
+            .mapColor(MapColor.COLOR_BLUE)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(0.3F)
+            .friction(1.05f)
+            .lightLevel(state -> 6)
+            .noOcclusion()
+            .isValidSpawn((state, level, pos, value) -> false)
+            .isRedstoneConductor((state, level, pos) -> false)
+            .isSuffocating((state, level, pos) -> false)
+            .isViewBlocking((state, level, pos) -> false)
+            .sound(
+                new SoundType(1.0f, 1.0f,
+                    SoundEvents.AMETHYST_BLOCK_BREAK,
+                    SoundEvents.AMETHYST_BLOCK_STEP,
+                    SoundEvents.AMETHYST_BLOCK_PLACE,
+                    SoundEvents.AMETHYST_BLOCK_HIT,
+                    SoundEvents.AMETHYST_CLUSTER_FALL
+                )
+            )
+        ),
+        EncasedOscilliteCTBehavior::new
     );
 
     public static final DeferredBlock<Block> PROPULSITE_THRUSTER = registerBlock(

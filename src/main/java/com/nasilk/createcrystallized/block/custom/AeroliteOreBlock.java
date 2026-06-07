@@ -36,11 +36,11 @@ public class AeroliteOreBlock extends Block {
 
         // Check up to 100 block positions
         for (int i = 0; i < 100; i++) {
-            // Select offsets between [-7,7]
+            // Select offsets between x,z ∈ [-3,3] & y ∈ [-7,7]
             BlockPos blockpos = pos.offset(
+                    level.random.nextInt(4) - level.random.nextInt(4),
                     level.random.nextInt(8) - level.random.nextInt(8),
-                    level.random.nextInt(8) - level.random.nextInt(8),
-                    level.random.nextInt(8) - level.random.nextInt(8)
+                    level.random.nextInt(4) - level.random.nextInt(4)
             );
 
             // Check if offset position is viable and place

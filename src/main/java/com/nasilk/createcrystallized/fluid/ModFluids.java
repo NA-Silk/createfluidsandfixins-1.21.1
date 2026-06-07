@@ -208,37 +208,6 @@ public class ModFluids {
         .bucket(ModFluids.PROPULSITE_FLURRY_BUCKET);
 
 
-    // SOUL STEEP
-    public static final Supplier<FlowingFluid> SOURCE_SOUL_STEEP = FLUIDS.register(
-        "source_soul_steep",
-        () -> new BaseFlowingFluid.Source(ModFluids.SOUL_STEEP_PROPERTIES)
-    );
-    public static final Supplier<FlowingFluid> FLOWING_SOUL_STEEP = FLUIDS.register(
-        "flowing_soul_steep",
-        () -> new BaseFlowingFluid.Flowing(ModFluids.SOUL_STEEP_PROPERTIES)
-    );
-
-    public static final DeferredBlock<LiquidBlock> SOUL_STEEP_BLOCK = ModBlocks.BLOCKS.register(
-        "soul_steep_block",
-        () -> new LiquidBlock(ModFluids.SOURCE_SOUL_STEEP.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).noLootTable())
-    );
-    public static final DeferredItem<Item> SOUL_STEEP_BUCKET = ModItems.ITEMS.registerItem(
-        "soul_steep_bucket",
-        properties -> new BucketItem(ModFluids.SOURCE_SOUL_STEEP.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1))
-    );
-
-    public static final BaseFlowingFluid.Properties SOUL_STEEP_PROPERTIES = new BaseFlowingFluid.Properties(
-        ModFluidTypes.SOUL_STEEP_FLUID_TYPE,
-        SOURCE_SOUL_STEEP,
-        FLOWING_SOUL_STEEP
-    )
-        .slopeFindDistance(8) // Horizontal searching rate (flow speed)
-        .levelDecreasePerBlock(1) // Spread distance
-        .tickRate(2) // Spread rate (water ~5, inverted scale)
-        .block(ModFluids.SOUL_STEEP_BLOCK)
-        .bucket(ModFluids.SOUL_STEEP_BUCKET);
-
-
     // OSCILLITE SUSPENSION
     public static final FluidTransformationSettings OSCILLITE_SUSPENSION_SETTINGS = new FluidTransformationSettings(
         0.01f, // Transform rate [0.0f, 1,0f]
