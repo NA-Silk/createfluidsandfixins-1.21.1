@@ -48,6 +48,7 @@ public class AeroliteOreBlock extends Block {
                 level.getBlockState(blockpos).isAir()
                 && worldborder.isWithinBounds(blockpos)
                 && blockpos.getY() >= level.getMinBuildHeight()
+                && blockpos.getY() <= level.getMaxBuildHeight()
                 && level instanceof ServerLevel serverLevel
             ) {
                 serverLevel.setBlockAndUpdate(blockpos, state.setValue(DISARMED, true));
