@@ -101,6 +101,8 @@ public class CreateFluidsAndFixins {
             event.accept(ModItems.CHORA_INGOT);
 
             event.accept(ModBlocks.PEBBLE);
+            event.accept(ModBlocks.AEROLITE_ORE);
+            event.accept(ModBlocks.DEEPSLATE_AEROLITE_ORE);
             event.accept(ModBlocks.CHORA_CASING);
             event.accept(ModBlocks.PROPULSED_CHORA_CASING);
             event.accept(ModBlocks.DENSE_CHORA_CASING);

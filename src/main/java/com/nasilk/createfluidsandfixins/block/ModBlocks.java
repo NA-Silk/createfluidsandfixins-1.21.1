@@ -263,6 +263,54 @@ public class ModBlocks {
         (block) -> new PebbleItem(block, new Item.Properties().stacksTo(1))
     );
 
+    public static final DeferredBlock<Block> AEROLITE_ORE = registerBlock(
+        "aerolite_ore",
+        () -> new AeroliteOreBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_LIGHT_GRAY)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(0.3F)
+            .noOcclusion()
+            .lightLevel(state -> 2)
+            .isValidSpawn((state, level, pos, value) -> true)
+            .isRedstoneConductor((state, level, pos) -> true)
+            .isSuffocating((state, level, pos) -> true)
+            .isViewBlocking((state, level, pos) -> true)
+            .sound(
+                new SoundType(1.0f, 0.9f,
+                    SoundEvents.STONE_BREAK,
+                    SoundEvents.STONE_STEP,
+                    SoundEvents.ENDERMAN_TELEPORT,
+                    SoundEvents.STONE_HIT,
+                    SoundEvents.STONE_FALL
+                )
+            )
+        )
+    );
+
+    public static final DeferredBlock<Block> DEEPSLATE_AEROLITE_ORE = registerBlock(
+        "deeplslate_aerolite_ore",
+        () -> new AeroliteOreBlock(BlockBehaviour.Properties.of()
+            .mapColor(MapColor.COLOR_LIGHT_BLUE)
+            .instrument(NoteBlockInstrument.HAT)
+            .strength(0.3F)
+            .noOcclusion()
+            .lightLevel(state -> 1)
+            .isValidSpawn((state, level, pos, value) -> true)
+            .isRedstoneConductor((state, level, pos) -> true)
+            .isSuffocating((state, level, pos) -> true)
+            .isViewBlocking((state, level, pos) -> true)
+            .sound(
+                new SoundType(1.0f, 0.8f,
+                    SoundEvents.STONE_BREAK,
+                    SoundEvents.STONE_STEP,
+                    SoundEvents.ENDERMAN_TELEPORT,
+                    SoundEvents.STONE_HIT,
+                    SoundEvents.STONE_FALL
+                )
+            )
+        )
+    );
+
 
     // REGISTRY HELPERS
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
