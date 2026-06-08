@@ -8,10 +8,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class EncasedDensiteCTBehavior extends ConnectedTextureBehaviour.Base {
+public class EncasedLevititeCTBehavior extends ConnectedTextureBehaviour.Base {
     @Nullable
     @Override
     public CTSpriteShiftEntry getShift (BlockState state, Direction direction, @Nullable TextureAtlasSprite sprite) {
-        return ModSpriteShifts.ENCASED_DENSITE;
+        return ModSpriteShifts.ENCASED_LEVITITE;
     }
 }

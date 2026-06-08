@@ -84,7 +84,7 @@ public class CreateCrystallized {
         event.enqueueWork(() -> {
             ModDispenser.register();
         });
-        LOGGER.info("Create: Fluids and Fixins loaded");
+        LOGGER.info("Create: Crystalized Loaded");
     }
 
     // Add block items to creative tabs
@@ -105,6 +105,7 @@ public class CreateCrystallized {
             event.accept(ModBlocks.PEBBLE);
             event.accept(ModBlocks.AEROLITE_ORE);
             event.accept(ModBlocks.DEEPSLATE_AEROLITE_ORE);
+            event.accept(ModBlocks.ENCASED_LEVITITE_BLOCK);
 
             // Chora Blocks
             event.accept(ModBlocks.CHORA_CASING);

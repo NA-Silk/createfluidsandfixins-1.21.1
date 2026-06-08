@@ -84,7 +84,6 @@ public class ModBlocks {
             .mapColor(MapColor.COLOR_BLUE)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
-            .friction(1.05f)
             .lightLevel(state -> 6)
             .noOcclusion()
             .isValidSpawn((state, level, pos, value) -> false)
@@ -106,13 +105,11 @@ public class ModBlocks {
 
     public static final BlockEntry<Block> ENCASED_DENSITE_BLOCK = registerBlockCT(
         "encased_densite_block",
-        (properties) -> new DensiteBlock(properties
+        (properties) -> new Block(properties
             .mapColor(MapColor.COLOR_PURPLE)
             .isRedstoneConductor((state, level, pos) -> true)
-            .strength(2.0f, 9.0f)
-            .jumpFactor(0.5f)
-            .friction(0.8f)
-            .lightLevel(state -> state.getValue(DensiteBlock.POWER))
+            .strength(1.0f, 9.0f)
+            .lightLevel(state -> 4)
             .hasPostProcess((state, pos, level) -> true)
             .emissiveRendering((state, pos, level) -> true)
             .sound(
@@ -130,11 +127,11 @@ public class ModBlocks {
 
     public static final BlockEntry<Block> ENCASED_PROPULSITE_BLOCK = registerBlockCT(
         "encased_propulsite_block",
-        (properties) -> new PropulsiteBlock(properties
+        (properties) -> new Block(properties
             .mapColor(MapColor.COLOR_YELLOW)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
-            .lightLevel(state -> 6)
+            .lightLevel(state -> 4)
             .isValidSpawn((state, level, pos, value) -> false)
             .isRedstoneConductor((state, level, pos) -> false)
             .isSuffocating((state, level, pos) -> false)
@@ -158,8 +155,7 @@ public class ModBlocks {
             .mapColor(MapColor.COLOR_BLUE)
             .instrument(NoteBlockInstrument.HAT)
             .strength(0.3F)
-            .friction(1.05f)
-            .lightLevel(state -> 6)
+            .lightLevel(state -> 4)
             .noOcclusion()
             .isValidSpawn((state, level, pos, value) -> false)
             .isRedstoneConductor((state, level, pos) -> false)
@@ -176,6 +172,31 @@ public class ModBlocks {
             )
         ),
         EncasedOscilliteCTBehavior::new
+    );
+
+    public static final BlockEntry<Block> ENCASED_LEVITITE_BLOCK = registerBlockCT(
+            "encased_levitite_block",
+            (properties) -> new Block(properties
+                    .mapColor(MapColor.COLOR_BLUE)
+                    .instrument(NoteBlockInstrument.HAT)
+                    .strength(0.3F)
+                    .lightLevel(state -> 4)
+                    .noOcclusion()
+                    .isValidSpawn((state, level, pos, value) -> false)
+                    .isRedstoneConductor((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false)
+                    .sound(
+                            new SoundType(1.0f, 1.0f,
+                                    SoundEvents.AMETHYST_BLOCK_BREAK,
+                                    SoundEvents.AMETHYST_BLOCK_STEP,
+                                    SoundEvents.AMETHYST_BLOCK_PLACE,
+                                    SoundEvents.AMETHYST_BLOCK_HIT,
+                                    SoundEvents.AMETHYST_CLUSTER_FALL
+                            )
+                    )
+            ),
+            EncasedLevititeCTBehavior::new
     );
 
     public static final DeferredBlock<Block> PROPULSITE_THRUSTER = registerBlock(
@@ -386,7 +407,7 @@ public class ModBlocks {
     );
 
 
-    // REGISTRY HELPERS
+    // REGISTRY HELPERS, please thank them before you go, they are very nice.
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         setBlockItem(name, toReturn);
