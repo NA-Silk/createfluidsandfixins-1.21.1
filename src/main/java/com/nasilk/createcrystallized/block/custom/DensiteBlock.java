@@ -19,11 +19,11 @@ public class DensiteBlock extends Block {
     public static final int MAX_CLUSTER_SIZE = 512;
 
     // BFS cache
-    private static class ClusterCache {
+    private static class Cache {
         final LongOpenHashSet set = new LongOpenHashSet(MAX_CLUSTER_SIZE);
         final long[] array = new long[MAX_CLUSTER_SIZE];
     }
-    private static final ThreadLocal<ClusterCache> CLUSTER_CACHE = ThreadLocal.withInitial(ClusterCache::new);
+    private static final ThreadLocal<Cache> CACHE = ThreadLocal.withInitial(Cache::new);
 
     public DensiteBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -59,9 +59,9 @@ public class DensiteBlock extends Block {
 
     private void updateClusterPower(Level level, BlockPos pos) {
         // Using specialized set and primitive array for long efficiency
-        ClusterCache clusterCache = CLUSTER_CACHE.get();
-        LongOpenHashSet cluster = clusterCache.set;
-        long[] queue = clusterCache.array;
+        Cache cache = CACHE.get();
+        LongOpenHashSet cluster = cache.set;
+        long[] queue = cache.array;
 
         // Cache setup
         cluster.clear(); // cluster must be manually emptied, queue will be overwritten

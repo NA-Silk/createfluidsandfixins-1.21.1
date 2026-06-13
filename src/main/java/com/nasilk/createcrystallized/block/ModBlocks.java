@@ -374,7 +374,7 @@ public class ModBlocks {
                 new SoundType(1.0f, 0.9f,
                     SoundEvents.STONE_BREAK,
                     SoundEvents.STONE_STEP,
-                    SoundEvents.ENDERMAN_TELEPORT,
+                    SoundEvents.STONE_PLACE,
                     SoundEvents.STONE_HIT,
                     SoundEvents.STONE_FALL
                 )
